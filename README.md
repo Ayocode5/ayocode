@@ -2,7 +2,7 @@
 
 Setup Database:
 1. buka xampp lalu aktifkan mysql dan apache 
-2. buka phpmyadmin lalu buat database 'ayocode'
+2. buka phpmyadmin lalu buat database, nama_database:ayocode, type_database:utf8mb4_general_ci
 3. import ayocode.sql
 
 Setup WebApp:
