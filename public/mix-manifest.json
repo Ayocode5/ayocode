@@ -1,0 +1,8 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/canvas-ui.js": "/js/canvas-ui.js",
+    "/vendor/canvas/js/app.js": "/vendor/canvas/js/app.js",
+    "/vendor/canvas/css/app.css": "/vendor/canvas/css/app.css",
+    "/css/canvas-ui.css": "/css/canvas-ui.css",
+    "/css/app.css": "/css/app.css"
+}
