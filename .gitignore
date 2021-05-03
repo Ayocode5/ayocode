@@ -3,7 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor
-!/vendor/austintoddj/*
+!**/vendor/austintoddj/*
 .env
 .env.backup
 .phpunit.result.cache
