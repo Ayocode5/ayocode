@@ -1,9 +1,11 @@
 <h1> CARA INSTALL </h1>
 
 <h2> Setup Database </h2>
-1. buka xampp lalu aktifkan mysql dan apache 
-2. buka phpmyadmin lalu buat database, nama_database:ayocode, type_database:utf8mb4_general_ci
-3. import ayocode.sql
+<ul style="list-style-type: none;">
+    <li>1. buka xampp lalu aktifkan mysql dan apache</li>
+    <li>2. buka phpmyadmin lalu buat database, nama_database:ayocode, type_database:utf8mb4_general_ci</li>
+    <li>3. import ayocode.sql</li>
+</ul>
 
 <h2> Setup WebApp </h2>
 1. git clone <url projek> lalu masuk ke directory projek
