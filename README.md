@@ -1,11 +1,11 @@
-#CARA INSTALL
+<h1> CARA INSTALL </h1>
 
-Setup Database:
+<h2> Setup Database </h2>
 1. buka xampp lalu aktifkan mysql dan apache 
 2. buka phpmyadmin lalu buat database, nama_database:ayocode, type_database:utf8mb4_general_ci
 3. import ayocode.sql
 
-Setup WebApp:
+<h2> Setup WebApp </h2>
 1. git clone <url projek> lalu masuk ke directory projek
 
 2. run command 'mv vendor/austintoddj vendor/austintoddj.bak' 
@@ -20,4 +20,13 @@ Setup WebApp:
 
 7. kemudian jalankan applikasi 'php artisan serve'
  
-<h1> cara modifikasi ui </h1>
+<h3> Cara modifikasi tampilan frontend </h3>
+NOTE: frontend menggunakan vue.js, 
+
+1. Install dependency node.js
+run command 'npm install' lalu 'npm run dev'
+2. Install laravel/mix
+run command 'composer require laravel/mix'
+3. Modifikasi tampilan/component vue.js ada di folder resources/js/canvas-ui/
+
+NOTE: setelah melakukan modifikasi, jalan perintah 'npm run dev'
