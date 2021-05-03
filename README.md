@@ -1,7 +1,15 @@
+<!DOCTYPE=html>
+<html>
+<head>
+    <style>
+        ul, li {list-style-type: none;}
+    </style>
+</head>
+<body>
 <h1> CARA INSTALL </h1>
 
 <h2> Setup Database </h2>
-<ul style="list-style-type: none;">
+<ul>
     <li>1. buka xampp lalu aktifkan mysql dan apache</li>
     <li>2. buka phpmyadmin lalu buat database, nama_database:ayocode, type_database:utf8mb4_general_ci</li>
     <li>3. import ayocode.sql</li>
@@ -32,3 +40,6 @@ run command 'composer require laravel/mix'
 3. Modifikasi tampilan/component vue.js ada di folder resources/js/canvas-ui/
 
 NOTE: setelah melakukan modifikasi, jalan perintah 'npm run dev'
+
+</body>
+</html>
