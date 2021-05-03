@@ -1,5 +1,11 @@
 #CARA INSTALL
 
+Setup Database:
+1. buka xampp lalu aktifkan mysql dan apache 
+2. buka phpmyadmin lalu buat database 'ayocode'
+3. import ayocode.sql
+
+Setup WebApp:
 1. git clone <url projek> lalu masuk ke directory projek
 
 2. run command 'mv vendor/austintoddj vendor/austintoddj.bak' 
