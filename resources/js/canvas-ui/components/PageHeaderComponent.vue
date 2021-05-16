@@ -1,24 +1,57 @@
 <template>
-    <div class="border-bottom">
-        <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12">
-            <nav class="navbar d-flex px-0 py-1">
-                <router-link :to="{ name: 'posts' }" class="navbar-brand hover font-weight-bolder font-serif mr-3">
-                    Ayocode
-                </router-link>
-                <div class="mr-auto border-left pl-1">
-                    <router-link :to="{ name: 'tags' }" class="btn btn-link py-0 text-decoration-none">
-                        Tags
-                    </router-link>
-                    <router-link :to="{ name: 'topics' }" class="btn btn-link py-0 text-decoration-none">
-                        Topics
-                    </router-link>
-                    
+  <div class="border-bottom">
+    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12">
+      <nav class="navbar d-flex px-0 py-1">
+        <router-link
+          :to="{ name: 'posts' }"
+          class="navbar-brand hover font-weight-bolder font-serif mr-3 text-white"
+        >
+          Ayocode
+        </router-link>
+        <div class="mr-auto border-left pl-1">
+          <router-link
+            :to="{ name: 'tags' }"
+            class="btn btn-link py-0 text-decoration-none text-white"
+          >
+            Tags
+          </router-link>
+          <router-link
+            :to="{ name: 'topics' }"
+            class="btn btn-link py-0 text-decoration-none text-white"
+          >
+            Topics
+          </router-link>
+        </div>
+
+        <!-- <input
+          v-on:keyup.enter="searchPost()"
+          type="text"
+          name="searchPost"
+          id="search-post"
+          v-model="keyword"
+        /> -->
+
+        
+          <div class="form-row align-items-center">
+            <div class="col-auto">
+              <label style="border: none" class="sr-only" for="inlineFormInputGroup">Search</label>
+              <div class="input-group mb-2 mt-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text"><i class="fas fa-search"></i></div>
                 </div>
+                <input v-on:keyup.enter="searchPost()" v-model="keyword"
+                  type="text"
+                  class="form-control"
+                  id="inlineFormInputGroup"
+                  placeholder="Search"
+                />
+              </div>
+            </div>
+          </div>
+        
 
-                <input v-on:keyup.enter="searchPost()" type="text" name="searchPost" id="search-post" v-model="keyword">
-
-                <slot v-if="user" name="options" />
-<!-- 
+        <slot v-if="user" name="options" />
+        <!-- 
                 <div v-if="user" class="dropdown ml-3">
                     <a
                         id="navbarDropdown"
@@ -57,45 +90,47 @@
                 </div>
 
                 <a v-if="!user" :href="`/${canvasPath}/login`" class="btn btn-link text-decoration-none">Sign in</a> -->
-            </nav>
-        </div>
+      </nav>
     </div>
+  </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-    name: 'page-header-component',
+  name: "page-header-component",
 
-    data() {
-        return {
-            user: CanvasUI.user, // eslint-disable-line no-undef
-            canvasPath: CanvasUI.canvasPath, // eslint-disable-line no-undef
+  data() {
+    return {
+      user: CanvasUI.user, // eslint-disable-line no-undef
+      canvasPath: CanvasUI.canvasPath, // eslint-disable-line no-undef
 
-            keyword: null
-        };
+      keyword: null,
+    };
+  },
+
+  methods: {
+    logout() {
+      axios.get(`/${this.canvasPath}/logout`).then(() => {
+        window.location.href = `/${this.canvasPath}/login`;
+      });
     },
 
-    methods: {
-        logout() {
-            axios.get(`/${this.canvasPath}/logout`).then(() => {
-                window.location.href = `/${this.canvasPath}/login`;
-            });
-        },
-
-        searchPost() {
-            this.$parent.searchPost(this.keyword)
-        }
+    searchPost() {
+      this.$parent.searchPost(this.keyword);
     },
+  },
 };
 </script>
 <style scoped>
-
-input {
-    border: none;
-    border-radius: 5px;
-    background: rgb(228, 228, 228);
+.border-bottom {
+  background: rgb(219, 169, 248);
 }
 
+input {
+  border: none;
+  border-radius: 5px;
+  background: rgb(228, 228, 228);
+}
 </style>

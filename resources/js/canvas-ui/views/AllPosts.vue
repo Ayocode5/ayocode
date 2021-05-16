@@ -61,6 +61,7 @@
                     </div>
                 </main>
             </div>
+            <Footer />
         </div>
     </section>
 </template>
@@ -69,8 +70,9 @@
 import InfiniteLoading from 'vue-infinite-loading';
 import NProgress from 'nprogress';
 import PageHeader from '../components/PageHeaderComponent';
-import isEmpty from 'lodash/isEmpty';
 import JumbotronBlog from '../components/JumbotronBlog';
+import Footer from '../components/Footer';
+import isEmpty from 'lodash/isEmpty';
 
 export default {
     name: 'all-posts',
@@ -78,7 +80,8 @@ export default {
     components: {
         InfiniteLoading,
         PageHeader,
-        JumbotronBlog
+        JumbotronBlog,
+        Footer,
     },
 
     metaInfo() {

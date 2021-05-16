@@ -120,6 +120,7 @@
                     </p>
                 </div>
             </div>
+            <Footer />
         </div>
     </section>
 </template>
@@ -127,6 +128,7 @@
 <script>
 import NProgress from 'nprogress';
 import PageHeader from '../components/PageHeaderComponent';
+import Footer from '../components/Footer';
 import hljs from 'highlight.js';
 import mediumZoom from 'medium-zoom';
 
@@ -135,6 +137,7 @@ export default {
 
     components: {
         PageHeader,
+        Footer,
     },
 
     metaInfo() {
