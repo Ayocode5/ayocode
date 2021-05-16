@@ -218,3 +218,19 @@ export default {
     },
 };
 </script>
+<style lang="scss">
+pre.ql-syntax {
+    background-color: #2c2c2c;
+    color: #f8f8f2;
+    overflow: none;
+}
+
+.ql-editor pre {
+    white-space: none;
+}
+
+.post-content p {
+    // margin: 1.5em 0 0 0 !important;
+    margin: 15px 0 0 0 !important;
+}
+</style>

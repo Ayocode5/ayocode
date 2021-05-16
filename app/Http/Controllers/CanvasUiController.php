@@ -35,7 +35,25 @@ class CanvasUiController extends Controller
      */
     public function getPosts(Request $request): LengthAwarePaginator
     {
-        return Post::latest()->published()->with('user', 'topic')->paginate();
+
+        $keyword = $request->input('search');
+
+        $keyword ? $posts = Post::whereRaw("MATCH (title,summary) AGAINST ('$keyword' IN NATURAL LANGUAGE MODE)")->with('user', 'topic')->paginate()
+                : $posts = Post::latest()->published()->with('user', 'topic')->paginate();
+        
+        return $posts;
+    }
+
+    /**
+     * Get id and slug for sitemap
+     *
+     * @return JsonResponse
+     */
+    public function getSlug(Request $request): JsonResponse
+    {
+        $summary = Post::query()->select('id', 'slug')->latest()->get();
+
+        return response()->json($summary);
     }
 
     /**

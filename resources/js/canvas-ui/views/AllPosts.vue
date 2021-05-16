@@ -5,7 +5,6 @@
         <div v-if="isReady" class="mt-5">
             <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
                 <JumbotronBlog />
-
                 <main role="main" class="mt-5">
                     <div>
                         <h4 class="my-4 border-bottom mt-5 pb-2">
@@ -130,6 +129,19 @@ export default {
                     });
             }
         },
+
+        searchPost(keyword) {
+            return this.request()
+                .get('api/posts?search='+keyword)
+                .then(({ data }) => {
+                    this.posts = [];
+                    this.posts.push(...data.data);
+                    console.log(data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
     },
 };
 </script>

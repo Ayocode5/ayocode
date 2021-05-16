@@ -22,13 +22,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::prefix('blog')->group(function () {
     Route::prefix('api')->group(function () {
         Route::get('posts', [\App\Http\Controllers\CanvasUiController::class, 'getPosts']);
         Route::get('posts/{slug}', [\App\Http\Controllers\CanvasUiController::class, 'showPost'])
              ->middleware('Canvas\Http\Middleware\Session');
-
+        
         Route::get('tags', [\App\Http\Controllers\CanvasUiController::class, 'getTags']);
         Route::get('tags/{slug}', [\App\Http\Controllers\CanvasUiController::class, 'showTag']);
         Route::get('tags/{slug}/posts', [\App\Http\Controllers\CanvasUiController::class, 'getPostsForTag']);

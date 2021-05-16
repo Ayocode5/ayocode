@@ -12,10 +12,13 @@
                     <router-link :to="{ name: 'topics' }" class="btn btn-link py-0 text-decoration-none">
                         Topics
                     </router-link>
+                    
                 </div>
 
-                <slot v-if="user" name="options" />
+                <input v-on:keyup.enter="searchPost()" type="text" name="searchPost" id="search-post" v-model="keyword">
 
+                <slot v-if="user" name="options" />
+<!-- 
                 <div v-if="user" class="dropdown ml-3">
                     <a
                         id="navbarDropdown"
@@ -33,6 +36,7 @@
                             style="width: 33px"
                         />
                     </a>
+                    
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <h6 class="dropdown-header">
                             <strong>{{ user.name }}</strong>
@@ -52,7 +56,7 @@
                     </div>
                 </div>
 
-                <a v-if="!user" :href="`/${canvasPath}/login`" class="btn btn-link text-decoration-none">Sign in</a>
+                <a v-if="!user" :href="`/${canvasPath}/login`" class="btn btn-link text-decoration-none">Sign in</a> -->
             </nav>
         </div>
     </div>
@@ -68,6 +72,8 @@ export default {
         return {
             user: CanvasUI.user, // eslint-disable-line no-undef
             canvasPath: CanvasUI.canvasPath, // eslint-disable-line no-undef
+
+            keyword: null
         };
     },
 
@@ -77,6 +83,19 @@ export default {
                 window.location.href = `/${this.canvasPath}/login`;
             });
         },
+
+        searchPost() {
+            this.$parent.searchPost(this.keyword)
+        }
     },
 };
 </script>
+<style scoped>
+
+input {
+    border: none;
+    border-radius: 5px;
+    background: rgb(228, 228, 228);
+}
+
+</style>
