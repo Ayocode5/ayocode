@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h1> CARA INSTALL APP</h1>
+<h1> CARA INSTALL</h1>
 
 <h2> Setup Database </h2>
 <ul>
