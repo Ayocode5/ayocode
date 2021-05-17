@@ -2146,6 +2146,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2153,7 +2181,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'all-posts',
+  name: "all-posts",
   components: {
     InfiniteLoading: (vue_infinite_loading__WEBPACK_IMPORTED_MODULE_1___default()),
     PageHeader: _components_PageHeaderComponent__WEBPACK_IMPORTED_MODULE_3__.default,
@@ -2162,14 +2190,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   metaInfo: function metaInfo() {
     return {
-      title: 'ayocode | posts'
+      title: "ayocode | posts"
     };
   },
   data: function data() {
     return {
       page: 1,
       posts: [],
-      isReady: false
+      isReady: false,
+      noMatchPost: false,
+      infiniteId: 1,
+      keyword: ""
     };
   },
   created: function created() {
@@ -2200,8 +2231,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       if ($state) {
-        return this.request().get('/api/posts', {
+        return this.request().get("api/posts", {
           params: {
+            search: this.keyword,
             page: this.page
           }
         }).then(function (_ref) {
@@ -2212,7 +2244,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             _this2.page += 1;
 
-            (_this2$posts = _this2.posts).push.apply(_this2$posts, _toConsumableArray(data.data));
+            (_this2$posts = _this2.posts).push.apply(_this2$posts, _toConsumableArray(Object.values(data.data)));
 
             $state.loaded();
           } else {
@@ -2222,7 +2254,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           if (lodash_isEmpty__WEBPACK_IMPORTED_MODULE_6___default()($state)) {
             nprogress__WEBPACK_IMPORTED_MODULE_2___default().inc();
           }
-        })["catch"](function () {
+        })["catch"](function (err) {
           nprogress__WEBPACK_IMPORTED_MODULE_2___default().done();
         });
       }
@@ -2230,18 +2262,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     searchPost: function searchPost(keyword) {
       var _this3 = this;
 
-      return this.request().get('api/posts?search=' + keyword).then(function (_ref2) {
-        var _this3$posts;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this3.keyword = keyword;
+                _this3.page = 2;
 
-        var data = _ref2.data;
-        _this3.posts = [];
+                if (keyword) {
+                  _this3.posts = [];
 
-        (_this3$posts = _this3.posts).push.apply(_this3$posts, _toConsumableArray(data.data));
+                  _this3.request().get("api/posts", {
+                    params: {
+                      search: keyword
+                    }
+                  }).then(function (_ref2) {
+                    var data = _ref2.data;
 
-        console.log(data);
-      })["catch"](function (err) {
-        console.log(err);
-      });
+                    if (!lodash_isEmpty__WEBPACK_IMPORTED_MODULE_6___default()(data) && !lodash_isEmpty__WEBPACK_IMPORTED_MODULE_6___default()(data.data)) {
+                      var _this3$posts;
+
+                      (_this3$posts = _this3.posts).push.apply(_this3$posts, _toConsumableArray(data.data));
+
+                      _this3.noMatchPost = false; //This line code will trigger infinite loading, if the given last_page is higher than 1
+
+                      data.last_page > 1 ? _this3.infiniteId += 1 : "";
+                    }
+                  })["catch"](function (err) {
+                    if (err.response.status == 404) {
+                      _this3.posts = [];
+                      _this3.noMatchPost = true;
+                    }
+                  });
+                }
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   }
 });
@@ -8036,7 +8098,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nfooter[data-v-e1a6f140] {\n    height: 100px;\n    background: rgb(219, 169, 248);\n    color: snow;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nfooter[data-v-e1a6f140] {\n    height: 100px;\n    background: rgb(196, 196, 196);\n    color: snow;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8060,7 +8122,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.border-bottom[data-v-11dfe4ec] {\n  background: rgb(219, 169, 248);\n}\ninput[data-v-11dfe4ec] {\n  border: none;\n  border-radius: 5px;\n  background: rgb(228, 228, 228);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.border-bottom[data-v-11dfe4ec] {\n  background: rgb(161, 191, 255);\n}\ninput[data-v-11dfe4ec] {\n  border: none;\n  border-radius: 5px;\n  background: rgb(228, 228, 228);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -95042,7 +95104,7 @@ var render = function() {
                   "navbar-brand hover font-weight-bolder font-serif mr-3 text-white",
                 attrs: { to: { name: "posts" } }
               },
-              [_vm._v("\n        Ayocode\n      ")]
+              [_vm._v("\n        AYOCODE\n      ")]
             ),
             _vm._v(" "),
             _c(
@@ -95073,61 +95135,63 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("div", { staticClass: "form-row align-items-center" }, [
-              _c("div", { staticClass: "col-auto" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "sr-only",
+                  attrs: { for: "inlineFormInputGroup" }
+                },
+                [_vm._v("Search")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "input-group mb-2 mt-2" }, [
                 _c(
-                  "label",
+                  "div",
                   {
-                    staticClass: "sr-only",
-                    staticStyle: { border: "none" },
-                    attrs: { for: "inlineFormInputGroup" }
-                  },
-                  [_vm._v("Search")]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "input-group mb-2 mt-2" }, [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.keyword,
-                        expression: "keyword"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "inlineFormInputGroup",
-                      placeholder: "Search"
-                    },
-                    domProps: { value: _vm.keyword },
+                    staticClass: "input-group-prepend",
                     on: {
-                      keyup: function($event) {
-                        if (
-                          !$event.type.indexOf("key") &&
-                          _vm._k(
-                            $event.keyCode,
-                            "enter",
-                            13,
-                            $event.key,
-                            "Enter"
-                          )
-                        ) {
-                          return null
-                        }
+                      click: function($event) {
                         return _vm.searchPost()
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.keyword = $event.target.value
                       }
                     }
-                  })
-                ])
+                  },
+                  [_vm._m(0)]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.keyword,
+                      expression: "keyword"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    id: "inlineFormInputGroup",
+                    placeholder: "Search"
+                  },
+                  domProps: { value: _vm.keyword },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.searchPost()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.keyword = $event.target.value
+                    }
+                  }
+                })
               ])
             ]),
             _vm._v(" "),
@@ -95144,10 +95208,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-prepend" }, [
-      _c("div", { staticClass: "input-group-text" }, [
-        _c("i", { staticClass: "fas fa-search" })
-      ])
+    return _c("div", { staticClass: "input-group-text" }, [
+      _c("i", { staticClass: "fas fa-search" })
     ])
   }
 ]
@@ -95268,7 +95330,13 @@ var render = function() {
                                                       staticClass:
                                                         "card-title text-truncate mb-0"
                                                     },
-                                                    [_vm._v(_vm._s(post.title))]
+                                                    [
+                                                      _vm._v(
+                                                        "\n                        " +
+                                                          _vm._s(post.title) +
+                                                          "\n                      "
+                                                      )
+                                                    ]
                                                   ),
                                                   _vm._v(" "),
                                                   _c(
@@ -95279,7 +95347,9 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        _vm._s(post.summary)
+                                                        "\n                        " +
+                                                          _vm._s(post.summary) +
+                                                          "\n                      "
                                                       )
                                                     ]
                                                   ),
@@ -95292,21 +95362,21 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                                                " +
+                                                        "\n                        " +
                                                           _vm._s(
                                                             post.user.name
                                                           ) +
-                                                          "\n                                                "
+                                                          "\n                        "
                                                       ),
                                                       post.topic.length
                                                         ? _c("span", [
                                                             _vm._v(
-                                                              " in " +
+                                                              "\n                          in " +
                                                                 _vm._s(
                                                                   post.topic[0]
                                                                     .name
                                                                 ) +
-                                                                " "
+                                                                "\n                        "
                                                             )
                                                           ])
                                                         : _vm._e()
@@ -95321,7 +95391,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                                                " +
+                                                        "\n                        " +
                                                           _vm._s(
                                                             _vm
                                                               .moment(
@@ -95331,11 +95401,11 @@ var render = function() {
                                                                 "MMM D, Y"
                                                               )
                                                           ) +
-                                                          " —\n                                                " +
+                                                          " —\n                        " +
                                                           _vm._s(
                                                             post.read_time
                                                           ) +
-                                                          "\n                                            "
+                                                          "\n                      "
                                                       )
                                                     ]
                                                   )
@@ -95357,7 +95427,10 @@ var render = function() {
                         _c(
                           "infinite-loading",
                           {
-                            attrs: { spinner: "spiral" },
+                            attrs: {
+                              spinner: "spiral",
+                              identifier: _vm.infiniteId
+                            },
                             on: { infinite: _vm.fetchPosts }
                           },
                           [
@@ -95381,7 +95454,11 @@ var render = function() {
                                       staticClass:
                                         "lead text-center text-muted mt-5"
                                     },
-                                    [_vm._v("You have no published posts")]
+                                    [
+                                      _vm._v(
+                                        "\n                  You have no published posts\n                "
+                                      )
+                                    ]
                                   ),
                                   _vm._v(" "),
                                   _c(
@@ -95392,7 +95469,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                    Write on the go with our mobile-ready app!\n                                "
+                                        "\n                  Write on the go with our mobile-ready app!\n                "
                                       )
                                     ]
                                   )
@@ -95400,7 +95477,9 @@ var render = function() {
                               ]
                             )
                           ]
-                        )
+                        ),
+                        _vm._v(" "),
+                        _vm.noMatchPost ? _c("div", [_vm._m(1)]) : _vm._e()
                       ],
                       2
                     )
@@ -95425,7 +95504,23 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h4", { staticClass: "my-4 border-bottom mt-5 pb-2" }, [
       _c("span", { staticClass: "border-bottom border-dark pb-2" }, [
-        _vm._v("Posts")
+        _vm._v("Featured Posts")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "my-5" }, [
+      _c("p", { staticClass: "lead text-center text-muted mt-5" }, [
+        _vm._v("\n                  Blog not found!\n                ")
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "lead text-center text-muted mt-1" }, [
+        _vm._v(
+          "\n                  Pala aing pusing gara2 ngoding mulu :)\n                "
+        )
       ])
     ])
   }

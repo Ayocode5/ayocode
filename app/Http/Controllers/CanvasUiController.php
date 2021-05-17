@@ -8,9 +8,11 @@ use Canvas\Events\PostViewed;
 use Canvas\Models\Post;
 use Canvas\Models\Tag;
 use Canvas\Models\Topic;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class CanvasUiController extends Controller
 {
@@ -33,15 +35,26 @@ class CanvasUiController extends Controller
      * @param Request $request
      * @return LengthAwarePaginator
      */
-    public function getPosts(Request $request): LengthAwarePaginator
+    public function getPosts(Request $request)
     {
 
         $keyword = $request->input('search');
-
-        $keyword ? $posts = Post::whereRaw("MATCH (title,summary) AGAINST ('$keyword' IN NATURAL LANGUAGE MODE)")->with('user', 'topic')->paginate()
-                : $posts = Post::latest()->published()->with('user', 'topic')->paginate();
+        $page = $request->input('page', 1);
         
-        return $posts;
+        if($keyword) {
+            $posts = Post::whereRaw("MATCH (title,summary) AGAINST ('$keyword' IN NATURAL LANGUAGE MODE)")->published()->with('user', 'topic')->get();
+            // return $posts;
+            $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+            $perPage = 3;
+            $posts = $posts instanceof Collection ? $posts : Collection::make($posts);
+
+            if($posts->count() > 0) {
+                return new LengthAwarePaginator($posts->forPage($page, $perPage), $posts->count(), $perPage, $page, ['path' => 'http://127.0.0.1:8000/blog/api/posts?search='.$keyword]);
+            } return response()->json(["message" => "Keyword do not match for any data", "status_code" => 404], 404);
+
+        } else {
+            return Post::latest()->published()->with('user', 'topic')->paginate(3);
+        }
     }
 
     /**

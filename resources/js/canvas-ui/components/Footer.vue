@@ -21,7 +21,7 @@ export default {
 <style scoped>
 footer {
     height: 100px;
-    background: rgb(219, 169, 248);
+    background: rgb(196, 196, 196);
     color: snow;
 }
 </style>

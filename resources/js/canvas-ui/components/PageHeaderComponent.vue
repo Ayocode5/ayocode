@@ -6,7 +6,7 @@
           :to="{ name: 'posts' }"
           class="navbar-brand hover font-weight-bolder font-serif mr-3 text-white"
         >
-          Ayocode
+          AYOCODE
         </router-link>
         <div class="mr-auto border-left pl-1">
           <router-link
@@ -33,10 +33,10 @@
 
         
           <div class="form-row align-items-center">
-            <div class="col-auto">
-              <label style="border: none" class="sr-only" for="inlineFormInputGroup">Search</label>
+           
+              <label class="sr-only" for="inlineFormInputGroup">Search</label>
               <div class="input-group mb-2 mt-2">
-                <div class="input-group-prepend">
+                <div v-on:click="searchPost()" class="input-group-prepend">
                   <div class="input-group-text"><i class="fas fa-search"></i></div>
                 </div>
                 <input v-on:keyup.enter="searchPost()" v-model="keyword"
@@ -46,7 +46,7 @@
                   placeholder="Search"
                 />
               </div>
-            </div>
+            
           </div>
         
 
@@ -125,7 +125,7 @@ export default {
 </script>
 <style scoped>
 .border-bottom {
-  background: rgb(219, 169, 248);
+  background: rgb(161, 191, 255);
 }
 
 input {
