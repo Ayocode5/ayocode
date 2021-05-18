@@ -40,7 +40,7 @@
 
         <div v-if="isReady" class="mt-5">
             <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
-                <h1 class="font-serif">{{ post.title }}</h1>
+                <h1>{{ post.title }}</h1>
 
                 <div class="media pt-1 pb-5">
                     <router-link :to="{ name: 'show-user', params: { id: post.user.id } }">
@@ -92,7 +92,7 @@
                     v-html="post.featured_image_caption"
                 />
 
-                <div class="post-content position-relative align-items-center overflow-y-visible font-serif mt-4">
+                <div class="post-content position-relative align-items-center overflow-y-visible mt-4">
                     <div v-html="post.body" />
                 </div>
 
@@ -109,7 +109,7 @@
 
                 <div
                     v-if="post.meta.canonical_link"
-                    class="post-content position-relative align-items-center overflow-y-visible font-serif"
+                    class="post-content position-relative align-items-center overflow-y-visible font-arial"
                 >
                     <hr />
                     <p class="text-center font-italic mb-5">
@@ -232,8 +232,9 @@ pre.ql-syntax {
     white-space: none;
 }
 
-.post-content p {
+.post-content {
     // margin: 1.5em 0 0 0 !important;
+    font-family: "Balsamiq Sans";
     margin: 15px 0 0 0 !important;
 }
 </style>

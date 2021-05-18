@@ -1,6 +1,6 @@
 <template>
 	<div>	
-		<h1 class="font-serif">Blogs</h1>
+		<h1>Blogs</h1>
     	<p class="lead text-secondary">Let's code the world</p>
 	</div>
 </template>

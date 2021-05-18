@@ -9,11 +9,14 @@
 
     <title>ayocode</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="{{ mix('css/canvas-ui.css') }}">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="stylesheet"
-        href="//fonts.googleapis.com/css2?family=Karla&family=Merriweather:wght@400;700&display=swap">
+
+    {{-- Font --}}
+    {{-- <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Karla&family=Merriweather:wght@400;700&display=swap"> --}}
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/dracula.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
@@ -34,6 +37,8 @@
     <script type="text/javascript" src="{{ mix('js/canvas-ui.js') }}"></script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
+
         .ql-syntax {
             counter-reset: line;
             padding-left: 0;
@@ -47,6 +52,10 @@
             padding: 0 .5em;
             margin-right: .5em;
             color: #888
+        }
+
+        body {
+            font-family: "Balsamiq Sans";
         }
 
     </style>

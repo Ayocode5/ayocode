@@ -41,7 +41,7 @@
     "vue-infinite-loading": "^2.4.5",
     "vue-loader": "^15.9.5",
     "vue-multiselect": "^2.1.6",
-    "vue-router": "^3.4.9",
+    "vue-router": "3.1.6",
     "vue-template-compiler": "^2.6.11",
     "vue-textarea-autosize": "^1.1.1",
     "vue-toasted": "^1.1.28",
@@ -67,7 +67,6 @@
     "vue-infinite-loading": "^2.4.5",
     "vue-loader": "^15.9.5",
     "vue-meta": "^2.4.0",
-    "vue-router": "^3.4.9",
     "vue-template-compiler": "^2.6.12"
   }
 }

@@ -4,20 +4,20 @@
       <nav class="navbar d-flex px-0 py-1">
         <router-link
           :to="{ name: 'posts' }"
-          class="navbar-brand hover font-weight-bolder font-serif mr-3 text-white"
+          class="navbar-brand hover font-weight-bolder mr-3"
         >
-          AYOCODE
+          Ayocode
         </router-link>
         <div class="mr-auto border-left pl-1">
           <router-link
             :to="{ name: 'tags' }"
-            class="btn btn-link py-0 text-decoration-none text-white"
+            class="btn btn-link py-0 text-decoration-none"
           >
             Tags
           </router-link>
           <router-link
             :to="{ name: 'topics' }"
-            class="btn btn-link py-0 text-decoration-none text-white"
+            class="btn btn-link py-0 text-decoration-none"
           >
             Topics
           </router-link>
@@ -31,24 +31,22 @@
           v-model="keyword"
         /> -->
 
-        
-          <div class="form-row align-items-center">
-           
-              <label class="sr-only" for="inlineFormInputGroup">Search</label>
-              <div class="input-group mb-2 mt-2">
-                <div v-on:click="searchPost()" class="input-group-prepend">
-                  <div class="input-group-text"><i class="fas fa-search"></i></div>
-                </div>
-                <input v-on:keyup.enter="searchPost()" v-model="keyword"
-                  type="text"
-                  class="form-control"
-                  id="inlineFormInputGroup"
-                  placeholder="Search"
-                />
-              </div>
-            
+        <div class="form-row align-items-center">
+          <label class="sr-only" for="inlineFormInputGroup">Search</label>
+          <div class="input-group mb-2 mt-2">
+            <input
+              v-on:keyup.enter="searchPost()"
+              v-model="keyword"
+              type="text"
+              class=""
+              id="inlineFormInputGroup"
+              placeholder="Search"
+            />
+            <div v-on:click="searchPost()" class="input-group-prepend bg-white">
+              <div class="input-group-text"><i class="fas fa-search"></i></div>
+            </div>
           </div>
-        
+        </div>
 
         <slot v-if="user" name="options" />
         <!-- 
@@ -97,6 +95,7 @@
 
 <script>
 import axios from "axios";
+import VueRouter from "vue-router";
 
 export default {
   name: "page-header-component",
@@ -118,19 +117,46 @@ export default {
     },
 
     searchPost() {
-      this.$parent.searchPost(this.keyword);
+      const regex = /s/;
+      if (this.keyword) {
+        if (this.$route.path.search(regex) == 1) {
+          window.location.href = `/blog/s/${this.keyword}`;
+          // this.$router.replace('/s/'+this.keyword).catch((e)=>{console.log(e)});
+        } else {
+          this.$router.push({name: 'search-post', params: {keyword: this.keyword}});
+        }
+      }
+      // this.$router.push({name: 'search-post', params: {keyword: this.keyword}});
     },
   },
 };
 </script>
 <style scoped>
-.border-bottom {
+/* .border-bottom {
   background: rgb(161, 191, 255);
-}
+} */
 
 input {
   border: none;
-  border-radius: 5px;
-  background: rgb(228, 228, 228);
+  border-bottom: 2px solid #b6b6b6;
+  border-radius: 0px;
+  color: #666666;
+  padding: 5px 10px;
+  outline: none;
+  padding-left: 2px;
+}
+
+[placeholder]:focus::-webkit-input-placeholder {
+  transition: text-indent 0.4s 0.4s ease;
+  text-indent: -100%;
+  opacity: 1;
+}
+
+.input-group-text {
+  background: white;
+  border: none;
+  border-bottom: 2px solid #b6b6b6;
+  border-radius: 0px;
+  color: #b6b6b6;
 }
 </style>

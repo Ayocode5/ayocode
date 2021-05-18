@@ -32,6 +32,8 @@ const router = new Router({
     routes,
 });
 
+// router.options.routes.forEach(val => { console.log(val.path) })
+
 router.beforeEach((to, from, next) => {
     NProgress.start();
     next();

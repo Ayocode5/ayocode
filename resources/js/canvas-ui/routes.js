@@ -1,4 +1,5 @@
 import AllPosts from './views/AllPosts';
+import SearchPost from './views/SearchPost';
 import AllTags from './views/AllTags';
 import AllTopics from './views/AllTopics';
 import ShowPost from './views/ShowPost';
@@ -38,13 +39,18 @@ export default [
         component: ShowTopic,
     },
     {
-        path: '/:id',
+        path: '/s/:keyword',
+        name: 'search-post',
+        component: SearchPost,
+    },    
+    {
+        path: '/user/:id',
         name: 'show-user',
         component: ShowUser,
     },
     {
         path: '*',
         name: 'catch-all',
-        redirect: '/blog',
+        redirect: '/',
     },
 ];

@@ -43,7 +43,7 @@ class CanvasUiController extends Controller
         
         if($keyword) {
             $posts = Post::whereRaw("MATCH (title,summary) AGAINST ('$keyword' IN NATURAL LANGUAGE MODE)")->published()->with('user', 'topic')->get();
-            // return $posts;
+            
             $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
             $perPage = 3;
             $posts = $posts instanceof Collection ? $posts : Collection::make($posts);

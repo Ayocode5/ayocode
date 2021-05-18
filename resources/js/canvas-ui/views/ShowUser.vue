@@ -54,7 +54,7 @@
                                                 <h5 class="card-title text-truncate mb-0">{{ post.title }}</h5>
                                                 <p class="card-text text-truncate">{{ post.summary }}</p>
                                                 <p class="card-text mb-0 text-secondary">
-                                                    {{ post.user.name }}
+                                                    {{ post.name }}
                                                     <span v-if="post.topic.length"> in {{ post.topic[0].name }} </span>
                                                 </p>
                                                 <p class="card-text text-secondary">
@@ -147,6 +147,8 @@ export default {
                         if (!isEmpty(data) && !isEmpty(data.data)) {
                             this.page += 1;
                             this.posts.push(...data.data);
+
+                            console.log(data)
 
                             $state.loaded();
                         } else {

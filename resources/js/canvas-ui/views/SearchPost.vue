@@ -8,7 +8,9 @@
         <main role="main" class="mt-5">
           <div>
             <h4 class="my-4 border-bottom mt-5 pb-2">
-              <span class="border-bottom border-dark pb-2">Featured Posts</span>
+              <span class="border-bottom border-dark pb-2"
+                >Search For : {{ $route.params.keyword }}</span
+              >
             </h4>
 
             <div :key="`${index}-${post.id}`" v-for="(post, index) in posts">
@@ -56,11 +58,7 @@
               </router-link>
             </div>
 
-            <infinite-loading
-              spinner="spiral"
-              :identifier="infiniteId"
-              @infinite="fetchPosts"
-            >
+            <infinite-loading spinner="spiral" @infinite="searchPost">
               <span slot="no-more" />
               <div slot="no-results" class="text-left">
                 <div class="my-5">
@@ -75,6 +73,8 @@
             </infinite-loading>
 
             <div v-if="noMatchPost">
+              <span slot="no-more" />
+              <div slot="no-results" class="text-left">
                 <div class="my-5">
                   <p class="lead text-center text-muted mt-5">
                     Blog not found!
@@ -83,13 +83,14 @@
                     Pala aing pusing gara2 ngoding mulu :)
                   </p>
                 </div>
+              </div>
             </div>
-
           </div>
         </main>
       </div>
-    <Footer />
-     
+    </div>
+    <div v-if="contentLoaded">
+      <Footer />
     </div>
   </section>
 </template>
@@ -103,7 +104,7 @@ import Footer from "../components/Footer";
 import isEmpty from "lodash/isEmpty";
 
 export default {
-  name: "all-posts",
+  name: "search-posts",
 
   components: {
     InfiniteLoading,
@@ -124,24 +125,24 @@ export default {
       posts: [],
       isReady: false,
       noMatchPost: false,
-      infiniteId: 1,
-      keyword: "",
+      contentLoaded: false
     };
   },
 
   async created() {
-    await Promise.all([this.fetchPosts()]);
+    await Promise.all([this.searchPost()]);
     this.isReady = true;
     NProgress.done();
   },
 
   methods: {
-    fetchPosts($state) {
+    searchPost($state) {
+
       if ($state) {
         return this.request()
           .get("api/posts", {
             params: {
-              search: this.keyword,
+              search: this.$route.params.keyword,
               page: this.page,
             },
           })
@@ -149,7 +150,6 @@ export default {
             if (!isEmpty(data) && !isEmpty(data.data)) {
               this.page += 1;
               this.posts.push(...Object.values(data.data));
-
               $state.loaded();
             } else {
               $state.complete();
@@ -160,42 +160,14 @@ export default {
             }
           })
           .catch((err) => {
-            NProgress.done();
+            if (err.response.status == 404) {
+              this.noMatchPost = true;
+              $state.loaded();
+              $state.complete();
+            }
           });
       }
     },
-
-    // async searchPost(keyword) {
-    //   this.keyword = keyword;
-    //   this.page = 2;
-    //   console.log(this.$route.path)
-
-    //   if (keyword) {
-    //     this.posts = [];
-
-    //     this.request()
-    //       .get("api/posts", {
-    //         params: {
-    //           search: keyword,
-    //         },
-    //       })
-    //       .then(({ data }) => {
-    //         if (!isEmpty(data) && !isEmpty(data.data)) {
-    //           this.posts.push(...data.data);
-    //           this.noMatchPost = false;
-
-    //           //This line code will trigger infinite loading, if the given last_page is higher than 1
-    //           data.last_page > 1 ? (this.infiniteId += 1) : "";
-    //         }
-    //       })
-    //       .catch((err) => {
-    //         if (err.response.status == 404) {
-    //           this.posts = [];
-    //           this.noMatchPost = true;
-    //         }
-    //       });
-    //   } 
-    // },
   },
 };
 </script>
