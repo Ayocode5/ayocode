@@ -2475,6 +2475,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -96434,169 +96467,179 @@ var render = function() {
                       [
                         _vm._m(0),
                         _vm._v(" "),
-                        _vm._l(_vm.posts, function(post, index) {
-                          return _c(
+                        _c("div", { staticClass: "container" }, [
+                          _c(
                             "div",
-                            { key: index + "-" + post.id },
-                            [
-                              _c(
-                                "router-link",
+                            { staticClass: "row" },
+                            _vm._l(_vm.posts, function(post, index) {
+                              return _c(
+                                "div",
                                 {
-                                  staticClass: "text-decoration-none",
-                                  attrs: {
-                                    to: {
-                                      name: "show-post",
-                                      params: { slug: post.slug }
-                                    }
-                                  }
+                                  key: index + "-" + post.id,
+                                  staticClass: "col-lg-4 mb-3"
                                 },
                                 [
-                                  _c(
-                                    "div",
-                                    { staticClass: "card mb-4 shadow" },
-                                    [
-                                      _c(
-                                        "div",
-                                        { staticClass: "card-body px-0" },
-                                        [
-                                          _c(
-                                            "div",
-                                            {
-                                              staticClass:
-                                                "container d-lg-inline-flex align-items-center"
-                                            },
-                                            [
-                                              post.featured_image
-                                                ? _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "col-12 col-lg-3 p-0"
-                                                    },
-                                                    [
-                                                      _c("img", {
-                                                        staticClass:
-                                                          "rounded w-100",
-                                                        attrs: {
-                                                          src:
-                                                            post.featured_image,
-                                                          alt:
-                                                            post.featured_image_caption
+                                  _c("div", { staticClass: "card-deck" }, [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "card article ",
+                                        staticStyle: { width: "18rem" }
+                                      },
+                                      [
+                                        _c("img", {
+                                          staticClass: "card-img-top"
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "card-body" },
+                                          [
+                                            _c(
+                                              "div",
+                                              [
+                                                _c(
+                                                  "router-link",
+                                                  {
+                                                    staticClass:
+                                                      "text-decoration-none",
+                                                    attrs: {
+                                                      to: {
+                                                        name: "show-post",
+                                                        params: {
+                                                          slug: post.slug
                                                         }
-                                                      })
-                                                    ]
-                                                  )
-                                                : _vm._e(),
-                                              _vm._v(" "),
-                                              _c(
-                                                "section",
-                                                {
-                                                  staticClass:
-                                                    "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
-                                                  class: post.featured_image
-                                                    ? "col-lg-9"
-                                                    : ""
-                                                },
-                                                [
-                                                  _c(
-                                                    "h5",
-                                                    {
-                                                      staticClass:
-                                                        "card-title text-truncate mb-0"
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                        " +
-                                                          _vm._s(post.title) +
-                                                          "\n                      "
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "card-text text-truncate"
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                        " +
-                                                          _vm._s(post.summary) +
-                                                          "\n                      "
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "card-text mb-0 text-secondary"
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                        " +
-                                                          _vm._s(
-                                                            post.user.name
-                                                          ) +
-                                                          "\n                        "
-                                                      ),
-                                                      post.topic.length
-                                                        ? _c("span", [
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    post.featured_image
+                                                      ? _c("div", [
+                                                          _c("img", {
+                                                            staticClass:
+                                                              "rounded w-100",
+                                                            attrs: {
+                                                              src:
+                                                                post.featured_image,
+                                                              alt:
+                                                                post.featured_image_caption
+                                                            }
+                                                          })
+                                                        ])
+                                                      : _vm._e(),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "section",
+                                                      {
+                                                        staticClass:
+                                                          "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
+                                                        class: post.featured_image
+                                                          ? "col-lg-9"
+                                                          : ""
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "h5",
+                                                          {
+                                                            staticClass:
+                                                              "card-title text-truncate mb-0"
+                                                          },
+                                                          [
                                                             _vm._v(
-                                                              "\n                          in " +
+                                                              " " +
                                                                 _vm._s(
-                                                                  post.topic[0]
-                                                                    .name
+                                                                  post.title
                                                                 ) +
-                                                                "\n                        "
+                                                                " "
                                                             )
-                                                          ])
-                                                        : _vm._e()
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "card-text text-secondary"
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                        " +
-                                                          _vm._s(
-                                                            _vm
-                                                              .moment(
-                                                                post.published_at
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "p",
+                                                          {
+                                                            staticClass:
+                                                              "card-text text-truncate"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                post.summary
                                                               )
-                                                              .format(
-                                                                "MMM D, Y"
-                                                              )
-                                                          ) +
-                                                          " —\n                        " +
-                                                          _vm._s(
-                                                            post.read_time
-                                                          ) +
-                                                          "\n                      "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  )
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "p",
+                                                          {
+                                                            staticClass:
+                                                              "card-text mb-0 text-secondary"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                post.user.name
+                                                              ) +
+                                                                "\n                          "
+                                                            ),
+                                                            post.topic.length
+                                                              ? _c("span", [
+                                                                  _vm._v(
+                                                                    " in " +
+                                                                      _vm._s(
+                                                                        post
+                                                                          .topic[0]
+                                                                          .name
+                                                                      )
+                                                                  )
+                                                                ])
+                                                              : _vm._e()
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "p",
+                                                          {
+                                                            staticClass:
+                                                              "card-text text-secondary"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                _vm
+                                                                  .moment(
+                                                                    post.published_at
+                                                                  )
+                                                                  .format(
+                                                                    "MMM D, Y"
+                                                                  )
+                                                              ) +
+                                                                " — " +
+                                                                _vm._s(
+                                                                  post.read_time
+                                                                )
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]
+                                                    )
+                                                  ]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ])
                                 ]
                               )
-                            ],
-                            1
+                            }),
+                            0
                           )
-                        }),
+                        ]),
                         _vm._v(" "),
                         _c(
                           "infinite-loading",
@@ -96650,7 +96693,7 @@ var render = function() {
                           ]
                         )
                       ],
-                      2
+                      1
                     )
                   ])
                 ],

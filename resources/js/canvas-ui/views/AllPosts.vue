@@ -12,7 +12,40 @@
               <span class="border-bottom border-dark pb-2">Featured Posts</span>
             </h4>
 
-            <div :key="`${index}-${post.id}`" v-for="(post, index) in posts">
+            <div class="container">
+              <div class="row">
+                <div :key="`${index}-${post.id}`" v-for="(post, index) in posts" class="col-lg-4 mb-3">
+                  <div class="card-deck">
+                    <div class="card article " style="width: 18rem;">
+                      <img class="card-img-top">
+                      <div class="card-body">
+
+                      <div>
+                      <router-link :to="{ name: 'show-post', params: { slug: post.slug } }" class="text-decoration-none">
+                        <div v-if="post.featured_image">
+                          <img :src="post.featured_image" :alt="post.featured_image_caption" class="rounded w-100" />
+                        </div>
+                        <section class="col-12 mt-3 mt-lg-0 px-0 px-lg-3" :class="post.featured_image ? 'col-lg-9' : ''">
+                          <h5 class="card-title text-truncate mb-0"> {{ post.title }} </h5>
+                          <p class="card-text text-truncate">{{ post.summary }}</p>
+                          <p class="card-text mb-0 text-secondary">{{ post.user.name }}
+                            <span v-if="post.topic.length"> in {{ post.topic[0].name }}</span>
+                          </p>
+                          <p class="card-text text-secondary">{{ moment( post.published_at ).format("MMM D, Y") }} — {{ post.read_time }}</p>
+                        </section>
+                      </router-link>
+                      </div>
+                                  
+                    </div>
+                  </div>
+                </div>
+                            
+             </div>
+                           
+          </div>
+        </div>
+
+            <!-- <div :key="`${index}-${post.id}`" v-for="(post, index) in posts">
               <router-link
                 :to="{ name: 'show-post', params: { slug: post.slug } }"
                 class="text-decoration-none"
@@ -55,7 +88,7 @@
                   </div>
                 </div>
               </router-link>
-            </div>
+            </div> -->
 
             <infinite-loading spinner="spiral" @infinite="fetchPosts">
               <span slot="no-more" />
