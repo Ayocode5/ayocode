@@ -25,6 +25,8 @@ Route::get('/', function () {
 Route::prefix('blog')->group(function () {
     Route::prefix('api')->group(function () {
         Route::get('posts', [\App\Http\Controllers\CanvasUiController::class, 'getPosts']);
+        Route::get('posts/popular', [\App\Http\Controllers\CanvasUiController::class, 'getPopularPosts']);
+        Route::get('posts/related', [\App\Http\Controllers\CanvasUiController::class, 'getRelatedPosts']);
         Route::get('posts/{slug}', [\App\Http\Controllers\CanvasUiController::class, 'showPost'])
              ->middleware('Canvas\Http\Middleware\Session');
         

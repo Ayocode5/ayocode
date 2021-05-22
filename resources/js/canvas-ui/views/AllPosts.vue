@@ -7,6 +7,7 @@
         <JumbotronBlog />
         <main role="main" class="mt-5">
           <div>
+            <!-- Featured Posts -->
             <h4 class="my-4 border-bottom mt-5 pb-2">
               <span class="border-bottom border-dark pb-2">Featured Posts</span>
             </h4>
@@ -56,11 +57,7 @@
               </router-link>
             </div>
 
-            <infinite-loading
-              spinner="spiral"
-              :identifier="infiniteId"
-              @infinite="fetchPosts"
-            >
+            <infinite-loading spinner="spiral" @infinite="fetchPosts">
               <span slot="no-more" />
               <div slot="no-results" class="text-left">
                 <div class="my-5">
@@ -73,23 +70,12 @@
                 </div>
               </div>
             </infinite-loading>
-
-            <div v-if="noMatchPost">
-                <div class="my-5">
-                  <p class="lead text-center text-muted mt-5">
-                    Blog not found!
-                  </p>
-                  <p class="lead text-center text-muted mt-1">
-                    Pala aing pusing gara2 ngoding mulu :)
-                  </p>
-                </div>
-            </div>
-
+            <!-- End Featured Posts -->
           </div>
         </main>
       </div>
-    <Footer />
-     
+      <popular-posts-component />
+      <Footer />
     </div>
   </section>
 </template>
@@ -99,6 +85,7 @@ import InfiniteLoading from "vue-infinite-loading";
 import NProgress from "nprogress";
 import PageHeader from "../components/PageHeaderComponent";
 import JumbotronBlog from "../components/JumbotronBlog";
+import PopularPostsComponent from "../components/PopularPostsComponent";
 import Footer from "../components/Footer";
 import isEmpty from "lodash/isEmpty";
 
@@ -109,12 +96,13 @@ export default {
     InfiniteLoading,
     PageHeader,
     JumbotronBlog,
+    PopularPostsComponent,
     Footer,
   },
 
   metaInfo() {
     return {
-      title: "ayocode | posts",
+      title: "Ayocode Blogs",
     };
   },
 
@@ -123,9 +111,6 @@ export default {
       page: 1,
       posts: [],
       isReady: false,
-      noMatchPost: false,
-      infiniteId: 1,
-      keyword: "",
     };
   },
 
@@ -141,7 +126,6 @@ export default {
         return this.request()
           .get("api/posts", {
             params: {
-              search: this.keyword,
               page: this.page,
             },
           })
@@ -164,38 +148,6 @@ export default {
           });
       }
     },
-
-    // async searchPost(keyword) {
-    //   this.keyword = keyword;
-    //   this.page = 2;
-    //   console.log(this.$route.path)
-
-    //   if (keyword) {
-    //     this.posts = [];
-
-    //     this.request()
-    //       .get("api/posts", {
-    //         params: {
-    //           search: keyword,
-    //         },
-    //       })
-    //       .then(({ data }) => {
-    //         if (!isEmpty(data) && !isEmpty(data.data)) {
-    //           this.posts.push(...data.data);
-    //           this.noMatchPost = false;
-
-    //           //This line code will trigger infinite loading, if the given last_page is higher than 1
-    //           data.last_page > 1 ? (this.infiniteId += 1) : "";
-    //         }
-    //       })
-    //       .catch((err) => {
-    //         if (err.response.status == 404) {
-    //           this.posts = [];
-    //           this.noMatchPost = true;
-    //         }
-    //       });
-    //   } 
-    // },
   },
 };
 </script>

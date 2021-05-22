@@ -6,7 +6,7 @@
           :to="{ name: 'posts' }"
           class="navbar-brand hover font-weight-bolder mr-3"
         >
-          Ayocode
+          Ayocode Blogs
         </router-link>
         <div class="mr-auto border-left pl-1">
           <router-link
@@ -117,16 +117,15 @@ export default {
     },
 
     searchPost() {
-      const regex = /s/;
-      if (this.keyword) {
-        if (this.$route.path.search(regex) == 1) {
-          window.location.href = `/blog/s/${this.keyword}`;
-          // this.$router.replace('/s/'+this.keyword).catch((e)=>{console.log(e)});
-        } else {
-          this.$router.push({name: 'search-post', params: {keyword: this.keyword}});
-        }
-      }
-      // this.$router.push({name: 'search-post', params: {keyword: this.keyword}});
+      // const regex = /s/;
+      // if (this.keyword) {
+      //   if (this.$route.path.search(regex) == 1) {
+      //     window.location.href = `/blog/s/${this.keyword}`;
+      //   } else {
+      //     this.$router.push({name: 'search-post', params: {keyword: this.keyword}});
+      //   }
+      // }
+      this.$router.push({name: 'search-post', params: {keyword: this.keyword}}).catch({});
     },
   },
 };
