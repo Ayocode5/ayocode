@@ -98,10 +98,10 @@
           </div>
         </main>
       </div>
-    </div>
 
-    <popular-posts-component />
-    <Footer />
+      <popular-posts-component />
+      <Footer />
+    </div>
   </section>
 </template>
 
@@ -228,9 +228,7 @@ export default {
 
 *:focus {
   outline: 0 !important;
-  box-shadow: 0 0 0 0.2rem #fff,
-    /* use site bg color to create whitespace for faux focus ring */ 0 0 0
-      0.35rem #069 !important; /* faux focus ring color */
+  box-shadow: none !important;
 }
 
 *:focus:not(:focus-visible) {

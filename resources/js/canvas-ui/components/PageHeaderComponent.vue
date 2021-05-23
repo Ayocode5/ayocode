@@ -105,7 +105,7 @@ export default {
       user: CanvasUI.user, // eslint-disable-line no-undef
       canvasPath: CanvasUI.canvasPath, // eslint-disable-line no-undef
 
-      keyword: null,
+      keyword: this.$route.params.keyword ?? null,
     };
   },
 
@@ -117,24 +117,12 @@ export default {
     },
 
     searchPost() {
-      // const regex = /s/;
-      // if (this.keyword) {
-      //   if (this.$route.path.search(regex) == 1) {
-      //     window.location.href = `/blog/s/${this.keyword}`;
-      //   } else {
-      //     this.$router.push({name: 'search-post', params: {keyword: this.keyword}});
-      //   }
-      // }
       this.$router.push({name: 'search-post', params: {keyword: this.keyword}}).catch({});
     },
   },
 };
 </script>
 <style scoped>
-/* .border-bottom {
-  background: rgb(161, 191, 255);
-} */
-
 input {
   border: none;
   border-bottom: 2px solid #b6b6b6;

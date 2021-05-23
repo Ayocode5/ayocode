@@ -80,10 +80,7 @@
                 <div slot="no-results" class="text-left">
                   <div class="my-5">
                     <p class="lead text-center text-muted mt-5">
-                      Blog not found!
-                    </p>
-                    <p class="lead text-center text-muted mt-1">
-                      Pala aing pusing gara2 ngoding mulu :)
+                      No matched posts found! 
                     </p>
                   </div>
                 </div>
