@@ -5,6 +5,9 @@ import VueMeta from 'vue-meta';
 import base from './mixins/base';
 import moment from 'moment';
 import routes from './routes';
+import { BPagination } from 'bootstrap-vue'
+
+Vue.component('b-pagination', BPagination)
 
 require('bootstrap');
 

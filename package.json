@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "bootstrap": "^4.6.0",
+    "bootstrap-vue": "^2.21.2",
     "chart.js": "^2.9.4",
     "filepond": "^4.25.1",
     "filepond-plugin-file-validate-size": "^2.2.1",
@@ -35,7 +35,6 @@
     "sass-loader": "^10.1.0",
     "unsplash-js": "^6.0.0",
     "url-parse": "^1.4.7",
-    "vue": "^2.6.11",
     "vue-filepond": "^6.0.2",
     "vue-fuse": "^2.2.1",
     "vue-infinite-loading": "^2.4.5",

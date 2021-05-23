@@ -53,7 +53,7 @@
         </div>
       </div>
       <center v-else>
-        <div class="spinner-border text-secondary" role="status">
+        <div class="lds-facebook" role="status">
         </div>
       </center>
       <!-- End Popular Posts -->
@@ -67,13 +67,11 @@ export default {
     return {
       posts: [],
       isReady: false,
-      routerLinkMode: true,
     };
   },
 
   async created() {
     await Promise.all([this.fetchPopularPosts()]);
-    this.determineRouteMode();
     this.isReady = true;
   },
 
@@ -86,43 +84,46 @@ export default {
         })
         .catch((err) => console.log(err));
     },
-
-    determineRouteMode() {
-      const regex = /post/;
-      if (this.$route.path.search(regex) == 1) {
-        this.routerLinkMode = false;
-      } else {
-        this.routerLinkMode = true;
-      }
-    },
   },
 };
 </script>
 
 <style scoped>
-.lds-dual-ring {
+.lds-facebook {
   display: inline-block;
-  width: 30px;
-  height: 30px;
-  text-align: center;
+  position: relative;
+  width: 80px;
+  height: 80px;
 }
-.lds-dual-ring:after {
-  content: " ";
-  display: block;
-  width: 30px;
-  height: 30px;
-  margin: 8px;
-  border-radius: 50%;
-  border: 6px solid rgb(56, 56, 56);
-  border-color: rgb(60, 60, 60) transparent rgb(60, 60, 60) transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 8px;
+  width: 16px;
+  background: rgb(157, 157, 157);
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
-@keyframes lds-dual-ring {
+.lds-facebook div:nth-child(1) {
+  left: 8px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 32px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 56px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
   0% {
-    transform: rotate(0deg);
+    top: 8px;
+    height: 64px;
   }
+  50%,
   100% {
-    transform: rotate(360deg);
+    top: 24px;
+    height: 32px;
   }
 }
 </style>
