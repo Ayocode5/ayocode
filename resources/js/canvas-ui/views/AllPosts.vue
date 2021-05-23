@@ -60,11 +60,13 @@
                 </router-link>
               </div>
             </div>
-            <div v-else class="lds-facebook">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
+            <center v-else>
+              <div class="lds-facebook">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </center>
 
             <div v-if="!posts">
               <div slot="no-results" class="text-left">
@@ -197,7 +199,7 @@ export default {
   position: absolute;
   left: 8px;
   width: 16px;
-  background: rgb(157, 157, 157);
+  background: rgb(201, 201, 201);
   animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 .lds-facebook div:nth-child(1) {

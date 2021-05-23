@@ -2486,6 +2486,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -12936,7 +12938,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: rgb(157, 157, 157);\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n*:focus {\n  outline: 0 !important;\n  box-shadow: 0 0 0 0.2rem #fff,\n    /* use site bg color to create whitespace for faux focus ring */ 0 0 0\n      0.35rem #069 !important; /* faux focus ring color */\n}\n*:focus:not(:focus-visible) {\n  outline: 0 !important;\n  box-shadow: none !important;\n}\n.page-link {\n  border: none;\n  margin: 1px;\n}\n.page-link:hover {\n  z-index: 2;\n  color: black;\n  text-decoration: none;\n  background-color: #ffffff;\n  border-color: #ffffff;\n  border-bottom: 2px solid #eda5fc;\n}\n.page-item:last-child .page-link {\n  border-top-right-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n.page-item:first-child .page-link {\n  border-top-left-radius: 0px;\n  border-bottom-left-radius: 0px;\n}\n.page-item.active .page-link {\n  z-index: 3;\n  color: #be53d3;\n  border: none;\n  background-color: white;\n  /* border-color: #be53d3; */\n  border-bottom: 2px solid #be53d3;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: rgb(201, 201, 201);\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n*:focus {\n  outline: 0 !important;\n  box-shadow: 0 0 0 0.2rem #fff,\n    /* use site bg color to create whitespace for faux focus ring */ 0 0 0\n      0.35rem #069 !important; /* faux focus ring color */\n}\n*:focus:not(:focus-visible) {\n  outline: 0 !important;\n  box-shadow: none !important;\n}\n.page-link {\n  border: none;\n  margin: 1px;\n}\n.page-link:hover {\n  z-index: 2;\n  color: black;\n  text-decoration: none;\n  background-color: #ffffff;\n  border-color: #ffffff;\n  border-bottom: 2px solid #eda5fc;\n}\n.page-item:last-child .page-link {\n  border-top-right-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n.page-item:first-child .page-link {\n  border-top-left-radius: 0px;\n  border-bottom-left-radius: 0px;\n}\n.page-item.active .page-link {\n  z-index: 3;\n  color: #be53d3;\n  border: none;\n  background-color: white;\n  /* border-color: #be53d3; */\n  border-bottom: 2px solid #be53d3;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -100422,12 +100424,7 @@ var render = function() {
               }),
               0
             )
-          : _c("center", [
-              _c("div", {
-                staticClass: "lds-facebook",
-                attrs: { role: "status" }
-              })
-            ])
+          : _c("center", [_c("div", { staticClass: "lds-facebook" })])
       ],
       1
     )
@@ -100614,227 +100611,235 @@ var render = function() {
                 _c("JumbotronBlog"),
                 _vm._v(" "),
                 _c("main", { staticClass: "mt-5", attrs: { role: "main" } }, [
-                  _c("div", [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    !_vm.loadingContent
-                      ? _c(
-                          "div",
-                          _vm._l(_vm.posts, function(post, index) {
-                            return _c(
-                              "div",
-                              { key: index + "-" + post.id },
-                              [
-                                _c(
-                                  "router-link",
-                                  {
-                                    staticClass: "text-decoration-none",
-                                    attrs: {
-                                      to: {
-                                        name: "show-post",
-                                        params: { slug: post.slug }
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "div",
-                                      { staticClass: "card mb-4 shadow" },
-                                      [
-                                        _c(
-                                          "div",
-                                          { staticClass: "card-body px-0" },
-                                          [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "container d-lg-inline-flex align-items-center"
-                                              },
-                                              [
-                                                post.featured_image
-                                                  ? _c(
-                                                      "div",
-                                                      {
-                                                        staticClass:
-                                                          "col-12 col-lg-3 p-0"
-                                                      },
-                                                      [
-                                                        _c("img", {
-                                                          staticClass:
-                                                            "rounded w-100",
-                                                          attrs: {
-                                                            src:
-                                                              post.featured_image,
-                                                            alt:
-                                                              post.featured_image_caption
-                                                          }
-                                                        })
-                                                      ]
-                                                    )
-                                                  : _vm._e(),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "section",
-                                                  {
-                                                    staticClass:
-                                                      "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
-                                                    class: post.featured_image
-                                                      ? "col-lg-9"
-                                                      : ""
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "h5",
-                                                      {
-                                                        staticClass:
-                                                          "card-title text-truncate mb-0"
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          " +
-                                                            _vm._s(post.title) +
-                                                            "\n                        "
-                                                        )
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "p",
-                                                      {
-                                                        staticClass:
-                                                          "card-text text-truncate"
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          " +
-                                                            _vm._s(
-                                                              post.summary
-                                                            ) +
-                                                            "\n                        "
-                                                        )
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "p",
-                                                      {
-                                                        staticClass:
-                                                          "card-text mb-0 text-secondary"
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          " +
-                                                            _vm._s(
-                                                              post.user.name
-                                                            ) +
-                                                            "\n                          "
-                                                        ),
-                                                        post.topic.length
-                                                          ? _c("span", [
-                                                              _vm._v(
-                                                                "\n                            in " +
-                                                                  _vm._s(
-                                                                    post
-                                                                      .topic[0]
-                                                                      .name
-                                                                  ) +
-                                                                  "\n                          "
-                                                              )
-                                                            ])
-                                                          : _vm._e()
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "p",
-                                                      {
-                                                        staticClass:
-                                                          "card-text text-secondary"
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                          " +
-                                                            _vm._s(
-                                                              _vm
-                                                                .moment(
-                                                                  post.published_at
-                                                                )
-                                                                .format(
-                                                                  "MMM D, Y"
-                                                                )
-                                                            ) +
-                                                            " —\n                          " +
-                                                            _vm._s(
-                                                              post.read_time
-                                                            ) +
-                                                            "\n                        "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ]
-                                                )
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ]
-                                )
-                              ],
-                              1
-                            )
-                          }),
-                          0
-                        )
-                      : _c("div", { staticClass: "lds-facebook" }, [
-                          _c("div"),
-                          _vm._v(" "),
-                          _c("div"),
-                          _vm._v(" "),
-                          _c("div")
-                        ]),
-                    _vm._v(" "),
-                    !_vm.posts
-                      ? _c("div", [
-                          _c(
+                  _c(
+                    "div",
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      !_vm.loadingContent
+                        ? _c(
                             "div",
-                            {
-                              staticClass: "text-left",
-                              attrs: { slot: "no-results" },
-                              slot: "no-results"
-                            },
-                            [_vm._m(1)]
+                            _vm._l(_vm.posts, function(post, index) {
+                              return _c(
+                                "div",
+                                { key: index + "-" + post.id },
+                                [
+                                  _c(
+                                    "router-link",
+                                    {
+                                      staticClass: "text-decoration-none",
+                                      attrs: {
+                                        to: {
+                                          name: "show-post",
+                                          params: { slug: post.slug }
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "div",
+                                        { staticClass: "card mb-4 shadow" },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "card-body px-0" },
+                                            [
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "container d-lg-inline-flex align-items-center"
+                                                },
+                                                [
+                                                  post.featured_image
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "col-12 col-lg-3 p-0"
+                                                        },
+                                                        [
+                                                          _c("img", {
+                                                            staticClass:
+                                                              "rounded w-100",
+                                                            attrs: {
+                                                              src:
+                                                                post.featured_image,
+                                                              alt:
+                                                                post.featured_image_caption
+                                                            }
+                                                          })
+                                                        ]
+                                                      )
+                                                    : _vm._e(),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "section",
+                                                    {
+                                                      staticClass:
+                                                        "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
+                                                      class: post.featured_image
+                                                        ? "col-lg-9"
+                                                        : ""
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "h5",
+                                                        {
+                                                          staticClass:
+                                                            "card-title text-truncate mb-0"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                          " +
+                                                              _vm._s(
+                                                                post.title
+                                                              ) +
+                                                              "\n                        "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "p",
+                                                        {
+                                                          staticClass:
+                                                            "card-text text-truncate"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                          " +
+                                                              _vm._s(
+                                                                post.summary
+                                                              ) +
+                                                              "\n                        "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "p",
+                                                        {
+                                                          staticClass:
+                                                            "card-text mb-0 text-secondary"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                          " +
+                                                              _vm._s(
+                                                                post.user.name
+                                                              ) +
+                                                              "\n                          "
+                                                          ),
+                                                          post.topic.length
+                                                            ? _c("span", [
+                                                                _vm._v(
+                                                                  "\n                            in " +
+                                                                    _vm._s(
+                                                                      post
+                                                                        .topic[0]
+                                                                        .name
+                                                                    ) +
+                                                                    "\n                          "
+                                                                )
+                                                              ])
+                                                            : _vm._e()
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "p",
+                                                        {
+                                                          staticClass:
+                                                            "card-text text-secondary"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                          " +
+                                                              _vm._s(
+                                                                _vm
+                                                                  .moment(
+                                                                    post.published_at
+                                                                  )
+                                                                  .format(
+                                                                    "MMM D, Y"
+                                                                  )
+                                                              ) +
+                                                              " —\n                          " +
+                                                              _vm._s(
+                                                                post.read_time
+                                                              ) +
+                                                              "\n                        "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            }),
+                            0
                           )
-                        ])
-                      : _c(
-                          "div",
-                          { staticClass: "mt-3" },
-                          [
-                            _c("h4", { staticClass: "border-bottom mt-2" }),
-                            _vm._v(" "),
-                            _c("b-pagination", {
-                              attrs: {
-                                pills: "",
-                                "total-rows": _vm.rows,
-                                "per-page": _vm.perPage,
-                                "first-number": "",
-                                "last-number": "",
-                                align: "center"
+                        : _c("center", [
+                            _c("div", { staticClass: "lds-facebook" }, [
+                              _c("div"),
+                              _vm._v(" "),
+                              _c("div"),
+                              _vm._v(" "),
+                              _c("div")
+                            ])
+                          ]),
+                      _vm._v(" "),
+                      !_vm.posts
+                        ? _c("div", [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "text-left",
+                                attrs: { slot: "no-results" },
+                                slot: "no-results"
                               },
-                              model: {
-                                value: _vm.page,
-                                callback: function($$v) {
-                                  _vm.page = $$v
+                              [_vm._m(1)]
+                            )
+                          ])
+                        : _c(
+                            "div",
+                            { staticClass: "mt-3" },
+                            [
+                              _c("h4", { staticClass: "border-bottom mt-2" }),
+                              _vm._v(" "),
+                              _c("b-pagination", {
+                                attrs: {
+                                  pills: "",
+                                  "total-rows": _vm.rows,
+                                  "per-page": _vm.perPage,
+                                  "first-number": "",
+                                  "last-number": "",
+                                  align: "center"
                                 },
-                                expression: "page"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                  ])
+                                model: {
+                                  value: _vm.page,
+                                  callback: function($$v) {
+                                    _vm.page = $$v
+                                  },
+                                  expression: "page"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                    ],
+                    1
+                  )
                 ])
               ],
               1

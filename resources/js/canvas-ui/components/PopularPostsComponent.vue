@@ -53,7 +53,7 @@
         </div>
       </div>
       <center v-else>
-        <div class="lds-facebook" role="status">
+        <div class="lds-facebook">
         </div>
       </center>
       <!-- End Popular Posts -->
