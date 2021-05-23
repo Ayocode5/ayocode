@@ -80,11 +80,13 @@
             </div>
 
             <div v-else class="mt-3">
+              <h4 class="border-bottom mt-2"></h4>
               <b-pagination
-                v-model="page"
                 pills
+                v-model="page"
                 :total-rows="rows"
                 :per-page="perPage"
+                first-number
                 last-number
                 align="center"
               ></b-pagination>
@@ -96,8 +98,8 @@
       </div>
     </div>
 
-     <popular-posts-component />
-     <Footer />
+    <popular-posts-component />
+    <Footer />
   </section>
 </template>
 
@@ -183,7 +185,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .lds-facebook {
   display: inline-block;
   position: relative;
@@ -222,7 +224,48 @@ export default {
   }
 }
 
-b-pagination {
+*:focus {
+  outline: 0 !important;
+  box-shadow: 0 0 0 0.2rem #fff,
+    /* use site bg color to create whitespace for faux focus ring */ 0 0 0
+      0.35rem #069 !important; /* faux focus ring color */
+}
+
+*:focus:not(:focus-visible) {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.page-link {
   border: none;
+  margin: 1px;
+}
+
+.page-link:hover {
+  z-index: 2;
+  color: black;
+  text-decoration: none;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  border-bottom: 2px solid #eda5fc;
+}
+
+.page-item:last-child .page-link {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.page-item:first-child .page-link {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.page-item.active .page-link {
+  z-index: 3;
+  color: #be53d3;
+  border: none;
+  background-color: white;
+  /* border-color: #be53d3; */
+  border-bottom: 2px solid #be53d3;
 }
 </style>
