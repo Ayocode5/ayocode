@@ -114,6 +114,7 @@
         </div>
 
         <div v-if="post.tags.length" class="mt-5">
+          tags:
           <router-link
             :key="tag.id"
             v-for="tag in post.tags"
@@ -140,6 +141,9 @@
           </p>
         </div>
       </div>
+      <!-- Comment Reply Component -->
+      <comment-reply-component :post_id="post.slug" />
+      <!-- Related Posts Component -->
       <div v-if="post.tags.length">
         <div :key="tag.id" v-for="tag in post.tags">
           <related-posts-component
@@ -150,7 +154,9 @@
           />
         </div>
       </div>
+      <!-- Popular Posts Component -->
       <popular-posts-component />
+      <!-- Footer Component -->
       <Footer />
     </div>
   </section>
@@ -161,6 +167,7 @@ import NProgress from "nprogress";
 import PageHeader from "../components/PageHeaderComponent";
 import PopularPostsComponent from "../components/PopularPostsComponent";
 import RelatedPostsComponent from "../components/RelatedPostsComponent";
+import CommentReplyComponent from "../components/CommentReplyComponent";
 import Footer from "../components/Footer";
 import hljs from "highlight.js";
 import mediumZoom from "medium-zoom";
@@ -172,7 +179,8 @@ export default {
     PageHeader,
     PopularPostsComponent,
     RelatedPostsComponent,
-    Footer,
+    CommentReplyComponent,
+    Footer
   },
 
   metaInfo() {

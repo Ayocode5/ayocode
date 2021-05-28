@@ -162,6 +162,9 @@ export default {
               this.noMatchPost = true;
               $state.loaded();
               $state.complete();
+            } else if (err.response.status == 500) {
+              // $state.loaded();
+              $state.complete();
             }
           });
       }

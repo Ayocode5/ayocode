@@ -23,14 +23,6 @@
           </router-link>
         </div>
 
-        <!-- <input
-          v-on:keyup.enter="searchPost()"
-          type="text"
-          name="searchPost"
-          id="search-post"
-          v-model="keyword"
-        /> -->
-
         <div class="form-row align-items-center">
           <label class="sr-only" for="inlineFormInputGroup">Search</label>
           <div class="input-group mb-2 mt-2">
@@ -125,12 +117,16 @@ export default {
 <style scoped>
 input {
   border: none;
-  border-bottom: 2px solid #b6b6b6;
+  border-bottom: 2px solid #e9e9e9;
   border-radius: 0px;
   color: #666666;
   padding: 5px 10px;
   outline: none;
   padding-left: 2px;
+}
+
+input:focus {
+  background: white;
 }
 
 [placeholder]:focus::-webkit-input-placeholder {
@@ -142,7 +138,7 @@ input {
 .input-group-text {
   background: white;
   border: none;
-  border-bottom: 2px solid #b6b6b6;
+  border-bottom: 2px solid #e9e9e9;
   border-radius: 0px;
   color: #b6b6b6;
 }

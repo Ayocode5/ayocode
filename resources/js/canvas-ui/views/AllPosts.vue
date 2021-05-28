@@ -139,6 +139,10 @@ export default {
       posts: [],
       isReady: false,
       loadingContent: false,
+      error: {
+        status: Number,
+        message: String
+      }
     };
   },
 
@@ -170,6 +174,8 @@ export default {
           }
         })
         .catch((err) => {
+          console.log(err);
+          
           NProgress.done();
         });
     },

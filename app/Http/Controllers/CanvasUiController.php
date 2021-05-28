@@ -41,13 +41,14 @@ class CanvasUiController extends Controller
 
         $keyword = $request->input('search');
         $page = $request->input('page', 1);
+        $limit = $request->input('limit', 3);
 
         //Search mathed posts AKA Full Text Search
         if ($keyword) {
             $posts = Post::whereRaw("MATCH (title,summary) AGAINST ('$keyword' IN NATURAL LANGUAGE MODE)")->published()->with('user', 'topic')->get();
 
             $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-            $perPage = 3;
+            $perPage = $limit;
             $posts = $posts instanceof Collection ? $posts : Collection::make($posts);
 
             if ($posts->count() > 0) {
@@ -55,7 +56,7 @@ class CanvasUiController extends Controller
             }
             return response()->json(["message" => "Keyword do not match for any data", "status_code" => 404], 404);
         } else {
-            return Post::latest()->published()->with('user', 'topic')->paginate(3);
+            return Post::latest()->published()->with('user', 'topic')->paginate($limit);
         }
     }
 

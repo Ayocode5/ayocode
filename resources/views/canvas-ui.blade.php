@@ -15,9 +15,9 @@
     <link rel="stylesheet" type="text/css" href="{{ mix('css/canvas-ui.css') }}">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
-    {{-- Font --}}
     {{-- <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Karla&family=Merriweather:wght@400;700&display=swap"> --}}
-
+    
+    {{-- Sintax Highlighting --}}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atelier-cave-light.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/go.min.js"></script>
