@@ -12,7 +12,7 @@
             :to="{ name: 'show-post', params: { slug: post.slug } }"
             class="text-decoration-none"
           >
-            <div class="card mb-4 shadow">
+            <div class="card border-0 mb-4 shadow-4">
               <div class="card-body px-0">
                 <div class="container d-lg-inline-flex align-items-center">
                   <!-- <div

@@ -114,12 +114,12 @@
         </div>
 
         <div v-if="post.tags.length" class="mt-5">
-          tags:
+          Tags:
           <router-link
             :key="tag.id"
             v-for="tag in post.tags"
             :to="{ name: 'show-tag', params: { slug: tag.slug } }"
-            class="badge badge-light p-2 my-1 mr-2 text-decoration-none text-uppercase"
+            class="badge badge-warning p-2 my-1 mr-2 text-decoration-none text-uppercase"
           >
             {{ tag.name }}
           </router-link>
@@ -142,7 +142,7 @@
         </div>
       </div>
       <!-- Comment Reply Component -->
-      <comment-reply-component :post_id="post.slug" />
+      <comment-reply-component :post_id="post.id" :post_slug="post.slug" />
       <!-- Related Posts Component -->
       <div v-if="post.tags.length">
         <div :key="tag.id" v-for="tag in post.tags">

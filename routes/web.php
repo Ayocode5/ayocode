@@ -27,8 +27,11 @@ Route::prefix('blog')->group(function () {
         Route::get('posts', [\App\Http\Controllers\CanvasUiController::class, 'getPosts']);
         Route::get('posts/popular', [\App\Http\Controllers\CanvasUiController::class, 'getPopularPosts']);
         Route::get('posts/related', [\App\Http\Controllers\CanvasUiController::class, 'getRelatedPosts']);
+        Route::get('posts/discussion', [\App\Http\Controllers\CanvasUiController::class, 'getCommentsReplies']);
         Route::get('posts/{slug}', [\App\Http\Controllers\CanvasUiController::class, 'showPost'])
              ->middleware('Canvas\Http\Middleware\Session');
+        Route::post('posts/comment',  [\App\Http\Controllers\CanvasUiController::class, 'storePostComment']);
+        Route::post('posts/reply', [\App\Http\Controllers\CanvasUiController::class, 'storeReplyComment']);
         
         Route::get('tags', [\App\Http\Controllers\CanvasUiController::class, 'getTags']);
         Route::get('tags/{slug}', [\App\Http\Controllers\CanvasUiController::class, 'showTag']);

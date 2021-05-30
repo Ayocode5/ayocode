@@ -1856,6 +1856,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2096,7 +2135,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CommentReplyComponent",
   props: {
-    post_id: ''
+    post_id: "",
+    post_slug: ""
   },
   data: function data() {
     return {
@@ -2119,14 +2159,20 @@ __webpack_require__.r(__webpack_exports__);
           name: "iyan",
           email: "iyan@mail.com",
           comment: "i know right",
-          reply_to: "Septian"
+          reply_to: {
+            name: "Septian",
+            email: "septian@mail.com"
+          }
         }, {
           id: 222,
           comment_section_id: 123,
           name: "brando",
           email: "brando@mail.com",
           comment: "yyyy",
-          reply_to: "iyan"
+          reply_to: {
+            name: "iyan",
+            email: "iyan@mail.com"
+          }
         }]
       }, {
         id: 456,
@@ -2139,59 +2185,105 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    if (localStorage.getItem("ayocode_saved_credential")) {
-      var data = JSON.parse(localStorage.getItem("ayocode_saved_credential"));
+    var savedCredential = localStorage.getItem("ayocode_saved_credential");
+
+    if (savedCredential) {
+      var data = JSON.parse(savedCredential);
       this.guest.name = data.guest.name;
       this.guest.email = data.guest.email;
       this.guest.isSavedCredential = true;
     }
   },
   methods: {
-    postComment: function postComment(e) {
-      console.log(e);
-      this.post_comments.push({
-        id: Math.floor(Math.random() * 999),
-        post_id: this.post_id,
-        name: this.guest.name,
-        email: this.guest.email,
-        comment: this.guest.comment,
-        reply: []
-      });
-      this.guest.comment = '';
+    postComment: function postComment() {
+      var _this = this;
+
+      if (this.guest.comment) {
+        //PostComment Object
+        var postCommentObj = {
+          id: Math.floor(Math.random() * 999),
+          post_id: this.post_id,
+          name: this.guest.name,
+          email: this.guest.email,
+          comment: this.guest.comment,
+          reply: []
+        }; //perform api post
+
+        this.request().post("api/posts/comment", postCommentObj).then(function (res) {
+          console.log(res);
+
+          _this.post_comments.push(_objectSpread(_objectSpread({}, postCommentObj), {}, {
+            id: res.data.id
+          }));
+
+          console.log(_this.post_comments); //Empty textarea after postComment clicked
+
+          _this.guest.comment = "";
+        })["catch"](function (err) {
+          return console.log(err);
+        }); //Empty email and name if guest do not save it
+
+        if (!this.guest.isSavedCredential) {
+          this.guest.name = "";
+          this.guest.email = "";
+        }
+      }
     },
     postReplyComment: function postReplyComment(_ref) {
+      var _this2 = this;
+
       var reply_to = _ref.reply_to,
           comment_section_id = _ref.comment_section_id;
-      var x = this.post_comments.find(function (_ref2) {
+      console.log(reply_to);
+      var selectedComment = this.post_comments.find(function (_ref2) {
         var id = _ref2.id;
         return id == comment_section_id;
       });
-      x.reply.push({
-        id: Math.floor(Math.random() * 999),
-        comment_section_id: comment_section_id,
-        name: this.guest.name,
-        email: this.guest.email,
-        comment: this.guest.reply,
-        reply_to: reply_to
+
+      if (this.guest.reply) {
+        var commentReplyObj = {
+          id: Math.floor(Math.random() * 999),
+          comment_section_id: comment_section_id,
+          name: this.guest.name,
+          email: this.guest.email,
+          comment: this.guest.reply,
+          reply_to: reply_to
+        };
+        this.request().post("api/posts/reply", _objectSpread(_objectSpread({}, commentReplyObj), {}, {
+          reply_to: JSON.stringify(reply_to) //replace reply_to with json string format,
+
+        })).then(function (res) {
+          console.log(res);
+          selectedComment.reply.push(commentReplyObj);
+          _this2.guest.reply = "";
+        })["catch"](function (err) {
+          console.log(err);
+        });
+      } //perform api post
+
+    },
+    getCommentsReplies: function getCommentsReplies() {
+      this.request().get("api/posts/discussion?post_id=" + this.post_id).then(function (res) {
+        console.log(res);
+      })["catch"](function (err) {
+        console.log(err);
       });
-      this.guest.reply = '';
     },
     check: function check(e) {
-      var _this = this;
+      var _this3 = this;
 
       this.$nextTick(function () {
-        if (_this.guest.isSavedCredential) {
-          console.log("wlwl");
-
-          if (_this.guest.name && _this.guest.email) {
+        if (_this3.guest.isSavedCredential) {
+          if (_this3.guest.name && _this3.guest.email) {
             localStorage.setItem("ayocode_saved_credential", JSON.stringify({
               guest: {
-                name: _this.guest.name,
-                email: _this.guest.email
+                name: _this3.guest.name,
+                email: _this3.guest.email
               }
             }));
           } else {
             console.log("email and name required before you save it");
+            _this3.guest.isSavedCredential = false;
           }
         } else {
           localStorage.removeItem("ayocode_saved_credential");
@@ -15307,7 +15399,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.pointer[data-v-47472ebd] {\n  cursor: pointer;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.pointer[data-v-47472ebd] {\n  cursor: pointer;\n}\nbutton[data-v-47472ebd] {\n  border-radius: 5px;\n  color: whitesmoke;\n}\na[data-v-47472ebd]:hover {\n  color: rgb(94, 201, 228);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -102701,21 +102793,35 @@ var render = function() {
           _vm._l(_vm.post_comments, function(comment) {
             return _c(
               "div",
-              { key: comment.id, staticClass: "card border-0 mb-2" },
+              { key: comment.id, staticClass: "card border-2 mb-2" },
               [
                 _c(
                   "div",
                   { staticClass: "card-body" },
                   [
-                    _c("h5", { staticClass: "card-title" }, [
-                      _vm._v(_vm._s(comment.name))
-                    ]),
-                    _vm._v(" "),
-                    _c("h6", { staticClass: "card-subtitle mb-2 text-muted" }, [
-                      _vm._v(
-                        "\n          Commented on " +
-                          _vm._s(comment.post_id) +
-                          "\n        "
+                    _c("div", [
+                      _c("img", {
+                        staticStyle: { width: "50px", height: "50px" },
+                        attrs: {
+                          src: "https://www.svgrepo.com/show/77591/user.svg",
+                          alt: "user"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("h5", { staticClass: "card-title" }, [
+                        _vm._v(_vm._s(comment.name))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "h6",
+                        { staticClass: "card-subtitle mb-2 text-muted" },
+                        [
+                          _vm._v(
+                            "\n            Commented on " +
+                              _vm._s(_vm.post_slug) +
+                              "\n          "
+                          )
+                        ]
                       )
                     ]),
                     _vm._v(" "),
@@ -102734,7 +102840,10 @@ var render = function() {
                           variant: "primary"
                         }
                       },
-                      [_vm._v("Reply")]
+                      [
+                        _c("i", { staticClass: "fas fa-reply" }),
+                        _vm._v(" Reply")
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -102748,7 +102857,17 @@ var render = function() {
                         }
                       },
                       [
-                        _c("p", [_vm._v("Reply to " + _vm._s(comment.name))]),
+                        _c(
+                          "p",
+                          { staticClass: "badge badge-secondary py-2 px-2" },
+                          [
+                            _vm._v(
+                              "\n            Reply to " +
+                                _vm._s(comment.name) +
+                                "\n          "
+                            )
+                          ]
+                        ),
                         _vm._v(" "),
                         _c(
                           "form",
@@ -102756,7 +102875,7 @@ var render = function() {
                           [
                             !_vm.guest.isSavedCredential
                               ? [
-                                  _c("div", { staticClass: "mb-3 mt-3" }, [
+                                  _c("div", { staticClass: "mt-2" }, [
                                     _c(
                                       "label",
                                       {
@@ -102797,7 +102916,7 @@ var render = function() {
                                     })
                                   ]),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "mb-3" }, [
+                                  _c("div", { staticClass: "mb-2" }, [
                                     _c(
                                       "label",
                                       {
@@ -102836,7 +102955,7 @@ var render = function() {
                                 ]
                               : _vm._e(),
                             _vm._v(" "),
-                            _c("div", { staticClass: "mb-3" }, [
+                            _c("div", { staticClass: "mb-2" }, [
                               _c(
                                 "label",
                                 {
@@ -102954,7 +103073,10 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     return _vm.postReplyComment({
-                                      reply_to: comment.name,
+                                      reply_to: {
+                                        name: comment.name,
+                                        email: comment.email
+                                      },
                                       comment_section_id: comment.id
                                     })
                                   }
@@ -102979,12 +103101,24 @@ var render = function() {
                             return _c("div", { key: reply.id }, [
                               _c(
                                 "div",
-                                { staticClass: "card border-0 mb-2 mt-2" },
+                                { staticClass: "card border-2 mb-2 mt-2" },
                                 [
                                   _c(
                                     "div",
                                     { staticClass: "card-body" },
                                     [
+                                      _c("img", {
+                                        staticStyle: {
+                                          width: "50px",
+                                          height: "50px"
+                                        },
+                                        attrs: {
+                                          src:
+                                            "https://www.svgrepo.com/show/77591/user.svg",
+                                          alt: "user"
+                                        }
+                                      }),
+                                      _vm._v(" "),
                                       _c("h5", { staticClass: "card-title" }, [
                                         _vm._v(_vm._s(reply.name))
                                       ]),
@@ -102997,8 +103131,13 @@ var render = function() {
                                         },
                                         [
                                           _vm._v(
-                                            "\n                  Replied to " +
-                                              _vm._s(reply.reply_to) +
+                                            "\n                  Replied to\n                  " +
+                                              _vm._s(
+                                                reply.reply_to.name +
+                                                  " (" +
+                                                  reply.reply_to.email +
+                                                  ")"
+                                              ) +
                                               "\n                "
                                           )
                                         ]
@@ -103018,361 +103157,407 @@ var render = function() {
                                                 variant: "primary"
                                               }
                                             },
-                                            [_vm._v("Reply")]
+                                            [
+                                              _c("i", {
+                                                staticClass: "fas fa-reply"
+                                              }),
+                                              _vm._v(" Reply")
+                                            ]
                                           )
                                         : _vm._e(),
                                       _vm._v(" "),
-                                      _c(
-                                        "b-popover",
-                                        {
-                                          ref: "popover",
-                                          refInFor: true,
-                                          attrs: {
-                                            target: "popover-reply-" + reply.id,
-                                            placement: "rightbottom"
-                                          }
-                                        },
-                                        [
-                                          _c("p", [
-                                            _vm._v(
-                                              "Reply to " + _vm._s(reply.name)
-                                            )
-                                          ]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "form",
+                                      reply.email != _vm.guest.email
+                                        ? _c(
+                                            "b-popover",
                                             {
+                                              ref: "popover",
+                                              refInFor: true,
                                               attrs: {
-                                                onsubmit: "return false"
+                                                target:
+                                                  "popover-reply-" + reply.id,
+                                                placement: "bottomright"
                                               }
                                             },
                                             [
-                                              !_vm.guest.isSavedCredential
-                                                ? [
-                                                    _c(
-                                                      "div",
-                                                      {
-                                                        staticClass: "mb-3 mt-3"
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "label",
-                                                          {
-                                                            staticClass:
-                                                              "form-label",
-                                                            attrs: {
-                                                              for:
-                                                                "exampleInputEmail1"
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "Email address"
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c("input", {
-                                                          directives: [
-                                                            {
-                                                              name: "model",
-                                                              rawName:
-                                                                "v-model",
-                                                              value:
-                                                                _vm.guest.email,
-                                                              expression:
-                                                                "guest.email"
-                                                            }
-                                                          ],
-                                                          staticClass:
-                                                            "form-control",
-                                                          attrs: {
-                                                            type: "email",
-                                                            id:
-                                                              "exampleInputEmail1",
-                                                            "aria-describedby":
-                                                              "emailHelp"
-                                                          },
-                                                          domProps: {
-                                                            value:
-                                                              _vm.guest.email
-                                                          },
-                                                          on: {
-                                                            input: function(
-                                                              $event
-                                                            ) {
-                                                              if (
-                                                                $event.target
-                                                                  .composing
-                                                              ) {
-                                                                return
-                                                              }
-                                                              _vm.$set(
-                                                                _vm.guest,
-                                                                "email",
-                                                                $event.target
-                                                                  .value
-                                                              )
-                                                            }
-                                                          }
-                                                        })
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "div",
-                                                      { staticClass: "mb-3" },
-                                                      [
-                                                        _c(
-                                                          "label",
-                                                          {
-                                                            staticClass:
-                                                              "form-label",
-                                                            attrs: {
-                                                              for: "nameInput"
-                                                            }
-                                                          },
-                                                          [_vm._v("Name")]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c("input", {
-                                                          directives: [
-                                                            {
-                                                              name: "model",
-                                                              rawName:
-                                                                "v-model",
-                                                              value:
-                                                                _vm.guest.name,
-                                                              expression:
-                                                                "guest.name"
-                                                            }
-                                                          ],
-                                                          staticClass:
-                                                            "form-control",
-                                                          attrs: {
-                                                            type: "text",
-                                                            id: "nameInput"
-                                                          },
-                                                          domProps: {
-                                                            value:
-                                                              _vm.guest.name
-                                                          },
-                                                          on: {
-                                                            input: function(
-                                                              $event
-                                                            ) {
-                                                              if (
-                                                                $event.target
-                                                                  .composing
-                                                              ) {
-                                                                return
-                                                              }
-                                                              _vm.$set(
-                                                                _vm.guest,
-                                                                "name",
-                                                                $event.target
-                                                                  .value
-                                                              )
-                                                            }
-                                                          }
-                                                        })
-                                                      ]
-                                                    )
-                                                  ]
-                                                : _vm._e(),
-                                              _vm._v(" "),
                                               _c(
-                                                "div",
-                                                { staticClass: "mb-3" },
+                                                "p",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-secondary py-2 px-2"
+                                                },
                                                 [
-                                                  _c(
-                                                    "label",
-                                                    {
-                                                      staticClass: "form-label",
-                                                      attrs: {
-                                                        for: "commentInput"
-                                                      }
-                                                    },
-                                                    [_vm._v("Your Reply")]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c("textarea", {
-                                                    directives: [
-                                                      {
-                                                        name: "model",
-                                                        rawName: "v-model",
-                                                        value: _vm.guest.reply,
-                                                        expression:
-                                                          "guest.reply"
-                                                      }
-                                                    ],
-                                                    staticClass: "form-control",
-                                                    attrs: {
-                                                      id: "commentInput"
-                                                    },
-                                                    domProps: {
-                                                      value: _vm.guest.reply
-                                                    },
-                                                    on: {
-                                                      input: function($event) {
-                                                        if (
-                                                          $event.target
-                                                            .composing
-                                                        ) {
-                                                          return
-                                                        }
-                                                        _vm.$set(
-                                                          _vm.guest,
-                                                          "reply",
-                                                          $event.target.value
-                                                        )
-                                                      }
-                                                    }
-                                                  })
+                                                  _vm._v(
+                                                    "\n                    Reply to " +
+                                                      _vm._s(reply.name) +
+                                                      "\n                  "
+                                                  )
                                                 ]
                                               ),
                                               _vm._v(" "),
                                               _c(
-                                                "div",
+                                                "form",
                                                 {
-                                                  staticClass: "mb-3 form-check"
+                                                  attrs: {
+                                                    onsubmit: "return false"
+                                                  }
                                                 },
                                                 [
-                                                  _c("input", {
-                                                    directives: [
-                                                      {
-                                                        name: "model",
-                                                        rawName: "v-model",
-                                                        value:
-                                                          _vm.guest
-                                                            .isSavedCredential,
-                                                        expression:
-                                                          "guest.isSavedCredential"
-                                                      }
-                                                    ],
-                                                    staticClass:
-                                                      "form-check-input",
-                                                    attrs: {
-                                                      type: "checkbox",
-                                                      id: "exampleCheck2"
-                                                    },
-                                                    domProps: {
-                                                      checked: Array.isArray(
-                                                        _vm.guest
-                                                          .isSavedCredential
-                                                      )
-                                                        ? _vm._i(
-                                                            _vm.guest
-                                                              .isSavedCredential,
-                                                            null
-                                                          ) > -1
-                                                        : _vm.guest
-                                                            .isSavedCredential
-                                                    },
-                                                    on: {
-                                                      change: [
-                                                        function($event) {
-                                                          var $$a =
-                                                              _vm.guest
-                                                                .isSavedCredential,
-                                                            $$el =
-                                                              $event.target,
-                                                            $$c = $$el.checked
-                                                              ? true
-                                                              : false
-                                                          if (
-                                                            Array.isArray($$a)
-                                                          ) {
-                                                            var $$v = null,
-                                                              $$i = _vm._i(
-                                                                $$a,
-                                                                $$v
-                                                              )
-                                                            if ($$el.checked) {
-                                                              $$i < 0 &&
-                                                                _vm.$set(
-                                                                  _vm.guest,
-                                                                  "isSavedCredential",
-                                                                  $$a.concat([
-                                                                    $$v
-                                                                  ])
+                                                  !_vm.guest.isSavedCredential
+                                                    ? [
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass: "mb-2"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "label",
+                                                              {
+                                                                staticClass:
+                                                                  "form-label",
+                                                                attrs: {
+                                                                  for:
+                                                                    "exampleInputEmail1"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "Email address"
                                                                 )
-                                                            } else {
-                                                              $$i > -1 &&
-                                                                _vm.$set(
-                                                                  _vm.guest,
-                                                                  "isSavedCredential",
-                                                                  $$a
-                                                                    .slice(
-                                                                      0,
-                                                                      $$i
-                                                                    )
-                                                                    .concat(
-                                                                      $$a.slice(
-                                                                        $$i + 1
-                                                                      )
-                                                                    )
-                                                                )
-                                                            }
-                                                          } else {
-                                                            _vm.$set(
-                                                              _vm.guest,
-                                                              "isSavedCredential",
-                                                              $$c
-                                                            )
-                                                          }
-                                                        },
-                                                        _vm.check
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c("input", {
+                                                              directives: [
+                                                                {
+                                                                  name: "model",
+                                                                  rawName:
+                                                                    "v-model",
+                                                                  value:
+                                                                    _vm.guest
+                                                                      .email,
+                                                                  expression:
+                                                                    "guest.email"
+                                                                }
+                                                              ],
+                                                              staticClass:
+                                                                "form-control",
+                                                              attrs: {
+                                                                type: "email",
+                                                                id:
+                                                                  "exampleInputEmail1",
+                                                                "aria-describedby":
+                                                                  "emailHelp"
+                                                              },
+                                                              domProps: {
+                                                                value:
+                                                                  _vm.guest
+                                                                    .email
+                                                              },
+                                                              on: {
+                                                                input: function(
+                                                                  $event
+                                                                ) {
+                                                                  if (
+                                                                    $event
+                                                                      .target
+                                                                      .composing
+                                                                  ) {
+                                                                    return
+                                                                  }
+                                                                  _vm.$set(
+                                                                    _vm.guest,
+                                                                    "email",
+                                                                    $event
+                                                                      .target
+                                                                      .value
+                                                                  )
+                                                                }
+                                                              }
+                                                            })
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass: "mb-2"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "label",
+                                                              {
+                                                                staticClass:
+                                                                  "form-label",
+                                                                attrs: {
+                                                                  for:
+                                                                    "nameInput"
+                                                                }
+                                                              },
+                                                              [_vm._v("Name")]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c("input", {
+                                                              directives: [
+                                                                {
+                                                                  name: "model",
+                                                                  rawName:
+                                                                    "v-model",
+                                                                  value:
+                                                                    _vm.guest
+                                                                      .name,
+                                                                  expression:
+                                                                    "guest.name"
+                                                                }
+                                                              ],
+                                                              staticClass:
+                                                                "form-control",
+                                                              attrs: {
+                                                                type: "text",
+                                                                id: "nameInput"
+                                                              },
+                                                              domProps: {
+                                                                value:
+                                                                  _vm.guest.name
+                                                              },
+                                                              on: {
+                                                                input: function(
+                                                                  $event
+                                                                ) {
+                                                                  if (
+                                                                    $event
+                                                                      .target
+                                                                      .composing
+                                                                  ) {
+                                                                    return
+                                                                  }
+                                                                  _vm.$set(
+                                                                    _vm.guest,
+                                                                    "name",
+                                                                    $event
+                                                                      .target
+                                                                      .value
+                                                                  )
+                                                                }
+                                                              }
+                                                            })
+                                                          ]
+                                                        )
                                                       ]
-                                                    }
-                                                  }),
+                                                    : _vm._e(),
                                                   _vm._v(" "),
                                                   _c(
-                                                    "label",
+                                                    "div",
+                                                    { staticClass: "mb-2" },
+                                                    [
+                                                      _c(
+                                                        "label",
+                                                        {
+                                                          staticClass:
+                                                            "form-label",
+                                                          attrs: {
+                                                            for: "commentInput"
+                                                          }
+                                                        },
+                                                        [_vm._v("Your Reply")]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c("textarea", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm.guest.reply,
+                                                            expression:
+                                                              "guest.reply"
+                                                          }
+                                                        ],
+                                                        staticClass:
+                                                          "form-control",
+                                                        attrs: {
+                                                          id: "commentInput"
+                                                        },
+                                                        domProps: {
+                                                          value: _vm.guest.reply
+                                                        },
+                                                        on: {
+                                                          input: function(
+                                                            $event
+                                                          ) {
+                                                            if (
+                                                              $event.target
+                                                                .composing
+                                                            ) {
+                                                              return
+                                                            }
+                                                            _vm.$set(
+                                                              _vm.guest,
+                                                              "reply",
+                                                              $event.target
+                                                                .value
+                                                            )
+                                                          }
+                                                        }
+                                                      })
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
                                                     {
                                                       staticClass:
-                                                        "form-check-label",
-                                                      attrs: {
-                                                        for: "exampleCheck2"
+                                                        "mb-3 form-check"
+                                                    },
+                                                    [
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm.guest
+                                                                .isSavedCredential,
+                                                            expression:
+                                                              "guest.isSavedCredential"
+                                                          }
+                                                        ],
+                                                        staticClass:
+                                                          "form-check-input",
+                                                        attrs: {
+                                                          type: "checkbox",
+                                                          id: "exampleCheck2"
+                                                        },
+                                                        domProps: {
+                                                          checked: Array.isArray(
+                                                            _vm.guest
+                                                              .isSavedCredential
+                                                          )
+                                                            ? _vm._i(
+                                                                _vm.guest
+                                                                  .isSavedCredential,
+                                                                null
+                                                              ) > -1
+                                                            : _vm.guest
+                                                                .isSavedCredential
+                                                        },
+                                                        on: {
+                                                          change: [
+                                                            function($event) {
+                                                              var $$a =
+                                                                  _vm.guest
+                                                                    .isSavedCredential,
+                                                                $$el =
+                                                                  $event.target,
+                                                                $$c = $$el.checked
+                                                                  ? true
+                                                                  : false
+                                                              if (
+                                                                Array.isArray(
+                                                                  $$a
+                                                                )
+                                                              ) {
+                                                                var $$v = null,
+                                                                  $$i = _vm._i(
+                                                                    $$a,
+                                                                    $$v
+                                                                  )
+                                                                if (
+                                                                  $$el.checked
+                                                                ) {
+                                                                  $$i < 0 &&
+                                                                    _vm.$set(
+                                                                      _vm.guest,
+                                                                      "isSavedCredential",
+                                                                      $$a.concat(
+                                                                        [$$v]
+                                                                      )
+                                                                    )
+                                                                } else {
+                                                                  $$i > -1 &&
+                                                                    _vm.$set(
+                                                                      _vm.guest,
+                                                                      "isSavedCredential",
+                                                                      $$a
+                                                                        .slice(
+                                                                          0,
+                                                                          $$i
+                                                                        )
+                                                                        .concat(
+                                                                          $$a.slice(
+                                                                            $$i +
+                                                                              1
+                                                                          )
+                                                                        )
+                                                                    )
+                                                                }
+                                                              } else {
+                                                                _vm.$set(
+                                                                  _vm.guest,
+                                                                  "isSavedCredential",
+                                                                  $$c
+                                                                )
+                                                              }
+                                                            },
+                                                            _vm.check
+                                                          ]
+                                                        }
+                                                      }),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "label",
+                                                        {
+                                                          staticClass:
+                                                            "form-check-label",
+                                                          attrs: {
+                                                            for: "exampleCheck2"
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "Save my name and email"
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "button",
+                                                    {
+                                                      staticClass:
+                                                        "btn btn-primary",
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          return _vm.postReplyComment(
+                                                            {
+                                                              reply_to: {
+                                                                name:
+                                                                  reply.name,
+                                                                email:
+                                                                  reply.email
+                                                              },
+                                                              comment_section_id:
+                                                                comment.id
+                                                            }
+                                                          )
+                                                        }
                                                       }
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "Save my name and email"
+                                                        "\n                      Post Reply\n                    "
                                                       )
                                                     ]
                                                   )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "button",
-                                                {
-                                                  staticClass:
-                                                    "btn btn-primary",
-                                                  on: {
-                                                    click: function($event) {
-                                                      return _vm.postReplyComment(
-                                                        {
-                                                          reply_to: reply.name,
-                                                          comment_section_id:
-                                                            comment.id
-                                                        }
-                                                      )
-                                                    }
-                                                  }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                      Post Reply\n                    "
-                                                  )
-                                                ]
+                                                ],
+                                                2
                                               )
-                                            ],
-                                            2
+                                            ]
                                           )
-                                        ]
-                                      )
+                                        : _vm._e()
                                     ],
                                     1
                                   )
@@ -103394,177 +103579,203 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
-        "form",
-        { staticClass: "mt-4", attrs: { onsubmit: "return false" } },
+        "div",
+        {
+          staticClass: "mt-3 py-4 px-4 rounded",
+          staticStyle: { background: "rgb(239 239 239)" }
+        },
         [
-          !_vm.guest.isSavedCredential
-            ? [
-                _c("div", { staticClass: "mb-3 mt-3" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "form-label",
-                      attrs: { for: "exampleInputEmail1" }
-                    },
-                    [_vm._v("Email address")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.guest.email,
-                        expression: "guest.email"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "email",
-                      id: "exampleInputEmail1",
-                      "aria-describedby": "emailHelp"
-                    },
-                    domProps: { value: _vm.guest.email },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.guest, "email", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-3" }, [
-                  _c(
-                    "label",
-                    { staticClass: "form-label", attrs: { for: "nameInput" } },
-                    [_vm._v("Name")]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.guest.name,
-                        expression: "guest.name"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text", id: "nameInput" },
-                    domProps: { value: _vm.guest.name },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.guest, "name", $event.target.value)
-                      }
-                    }
-                  })
-                ])
-              ]
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", { staticClass: "mb-3" }, [
-            _c(
-              "label",
-              { staticClass: "form-label", attrs: { for: "commentInput" } },
-              [_vm._v("Your Comment")]
-            ),
-            _vm._v(" "),
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.guest.comment,
-                  expression: "guest.comment"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { id: "commentInput" },
-              domProps: { value: _vm.guest.comment },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.guest, "comment", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "mb-3 form-check" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.guest.isSavedCredential,
-                  expression: "guest.isSavedCredential"
-                }
-              ],
-              staticClass: "form-check-input",
-              attrs: { type: "checkbox", id: "exampleCheck1" },
-              domProps: {
-                checked: Array.isArray(_vm.guest.isSavedCredential)
-                  ? _vm._i(_vm.guest.isSavedCredential, null) > -1
-                  : _vm.guest.isSavedCredential
-              },
-              on: {
-                change: [
-                  function($event) {
-                    var $$a = _vm.guest.isSavedCredential,
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = null,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 &&
-                          _vm.$set(
-                            _vm.guest,
-                            "isSavedCredential",
-                            $$a.concat([$$v])
-                          )
-                      } else {
-                        $$i > -1 &&
-                          _vm.$set(
-                            _vm.guest,
-                            "isSavedCredential",
-                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                          )
-                      }
-                    } else {
-                      _vm.$set(_vm.guest, "isSavedCredential", $$c)
-                    }
-                  },
-                  _vm.check
-                ]
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "label",
-              {
-                staticClass: "form-check-label",
-                attrs: { for: "exampleCheck1" }
-              },
-              [_vm._v("Save my name and email")]
-            )
-          ]),
-          _vm._v(" "),
           _c(
-            "button",
-            { staticClass: "btn btn-primary", on: { click: _vm.postComment } },
-            [_vm._v("Post Comment")]
+            "form",
+            { attrs: { onsubmit: "return false" } },
+            [
+              !_vm.guest.isSavedCredential
+                ? [
+                    _c("div", { staticClass: "mb-3" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "form-label",
+                          attrs: { for: "exampleInputEmail1" }
+                        },
+                        [_vm._v("Email address")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.guest.email,
+                            expression: "guest.email"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "email",
+                          id: "exampleInputEmail1",
+                          "aria-describedby": "emailHelp",
+                          required: ""
+                        },
+                        domProps: { value: _vm.guest.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.guest, "email", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mb-3" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "form-label",
+                          attrs: { for: "nameInput" }
+                        },
+                        [_vm._v("Name")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.guest.name,
+                            expression: "guest.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", id: "nameInput", required: "" },
+                        domProps: { value: _vm.guest.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.guest, "name", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ]
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-3" }, [
+                _c(
+                  "label",
+                  { staticClass: "form-label", attrs: { for: "commentInput" } },
+                  [_vm._v("Your Comment")]
+                ),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.guest.comment,
+                      expression: "guest.comment"
+                    }
+                  ],
+                  ref: "write_comment",
+                  staticClass: "form-control",
+                  attrs: { id: "commentInput" },
+                  domProps: { value: _vm.guest.comment },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.guest, "comment", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mb-3 form-check" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.guest.isSavedCredential,
+                      expression: "guest.isSavedCredential"
+                    }
+                  ],
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "exampleCheck1" },
+                  domProps: {
+                    checked: Array.isArray(_vm.guest.isSavedCredential)
+                      ? _vm._i(_vm.guest.isSavedCredential, null) > -1
+                      : _vm.guest.isSavedCredential
+                  },
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$a = _vm.guest.isSavedCredential,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(
+                                _vm.guest,
+                                "isSavedCredential",
+                                $$a.concat([$$v])
+                              )
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.guest,
+                                "isSavedCredential",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.guest, "isSavedCredential", $$c)
+                        }
+                      },
+                      _vm.check
+                    ]
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "exampleCheck1" }
+                  },
+                  [_vm._v("Save my name and email")]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.postComment }
+                },
+                [_vm._v("\n        Post Comment\n      ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.getCommentsReplies }
+                },
+                [_vm._v("\n        wwww\n      ")]
+              )
+            ],
+            2
           )
-        ],
-        2
+        ]
       )
     ]
   )
@@ -103576,7 +103787,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h4", { staticClass: "my-4 border-bottom mt-5 pb-2" }, [
       _c("span", { staticClass: "border-bottom border-dark pb-2" }, [
-        _vm._v("Comments")
+        _vm._v("Discussion")
       ])
     ])
   }
@@ -103860,76 +104071,82 @@ var render = function() {
                         }
                       },
                       [
-                        _c("div", { staticClass: "card mb-4 shadow" }, [
-                          _c("div", { staticClass: "card-body px-0" }, [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "container d-lg-inline-flex align-items-center"
-                              },
-                              [
-                                _c(
-                                  "section",
-                                  {
-                                    staticClass:
-                                      "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
-                                    class: post.featured_image ? "col-lg-9" : ""
-                                  },
-                                  [
-                                    _c(
-                                      "h5",
-                                      {
-                                        staticClass:
-                                          "card-title text-truncate mb-0"
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                    " +
-                                            _vm._s(post.title) +
-                                            "\n                  "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "p",
-                                      {
-                                        staticClass: "card-text text-truncate"
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                    " +
-                                            _vm._s(post.summary) +
-                                            "\n                  "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "p",
-                                      {
-                                        staticClass:
-                                          "card-text mb-0 text-secondary"
-                                      },
-                                      [
-                                        post.topic.length
-                                          ? _c("span", [
-                                              _vm._v(
-                                                "\n                      topic " +
-                                                  _vm._s(post.topic[0].name) +
-                                                  "\n                    "
-                                              )
-                                            ])
-                                          : _vm._e()
-                                      ]
-                                    )
-                                  ]
-                                )
-                              ]
-                            )
-                          ])
-                        ])
+                        _c(
+                          "div",
+                          { staticClass: "card border-0 mb-4 shadow-4" },
+                          [
+                            _c("div", { staticClass: "card-body px-0" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "container d-lg-inline-flex align-items-center"
+                                },
+                                [
+                                  _c(
+                                    "section",
+                                    {
+                                      staticClass:
+                                        "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
+                                      class: post.featured_image
+                                        ? "col-lg-9"
+                                        : ""
+                                    },
+                                    [
+                                      _c(
+                                        "h5",
+                                        {
+                                          staticClass:
+                                            "card-title text-truncate mb-0"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    " +
+                                              _vm._s(post.title) +
+                                              "\n                  "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "p",
+                                        {
+                                          staticClass: "card-text text-truncate"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    " +
+                                              _vm._s(post.summary) +
+                                              "\n                  "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "p",
+                                        {
+                                          staticClass:
+                                            "card-text mb-0 text-secondary"
+                                        },
+                                        [
+                                          post.topic.length
+                                            ? _c("span", [
+                                                _vm._v(
+                                                  "\n                      topic " +
+                                                    _vm._s(post.topic[0].name) +
+                                                    "\n                    "
+                                                )
+                                              ])
+                                            : _vm._e()
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        )
                       ]
                     )
                   ],
@@ -104004,62 +104221,68 @@ var render = function() {
                         }
                       },
                       [
-                        _c("div", { staticClass: "card mb-4 shadow" }, [
-                          _c("div", { staticClass: "card-body px-0" }, [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "container d-lg-inline-flex align-items-center"
-                              },
-                              [
-                                _c(
-                                  "section",
-                                  {
-                                    staticClass:
-                                      "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
-                                    class: post.featured_image ? "col-lg-9" : ""
-                                  },
-                                  [
-                                    _c(
-                                      "h5",
-                                      {
-                                        staticClass:
-                                          "card-title text-truncate mb-0"
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                    " +
-                                            _vm._s(post.title) +
-                                            "\n                  "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "p",
-                                      {
-                                        staticClass: "card-text text-truncate"
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                    " +
-                                            _vm._s(post.summary) +
-                                            "\n                  "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("p", {
+                        _c(
+                          "div",
+                          { staticClass: "card border-0 mb-4 shadow-4" },
+                          [
+                            _c("div", { staticClass: "card-body px-0" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "container d-lg-inline-flex align-items-center"
+                                },
+                                [
+                                  _c(
+                                    "section",
+                                    {
                                       staticClass:
-                                        "card-text mb-0 text-secondary"
-                                    })
-                                  ]
-                                )
-                              ]
-                            )
-                          ])
-                        ])
+                                        "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
+                                      class: post.featured_image
+                                        ? "col-lg-9"
+                                        : ""
+                                    },
+                                    [
+                                      _c(
+                                        "h5",
+                                        {
+                                          staticClass:
+                                            "card-title text-truncate mb-0"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    " +
+                                              _vm._s(post.title) +
+                                              "\n                  "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "p",
+                                        {
+                                          staticClass: "card-text text-truncate"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    " +
+                                              _vm._s(post.summary) +
+                                              "\n                  "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("p", {
+                                        staticClass:
+                                          "card-text mb-0 text-secondary"
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        )
                       ]
                     )
                   ],
@@ -104155,7 +104378,7 @@ var render = function() {
                                       [
                                         _c(
                                           "div",
-                                          { staticClass: "card mb-4 shadow" },
+                                          { staticClass: "card mb-4 border-0" },
                                           [
                                             _c(
                                               "div",
@@ -105275,14 +105498,14 @@ var render = function() {
                         "div",
                         { staticClass: "mt-5" },
                         [
-                          _vm._v("\n        tags:\n        "),
+                          _vm._v("\n        Tags:\n        "),
                           _vm._l(_vm.post.tags, function(tag) {
                             return _c(
                               "router-link",
                               {
                                 key: tag.id,
                                 staticClass:
-                                  "badge badge-light p-2 my-1 mr-2 text-decoration-none text-uppercase",
+                                  "badge badge-warning p-2 my-1 mr-2 text-decoration-none text-uppercase",
                                 attrs: {
                                   to: {
                                     name: "show-tag",
@@ -105348,7 +105571,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("comment-reply-component", {
-                attrs: { post_id: _vm.post.slug }
+                attrs: { post_id: _vm.post.id, post_slug: _vm.post.slug }
               }),
               _vm._v(" "),
               _vm.post.tags.length

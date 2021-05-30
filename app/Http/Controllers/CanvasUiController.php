@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
+use App\Models\Guest;
+use App\Models\Reply;
 use Canvas\Models\User;
 use Canvas\Events\PostViewed;
 use Canvas\Models\Post;
@@ -178,7 +181,7 @@ class CanvasUiController extends Controller
                     today()->endOfMonth()->endOfDay()->toDateTimeString()
                 ]);
             },
-            'visits as visits_count' => function($q) {
+            'visits as visits_count' => function ($q) {
                 $q->whereBetween('created_at', [
                     today()->startOfMonth()->startOfDay()->toDateTimeString(),
                     today()->endOfMonth()->endOfDay()->toDateTimeString()
@@ -193,23 +196,91 @@ class CanvasUiController extends Controller
     public function getRelatedPosts(Request $req): JsonResponse
     {
         $tag = $req->input('tag');
-        $current_post_id = $req->input('current_post'); 
-   
+        $current_post_id = $req->input('current_post');
+
         $tag = DB::table('canvas_tags')->where('slug', strval($tag))->first();
-        
-        if($tag && $current_post_id) {
+
+        if ($tag && $current_post_id) {
             $posts_id = DB::table('canvas_posts_tags')->select('post_id')->limit(4)
-            ->where('tag_id', $tag->id)
-            ->where('post_id', '!=', strval($current_post_id))
-            ->orderBy(DB::raw('RAND()'))
-            ->get();
+                ->where('tag_id', $tag->id)
+                ->where('post_id', '!=', strval($current_post_id))
+                ->orderBy(DB::raw('RAND()'))
+                ->get();
 
             $related_posts = Post::select(['id', 'slug', 'title', 'summary'])->whereIn('id', $posts_id->pluck('post_id'))->get();
             return response()->json($related_posts, 200);
         }
 
         return response()->json(null, 200);
+    }
 
+    //fetch discussion by specific post_id
+    public function getCommentsReplies(Request $request): JsonResponse
+    {
+        $post_id = $request->input('post_id');
+
+        $comments = DB::table('comments as c')
+            ->select('c.id', 'c.post_id', 'g.name', 'g.email','c.comment')
+            ->where('post_id', $post_id)
+            ->leftJoin('guests as g', 'g.id', '=', 'c.guest_id')
+            ->get();
+
+        $comments = collect($comments);
+        $comments->map(function ($comment) {
+            return $comment->replies = DB::table('replies as r')
+                ->select('r.id', 'r.comment_section_id', 'g.name', 'g.email','r.comment', 'r.reply_to',)
+                ->where('comment_section_id', $comment->id)
+                ->leftJoin('guests as g', 'g.id', '=', 'r.guest_id')
+                ->get();
+        });
+
+        return response()->json($comments, 200);
+    }
+
+    //Perform Post Comment
+    public function storePostComment(Request $request): JsonResponse
+    {
+        if ($request->validate([
+            'post_id' => 'required',
+            'name' => 'required|max:100',
+            'email' => 'required|email|max:100',
+            'comment' => 'required|string'
+        ])) {
+            $guest = Guest::firstOrCreate(['email' => $request->input('email'), 'name' => $request->input('name')]);
+            $comment = $guest->comments()->create(['post_id' => $request->input('post_id'), 'comment' => $request->input('comment')]);
+
+            if ($guest) {
+                return response()->json($comment, 200);
+            }
+        }
+
+        return response()->json('failed', 200);
+    }
+
+    //perform Reply Comment
+    public function storeReplyComment(Request $request): JsonResponse
+    {
+        if ($request->validate([
+            'comment_section_id' => 'required',
+            'name' => 'required|max:100',
+            'email' => 'required|email|max:100',
+            'comment' => 'required|string',
+            'reply_to' => 'required|string'
+        ])) {
+
+            $guest = Guest::firstOrCreate(['email' => $request->input('email'), 'name' => $request->input('name')]);
+            $guest->replies()->create([
+                'comment_section_id' => $request->input('comment_section_id'),
+                'comment' => $request->input('comment'),
+                'reply_to' => $request->input('reply_to'),
+            ]);
+
+            if ($guest) {
+                return response()->json('success', 200);
+            }
+        }
+
+        return response()->json('validation failed', 200);
     }
 
     /**

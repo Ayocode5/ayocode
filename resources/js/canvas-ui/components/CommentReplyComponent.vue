@@ -2,19 +2,27 @@
   <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-5">
     <div class="posts-comment">
       <h4 class="my-4 border-bottom mt-5 pb-2">
-        <span class="border-bottom border-dark pb-2">Comments</span>
+        <span class="border-bottom border-dark pb-2">Discussion</span>
       </h4>
       <!-- Post Comment Section -->
       <div
         v-for="comment in post_comments"
         :key="comment.id"
-        class="card border-0 mb-2"
+        class="card border-2 mb-2"
       >
         <div class="card-body">
-          <h5 class="card-title">{{ comment.name }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">
-            Commented on {{ comment.post_id }}
-          </h6>
+          <div>
+            <img
+              style="width: 50px; height: 50px"
+              src="https://www.svgrepo.com/show/77591/user.svg"
+              alt="user"
+            />
+            <h5 class="card-title">{{ comment.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Commented on {{ post_slug }}
+            </h6>
+          </div>
+
           <p class="card-text">
             {{ comment.comment }}
           </p>
@@ -24,17 +32,19 @@
             class="card-link pointer"
             :id="'popover-reply-' + comment.id"
             variant="primary"
-            >Reply</a
+            ><i class="fas fa-reply"></i>&nbsp;Reply</a
           >
           <b-popover
             ref="popover"
             :target="'popover-reply-' + comment.id"
             placement="rightbottom"
           >
-            <p>Reply to {{ comment.name }}</p>
+            <p class="badge badge-secondary py-2 px-2">
+              Reply to {{ comment.name }}
+            </p>
             <form onsubmit="return false">
               <template v-if="!guest.isSavedCredential">
-                <div class="mb-3 mt-3">
+                <div class="mt-2">
                   <label for="exampleInputEmail1" class="form-label"
                     >Email address</label
                   >
@@ -46,7 +56,7 @@
                     v-model="guest.email"
                   />
                 </div>
-                <div class="mb-3">
+                <div class="mb-2">
                   <label for="nameInput" class="form-label">Name</label>
                   <input
                     type="text"
@@ -56,7 +66,7 @@
                   />
                 </div>
               </template>
-              <div class="mb-3">
+              <div class="mb-2">
                 <label for="commentInput" class="form-label">Your Reply</label>
                 <textarea
                   class="form-control"
@@ -79,7 +89,7 @@
               <button
                 @click="
                   postReplyComment({
-                    reply_to: comment.name,
+                    reply_to: { name: comment.name, email: comment.email },
                     comment_section_id: comment.id,
                   })
                 "
@@ -94,30 +104,42 @@
           <!-- Comment Replies Section -->
           <div v-if="comment.reply.length">
             <div v-for="reply in comment.reply" :key="reply.id">
-              <div class="card border-0 mb-2 mt-2">
+              <div class="card border-2 mb-2 mt-2">
                 <div class="card-body">
+                  <img
+                    style="width: 50px; height: 50px"
+                    src="https://www.svgrepo.com/show/77591/user.svg"
+                    alt="user"
+                  />
                   <h5 class="card-title">{{ reply.name }}</h5>
                   <h6 class="card-subtitle mb-2 text-muted">
-                    Replied to {{ reply.reply_to }}
+                    Replied to
+                    {{
+                      reply.reply_to.name + " (" + reply.reply_to.email + ")"
+                    }}
                   </h6>
                   <p class="card-text">{{ reply.comment }}</p>
 
                   <!-- Popover in Reply Comment Section-->
-                  <a v-if="reply.email != guest.email"
+                  <a
+                    v-if="reply.email != guest.email"
                     class="card-link pointer"
                     :id="'popover-reply-' + reply.id"
                     variant="primary"
-                    >Reply</a
+                    ><i class="fas fa-reply"></i>&nbsp;Reply</a
                   >
                   <b-popover
+                    v-if="reply.email != guest.email"
                     ref="popover"
                     :target="'popover-reply-' + reply.id"
-                    placement="rightbottom"
+                    placement="bottomright"
                   >
-                    <p>Reply to {{ reply.name }}</p>
+                    <p class="badge badge-secondary py-2 px-2">
+                      Reply to {{ reply.name }}
+                    </p>
                     <form onsubmit="return false">
                       <template v-if="!guest.isSavedCredential">
-                        <div class="mb-3 mt-3">
+                        <div class="mb-2">
                           <label for="exampleInputEmail1" class="form-label"
                             >Email address</label
                           >
@@ -129,7 +151,7 @@
                             v-model="guest.email"
                           />
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-2">
                           <label for="nameInput" class="form-label">Name</label>
                           <input
                             type="text"
@@ -139,7 +161,7 @@
                           />
                         </div>
                       </template>
-                      <div class="mb-3">
+                      <div class="mb-2">
                         <label for="commentInput" class="form-label"
                           >Your Reply</label
                         >
@@ -164,7 +186,7 @@
                       <button
                         @click="
                           postReplyComment({
-                            reply_to: reply.name,
+                            reply_to: { name: reply.name, email: reply.email },
                             comment_section_id: comment.id,
                           })
                         "
@@ -186,52 +208,63 @@
     </div>
 
     <!-- Write Post Comment -->
-    <form onsubmit="return false" class="mt-4">
-      <template v-if="!guest.isSavedCredential">
-        <div class="mb-3 mt-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
-          >
-          <input
-            type="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            v-model="guest.email"
-          />
-        </div>
+    <div style="background: rgb(239 239 239)" class="mt-3 py-4 px-4 rounded">
+      <form onsubmit="return false">
+        <template v-if="!guest.isSavedCredential">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label"
+              >Email address</label
+            >
+            <input
+              type="email"
+              class="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              v-model="guest.email"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="nameInput" class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nameInput"
+              v-model="guest.name"
+              required
+            />
+          </div>
+        </template>
         <div class="mb-3">
-          <label for="nameInput" class="form-label">Name</label>
-          <input
-            type="text"
+          <label for="commentInput" class="form-label">Your Comment</label>
+          <textarea
             class="form-control"
-            id="nameInput"
-            v-model="guest.name"
+            ref="write_comment"
+            id="commentInput"
+            v-model="guest.comment"
           />
         </div>
-      </template>
-      <div class="mb-3">
-        <label for="commentInput" class="form-label">Your Comment</label>
-        <textarea
-          class="form-control"
-          id="commentInput"
-          v-model="guest.comment"
-        />
-      </div>
-      <div class="mb-3 form-check">
-        <input
-          type="checkbox"
-          class="form-check-input"
-          v-model="guest.isSavedCredential"
-          id="exampleCheck1"
-          @change="check"
-        />
-        <label class="form-check-label" for="exampleCheck1"
-          >Save my name and email</label
-        >
-      </div>
-      <button @click="postComment" class="btn btn-primary">Post Comment</button>
-    </form>
+        <div class="mb-3 form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            v-model="guest.isSavedCredential"
+            id="exampleCheck1"
+            @change="check"
+          />
+          <label class="form-check-label" for="exampleCheck1"
+            >Save my name and email</label
+          >
+        </div>
+        <button @click="postComment" class="btn btn-primary">
+          Post Comment
+        </button>
+
+        <button @click="getCommentsReplies" class="btn btn-primary">
+          wwww
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -240,7 +273,8 @@ export default {
   name: "CommentReplyComponent",
 
   props: {
-    post_id: '',
+    post_id: "",
+    post_slug: "",
   },
 
   data() {
@@ -267,7 +301,7 @@ export default {
               name: "iyan",
               email: "iyan@mail.com",
               comment: "i know right",
-              reply_to: "Septian",
+              reply_to: { name: "Septian", email: "septian@mail.com" },
             },
             {
               id: 222,
@@ -275,7 +309,7 @@ export default {
               name: "brando",
               email: "brando@mail.com",
               comment: "yyyy",
-              reply_to: "iyan",
+              reply_to: { name: "iyan", email: "iyan@mail.com" },
             },
           ],
         },
@@ -292,8 +326,9 @@ export default {
   },
 
   created() {
-    if (localStorage.getItem("ayocode_saved_credential")) {
-      const data = JSON.parse(localStorage.getItem("ayocode_saved_credential"));
+    const savedCredential = localStorage.getItem("ayocode_saved_credential");
+    if (savedCredential) {
+      const data = JSON.parse(savedCredential);
       this.guest.name = data.guest.name;
       this.guest.email = data.guest.email;
 
@@ -302,38 +337,86 @@ export default {
   },
 
   methods: {
-    postComment: function (e) {
-      console.log(e);
-      this.post_comments.push(
-        {
+    postComment: function () {
+      if (this.guest.comment) {
+        //PostComment Object
+        const postCommentObj = {
           id: Math.floor(Math.random() * 999),
           post_id: this.post_id,
           name: this.guest.name,
           email: this.guest.email,
           comment: this.guest.comment,
           reply: [],
+        };
+
+        //perform api post
+        this.request()
+          .post("api/posts/comment", postCommentObj)
+          .then((res) => {
+            console.log(res);
+            this.post_comments.push({...postCommentObj, id: res.data.id});
+            console.log(this.post_comments)
+            //Empty textarea after postComment clicked
+            this.guest.comment = "";
+          })
+          .catch((err) => console.log(err));
+
+        //Empty email and name if guest do not save it
+        if (!this.guest.isSavedCredential) {
+          this.guest.name = "";
+          this.guest.email = "";
         }
-      );
-      this.guest.comment = '';
+      }
     },
 
     postReplyComment: function ({ reply_to, comment_section_id }) {
-      const x = this.post_comments.find(({ id }) => id == comment_section_id);
-      x.reply.push({
-        id: Math.floor(Math.random() * 999),
-        comment_section_id: comment_section_id,
-        name: this.guest.name,
-        email: this.guest.email,
-        comment: this.guest.reply,
-        reply_to: reply_to,
-      });
-      this.guest.reply = '';
+      console.log(reply_to);
+      const selectedComment = this.post_comments.find(
+        ({ id }) => id == comment_section_id
+      );
+
+      if (this.guest.reply) {
+        const commentReplyObj = {
+          id: Math.floor(Math.random() * 999),
+          comment_section_id: comment_section_id,
+          name: this.guest.name,
+          email: this.guest.email,
+          comment: this.guest.reply,
+          reply_to: reply_to,
+        };
+
+        this.request()
+          .post("api/posts/reply", {
+            ...commentReplyObj,
+            reply_to: JSON.stringify(reply_to), //replace reply_to with json string format,
+          })
+          .then((res) => {
+            console.log(res);
+            selectedComment.reply.push(commentReplyObj);
+            this.guest.reply = "";
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      //perform api post
+    },
+
+    getCommentsReplies: function () {
+      this.request()
+        .get("api/posts/discussion?post_id="+this.post_id)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     check: function (e) {
       this.$nextTick(() => {
         if (this.guest.isSavedCredential) {
-          console.log("wlwl");
           if (this.guest.name && this.guest.email) {
             localStorage.setItem(
               "ayocode_saved_credential",
@@ -346,6 +429,7 @@ export default {
             );
           } else {
             console.log("email and name required before you save it");
+            this.guest.isSavedCredential = false;
           }
         } else {
           localStorage.removeItem("ayocode_saved_credential");
@@ -359,5 +443,14 @@ export default {
 <style scoped>
 .pointer {
   cursor: pointer;
+}
+
+button {
+  border-radius: 5px;
+  color: whitesmoke;
+}
+
+a:hover {
+  color: rgb(94, 201, 228);
 }
 </style>
