@@ -1,11 +1,65 @@
 <template>
   <div class="border-bottom">
+
+    
+    
     <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12">
+      
+      <nav class="navbar navbar-expand-lg navbar-light">
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+    
+          <router-link
+            :to="{ name: 'posts' }"
+            class="navbar-brand hover font-weight-bolder mr-3"
+          >
+            <img :src="logo" width="30" height="30"  class="d-inline-block align-top"  alt="logoAyocode"/>
+            Ayocode Blogs
+          </router-link>
+        
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item active">
+                <router-link
+                  :to="{ name: 'tags' }"
+                  class="btn btn-link  text-decoration-none"
+                >
+                  Tags
+                </router-link>
+              </li>
+              <li class="nav-item active">
+                <router-link
+                  :to="{ name: 'topics' }"
+                  class="btn btn-link text-decoration-none"
+                >
+                  Topics
+                </router-link>
+              </li>
+              
+            </ul>
+            <div class="form-inline my-2 my-lg-0">
+              <input v-on:keyup.enter="searchPost()"
+              v-model="keyword"
+              type="text"
+              id="inlineFormInputGroup"
+              placeholder="Search" class="form-control mr-sm-2" aria-label="Search">
+
+              <button v-on:click="searchPost()"  class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </div>
+            <slot v-if="user" name="options" />
+        </div>
+      </nav>
+
+<!-- 
       <nav class="navbar d-flex px-0 py-1">
+        
         <router-link
           :to="{ name: 'posts' }"
           class="navbar-brand hover font-weight-bolder mr-3"
         >
+          <img :src="logo" width="30" height="30"  class="d-inline-block align-top"  alt="logoAyocode"/>
           Ayocode Blogs
         </router-link>
         <div class="mr-auto border-left pl-1">
@@ -21,7 +75,7 @@
           >
             Topics
           </router-link>
-        </div>
+        </div> -->
 
         <!-- <input
           v-on:keyup.enter="searchPost()"
@@ -31,7 +85,7 @@
           v-model="keyword"
         /> -->
 
-        <div class="form-row align-items-center">
+        <!-- <div class="form-row align-items-center">
           <label class="sr-only" for="inlineFormInputGroup">Search</label>
           <div class="input-group mb-2 mt-2">
             <input
@@ -46,9 +100,9 @@
               <div class="input-group-text"><i class="fas fa-search"></i></div>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <slot v-if="user" name="options" />
+        
         <!-- 
                 <div v-if="user" class="dropdown ml-3">
                     <a
@@ -88,13 +142,14 @@
                 </div>
 
                 <a v-if="!user" :href="`/${canvasPath}/login`" class="btn btn-link text-decoration-none">Sign in</a> -->
-      </nav>
+      <!-- </nav> -->
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import logo from "../../../../storage/app/public/canvas/images/logo.png"
 import VueRouter from "vue-router";
 
 export default {
@@ -106,6 +161,7 @@ export default {
       canvasPath: CanvasUI.canvasPath, // eslint-disable-line no-undef
 
       keyword: null,
+      logo: logo,
     };
   },
 
