@@ -1856,6 +1856,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2147,41 +2159,40 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         reply: "",
         isSavedCredential: false
       },
-      post_comments: [{
-        id: 123,
-        post_id: this.post_id,
-        name: "Septian",
-        email: "septian@mail.com",
-        comment: "Great content!",
-        reply: [{
-          id: 111,
-          comment_section_id: 123,
-          name: "iyan",
-          email: "iyan@mail.com",
-          comment: "i know right",
-          reply_to: {
-            name: "Septian",
-            email: "septian@mail.com"
-          }
-        }, {
-          id: 222,
-          comment_section_id: 123,
-          name: "brando",
-          email: "brando@mail.com",
-          comment: "yyyy",
-          reply_to: {
-            name: "iyan",
-            email: "iyan@mail.com"
-          }
-        }]
-      }, {
-        id: 456,
-        post_id: this.post_id,
-        name: "Mamank Garok",
-        email: "garok@mail.com",
-        comment: "Thx!",
-        reply: []
-      }]
+      post_comments: [// {
+        //   id: 123,
+        //   post_id: this.post_id,
+        //   name: "Septian",
+        //   email: "septian@mail.com",
+        //   comment: "Great content!",
+        //   replies: [
+        //     {
+        //       id: 111,
+        //       comment_section_id: 123,
+        //       name: "iyan",
+        //       email: "iyan@mail.com",
+        //       comment: "i know right",
+        //       reply_to: { name: "Septian", email: "septian@mail.com" },
+        //     },
+        //     {
+        //       id: 222,
+        //       comment_section_id: 123,
+        //       name: "brando",
+        //       email: "brando@mail.com",
+        //       comment: "yyyy",
+        //       reply_to: { name: "iyan", email: "iyan@mail.com" },
+        //     },
+        //   ],
+        // },
+        // {
+        //   id: 456,
+        //   post_id: this.post_id,
+        //   name: "Mamank Garok",
+        //   email: "garok@mail.com",
+        //   comment: "Thx!",
+        //   replies: [],
+        // },
+      ]
     };
   },
   created: function created() {
@@ -2199,48 +2210,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this = this;
 
       if (this.guest.comment) {
-        //PostComment Object
+        //PostComment Object Structure
         var postCommentObj = {
           id: Math.floor(Math.random() * 999),
           post_id: this.post_id,
           name: this.guest.name,
           email: this.guest.email,
           comment: this.guest.comment,
-          reply: []
-        }; //perform api post
+          replies: []
+        }; //Save comment onto the server and push the object into array
+        //with given id
 
-        this.request().post("api/posts/comment", postCommentObj).then(function (res) {
-          console.log(res);
+        this.request().post("api/posts/comment", postCommentObj).then(function (_ref) {
+          var data = _ref.data;
 
           _this.post_comments.push(_objectSpread(_objectSpread({}, postCommentObj), {}, {
-            id: res.data.id
-          }));
+            id: data.id
+          })); //Empty textarea after postComment clicked
 
-          console.log(_this.post_comments); //Empty textarea after postComment clicked
 
           _this.guest.comment = "";
         })["catch"](function (err) {
           return console.log(err);
-        }); //Empty email and name if guest do not save it
-
-        if (!this.guest.isSavedCredential) {
-          this.guest.name = "";
-          this.guest.email = "";
-        }
+        });
       }
     },
-    postReplyComment: function postReplyComment(_ref) {
+    postReplyComment: function postReplyComment(_ref2) {
       var _this2 = this;
 
-      var reply_to = _ref.reply_to,
-          comment_section_id = _ref.comment_section_id;
-      console.log(reply_to);
-      var selectedComment = this.post_comments.find(function (_ref2) {
-        var id = _ref2.id;
+      var reply_to = _ref2.reply_to,
+          comment_section_id = _ref2.comment_section_id;
+      var selectedComment = this.post_comments.find(function (_ref3) {
+        var id = _ref3.id;
         return id == comment_section_id;
       });
 
       if (this.guest.reply) {
+        //Reply Object Structure
         var commentReplyObj = {
           id: Math.floor(Math.random() * 999),
           comment_section_id: comment_section_id,
@@ -2252,38 +2258,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.request().post("api/posts/reply", _objectSpread(_objectSpread({}, commentReplyObj), {}, {
           reply_to: JSON.stringify(reply_to) //replace reply_to with json string format,
 
-        })).then(function (res) {
-          console.log(res);
-          selectedComment.reply.push(commentReplyObj);
+        })).then(function (_ref4) {
+          var data = _ref4.data;
+          selectedComment.replies.push(_objectSpread(_objectSpread({}, commentReplyObj), {}, {
+            id: data.id
+          }));
           _this2.guest.reply = "";
         })["catch"](function (err) {
           console.log(err);
         });
-      } //perform api post
-
+      }
     },
     getCommentsReplies: function getCommentsReplies() {
-      this.request().get("api/posts/discussion?post_id=" + this.post_id).then(function (res) {
-        console.log(res);
+      var _this3 = this;
+
+      this.request().get("api/posts/discussion?post_id=" + this.post_id).then(function (_ref5) {
+        var _this3$post_comments;
+
+        var data = _ref5.data;
+        data.forEach(function (element) {
+          element.replies.map(function (reply, i) {
+            return reply.reply_to = JSON.parse(reply.reply_to);
+          });
+        }); // console.log(data);
+
+        (_this3$post_comments = _this3.post_comments).push.apply(_this3$post_comments, _toConsumableArray(data));
       })["catch"](function (err) {
         console.log(err);
       });
     },
     check: function check(e) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$nextTick(function () {
-        if (_this3.guest.isSavedCredential) {
-          if (_this3.guest.name && _this3.guest.email) {
+        if (_this4.guest.isSavedCredential) {
+          if (_this4.guest.name && _this4.guest.email) {
             localStorage.setItem("ayocode_saved_credential", JSON.stringify({
               guest: {
-                name: _this3.guest.name,
-                email: _this3.guest.email
+                name: _this4.guest.name,
+                email: _this4.guest.email
               }
             }));
           } else {
             console.log("email and name required before you save it");
-            _this3.guest.isSavedCredential = false;
+            _this4.guest.isSavedCredential = false;
           }
         } else {
           localStorage.removeItem("ayocode_saved_credential");
@@ -103094,10 +103112,10 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    comment.reply.length
+                    comment.replies.length
                       ? _c(
                           "div",
-                          _vm._l(comment.reply, function(reply) {
+                          _vm._l(comment.replies, function(reply) {
                             return _c("div", { key: reply.id }, [
                               _c(
                                 "div",

@@ -174,29 +174,32 @@ class CanvasUiController extends Controller
     // Mengambil Post populer dalam rentang bulan saat ini
     public function getPopularPosts(Request $request): JsonResponse
     {
-        $posts = Post::select(['id', 'slug', 'title', 'summary', 'featured_image', 'featured_image_caption'])->with('topic')->limit(4)->withCount([
-            'views as views_count' => function ($q) {
-                $q->whereBetween('created_at', [
-                    today()->startOfMonth()->startOfDay()->toDateTimeString(),
-                    today()->endOfMonth()->endOfDay()->toDateTimeString()
-                ]);
-            },
-            'visits as visits_count' => function ($q) {
-                $q->whereBetween('created_at', [
-                    today()->startOfMonth()->startOfDay()->toDateTimeString(),
-                    today()->endOfMonth()->endOfDay()->toDateTimeString()
-                ]);
-            }
-        ])->orderBy('visits_count', 'desc')->published()->get();
+        $posts = Post::select(['id', 'slug', 'title', 'summary', 'featured_image', 'featured_image_caption'])
+            ->with('topic')
+            ->limit(4)
+            ->withCount([
+                'views as views_count' => function ($q) {
+                    $q->whereBetween('created_at', [
+                        today()->startOfMonth()->startOfDay()->toDateTimeString(),
+                        today()->endOfMonth()->endOfDay()->toDateTimeString()
+                    ]);
+                },
+                'visits as visits_count' => function ($q) {
+                    $q->whereBetween('created_at', [
+                        today()->startOfMonth()->startOfDay()->toDateTimeString(),
+                        today()->endOfMonth()->endOfDay()->toDateTimeString()
+                    ]);
+                }
+            ])->orderBy('visits_count', 'desc')->published()->get();
 
         return response()->json($posts, 200);
     }
 
     // Mengambil Post yang tema nya masih berhubungan dengan post yang sedang dibuka
-    public function getRelatedPosts(Request $req): JsonResponse
+    public function getRelatedPosts(Request $request): JsonResponse
     {
-        $tag = $req->input('tag');
-        $current_post_id = $req->input('current_post');
+        $tag = $request->input('tag');
+        $current_post_id = $request->input('current_post');
 
         $tag = DB::table('canvas_tags')->where('slug', strval($tag))->first();
 
@@ -220,7 +223,7 @@ class CanvasUiController extends Controller
         $post_id = $request->input('post_id');
 
         $comments = DB::table('comments as c')
-            ->select('c.id', 'c.post_id', 'g.name', 'g.email','c.comment')
+            ->select('c.id', 'c.post_id', 'g.name', 'g.email', 'c.comment')
             ->where('post_id', $post_id)
             ->leftJoin('guests as g', 'g.id', '=', 'c.guest_id')
             ->get();
@@ -228,7 +231,7 @@ class CanvasUiController extends Controller
         $comments = collect($comments);
         $comments->map(function ($comment) {
             return $comment->replies = DB::table('replies as r')
-                ->select('r.id', 'r.comment_section_id', 'g.name', 'g.email','r.comment', 'r.reply_to',)
+                ->select('r.id', 'r.comment_section_id', 'g.name', 'g.email', 'r.comment', 'r.reply_to')
                 ->where('comment_section_id', $comment->id)
                 ->leftJoin('guests as g', 'g.id', '=', 'r.guest_id')
                 ->get();
@@ -254,7 +257,7 @@ class CanvasUiController extends Controller
             }
         }
 
-        return response()->json('failed', 200);
+        return response()->json('Validation failed!', 200);
     }
 
     //perform Reply Comment
@@ -269,18 +272,18 @@ class CanvasUiController extends Controller
         ])) {
 
             $guest = Guest::firstOrCreate(['email' => $request->input('email'), 'name' => $request->input('name')]);
-            $guest->replies()->create([
+            $reply = $guest->replies()->create([
                 'comment_section_id' => $request->input('comment_section_id'),
                 'comment' => $request->input('comment'),
                 'reply_to' => $request->input('reply_to'),
             ]);
 
             if ($guest) {
-                return response()->json('success', 200);
+                return response()->json($reply, 200);
             }
         }
 
-        return response()->json('validation failed', 200);
+        return response()->json('Validation failed!', 200);
     }
 
     /**

@@ -102,8 +102,8 @@
           <!-- End of Popover in Post Comment Section-->
 
           <!-- Comment Replies Section -->
-          <div v-if="comment.reply.length">
-            <div v-for="reply in comment.reply" :key="reply.id">
+          <div v-if="comment.replies.length">
+            <div v-for="reply in comment.replies" :key="reply.id">
               <div class="card border-2 mb-2 mt-2">
                 <div class="card-body">
                   <img
@@ -288,39 +288,39 @@ export default {
       },
 
       post_comments: [
-        {
-          id: 123,
-          post_id: this.post_id,
-          name: "Septian",
-          email: "septian@mail.com",
-          comment: "Great content!",
-          reply: [
-            {
-              id: 111,
-              comment_section_id: 123,
-              name: "iyan",
-              email: "iyan@mail.com",
-              comment: "i know right",
-              reply_to: { name: "Septian", email: "septian@mail.com" },
-            },
-            {
-              id: 222,
-              comment_section_id: 123,
-              name: "brando",
-              email: "brando@mail.com",
-              comment: "yyyy",
-              reply_to: { name: "iyan", email: "iyan@mail.com" },
-            },
-          ],
-        },
-        {
-          id: 456,
-          post_id: this.post_id,
-          name: "Mamank Garok",
-          email: "garok@mail.com",
-          comment: "Thx!",
-          reply: [],
-        },
+        // {
+        //   id: 123,
+        //   post_id: this.post_id,
+        //   name: "Septian",
+        //   email: "septian@mail.com",
+        //   comment: "Great content!",
+        //   replies: [
+        //     {
+        //       id: 111,
+        //       comment_section_id: 123,
+        //       name: "iyan",
+        //       email: "iyan@mail.com",
+        //       comment: "i know right",
+        //       reply_to: { name: "Septian", email: "septian@mail.com" },
+        //     },
+        //     {
+        //       id: 222,
+        //       comment_section_id: 123,
+        //       name: "brando",
+        //       email: "brando@mail.com",
+        //       comment: "yyyy",
+        //       reply_to: { name: "iyan", email: "iyan@mail.com" },
+        //     },
+        //   ],
+        // },
+        // {
+        //   id: 456,
+        //   post_id: this.post_id,
+        //   name: "Mamank Garok",
+        //   email: "garok@mail.com",
+        //   comment: "Thx!",
+        //   replies: [],
+        // },
       ],
     };
   },
@@ -339,43 +339,37 @@ export default {
   methods: {
     postComment: function () {
       if (this.guest.comment) {
-        //PostComment Object
+        //PostComment Object Structure
         const postCommentObj = {
           id: Math.floor(Math.random() * 999),
           post_id: this.post_id,
           name: this.guest.name,
           email: this.guest.email,
           comment: this.guest.comment,
-          reply: [],
+          replies: [],
         };
 
-        //perform api post
+        //Save comment onto the server and push the object into array
+        //with given id
         this.request()
           .post("api/posts/comment", postCommentObj)
-          .then((res) => {
-            console.log(res);
-            this.post_comments.push({...postCommentObj, id: res.data.id});
-            console.log(this.post_comments)
+          .then(({ data }) => {
+            this.post_comments.push({ ...postCommentObj, id: data.id });
+
             //Empty textarea after postComment clicked
             this.guest.comment = "";
           })
           .catch((err) => console.log(err));
-
-        //Empty email and name if guest do not save it
-        if (!this.guest.isSavedCredential) {
-          this.guest.name = "";
-          this.guest.email = "";
-        }
       }
     },
 
     postReplyComment: function ({ reply_to, comment_section_id }) {
-      console.log(reply_to);
       const selectedComment = this.post_comments.find(
         ({ id }) => id == comment_section_id
       );
 
       if (this.guest.reply) {
+        //Reply Object Structure
         const commentReplyObj = {
           id: Math.floor(Math.random() * 999),
           comment_section_id: comment_section_id,
@@ -390,24 +384,29 @@ export default {
             ...commentReplyObj,
             reply_to: JSON.stringify(reply_to), //replace reply_to with json string format,
           })
-          .then((res) => {
-            console.log(res);
-            selectedComment.reply.push(commentReplyObj);
+          .then(({data}) => {
+            selectedComment.replies.push({...commentReplyObj, id: data.id});
             this.guest.reply = "";
           })
           .catch((err) => {
             console.log(err);
           });
       }
-
-      //perform api post
     },
 
     getCommentsReplies: function () {
       this.request()
-        .get("api/posts/discussion?post_id="+this.post_id)
-        .then((res) => {
-          console.log(res);
+        .get("api/posts/discussion?post_id=" + this.post_id)
+        .then(({ data }) => {
+
+          data.forEach((element) => {
+            element.replies.map((reply, i) => {
+              return (reply.reply_to = JSON.parse(reply.reply_to));
+            });
+          });
+
+          // console.log(data);
+          this.post_comments.push(...data);
         })
         .catch((err) => {
           console.log(err);
