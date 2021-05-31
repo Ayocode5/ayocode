@@ -1856,6 +1856,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1874,6 +1876,16 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
 //
 //
 //
@@ -2196,18 +2208,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   created: function created() {
-    var savedCredential = localStorage.getItem("ayocode_saved_credential");
+    var _this = this;
 
-    if (savedCredential) {
-      var data = JSON.parse(savedCredential);
-      this.guest.name = data.guest.name;
-      this.guest.email = data.guest.email;
-      this.guest.isSavedCredential = true;
-    }
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var savedCredential, _JSON$parse, _JSON$parse$guest, name, email;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return Promise.all([_this.getCommentsReplies()]);
+
+            case 2:
+              savedCredential = localStorage.getItem("ayocode_saved_credential");
+
+              if (savedCredential) {
+                _JSON$parse = JSON.parse(savedCredential), _JSON$parse$guest = _JSON$parse.guest, name = _JSON$parse$guest.name, email = _JSON$parse$guest.email;
+                _this.guest.name = name;
+                _this.guest.email = email;
+                _this.guest.isSavedCredential = true;
+              } else {
+                _this.guest.isSavedCredential = false;
+              }
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     postComment: function postComment() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.guest.comment) {
         //PostComment Object Structure
@@ -2224,19 +2259,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.request().post("api/posts/comment", postCommentObj).then(function (_ref) {
           var data = _ref.data;
 
-          _this.post_comments.push(_objectSpread(_objectSpread({}, postCommentObj), {}, {
+          _this2.post_comments.push(_objectSpread(_objectSpread({}, postCommentObj), {}, {
             id: data.id
           })); //Empty textarea after postComment clicked
 
 
-          _this.guest.comment = "";
+          _this2.guest.comment = "";
         })["catch"](function (err) {
           return console.log(err);
         });
       }
     },
     postReplyComment: function postReplyComment(_ref2) {
-      var _this2 = this;
+      var _this3 = this;
 
       var reply_to = _ref2.reply_to,
           comment_section_id = _ref2.comment_section_id;
@@ -2263,17 +2298,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           selectedComment.replies.push(_objectSpread(_objectSpread({}, commentReplyObj), {}, {
             id: data.id
           }));
-          _this2.guest.reply = "";
+          _this3.guest.reply = "";
         })["catch"](function (err) {
           console.log(err);
         });
       }
     },
     getCommentsReplies: function getCommentsReplies() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.request().get("api/posts/discussion?post_id=" + this.post_id).then(function (_ref5) {
-        var _this3$post_comments;
+        var _this4$post_comments;
 
         var data = _ref5.data;
         data.forEach(function (element) {
@@ -2282,26 +2317,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }); // console.log(data);
 
-        (_this3$post_comments = _this3.post_comments).push.apply(_this3$post_comments, _toConsumableArray(data));
+        (_this4$post_comments = _this4.post_comments).push.apply(_this4$post_comments, _toConsumableArray(data));
       })["catch"](function (err) {
         console.log(err);
       });
     },
     check: function check(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$nextTick(function () {
-        if (_this4.guest.isSavedCredential) {
-          if (_this4.guest.name && _this4.guest.email) {
+        if (_this5.guest.isSavedCredential) {
+          if (_this5.guest.name && _this5.guest.email) {
             localStorage.setItem("ayocode_saved_credential", JSON.stringify({
               guest: {
-                name: _this4.guest.name,
-                email: _this4.guest.email
+                name: _this5.guest.name,
+                email: _this5.guest.email
               }
             }));
           } else {
             console.log("email and name required before you save it");
-            _this4.guest.isSavedCredential = false;
+            _this5.guest.isSavedCredential = false;
           }
         } else {
           localStorage.removeItem("ayocode_saved_credential");
@@ -103595,6 +103630,14 @@ var render = function() {
         ],
         2
       ),
+      _vm._v(" "),
+      !_vm.post_comments.length
+        ? _c(
+            "div",
+            [_c("center", [_c("h4", [_vm._v("Be the first comment :(")])])],
+            1
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",

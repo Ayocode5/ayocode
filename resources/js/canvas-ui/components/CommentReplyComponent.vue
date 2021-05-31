@@ -207,6 +207,10 @@
       <!-- End of Post Comment Section -->
     </div>
 
+    <div v-if="!post_comments.length">
+      <center><h4>Be the first comment :(</h4></center>
+    </div>
+
     <!-- Write Post Comment -->
     <div style="background: rgb(239 239 239)" class="mt-3 py-4 px-4 rounded">
       <form onsubmit="return false">
@@ -325,14 +329,21 @@ export default {
     };
   },
 
-  created() {
+  async created() {
+    await Promise.all([this.getCommentsReplies()]);
+
     const savedCredential = localStorage.getItem("ayocode_saved_credential");
     if (savedCredential) {
-      const data = JSON.parse(savedCredential);
-      this.guest.name = data.guest.name;
-      this.guest.email = data.guest.email;
+      const {
+        guest: { name, email },
+      } = JSON.parse(savedCredential);
+
+      this.guest.name = name;
+      this.guest.email = email;
 
       this.guest.isSavedCredential = true;
+    } else {
+      this.guest.isSavedCredential = false;
     }
   },
 
@@ -384,8 +395,8 @@ export default {
             ...commentReplyObj,
             reply_to: JSON.stringify(reply_to), //replace reply_to with json string format,
           })
-          .then(({data}) => {
-            selectedComment.replies.push({...commentReplyObj, id: data.id});
+          .then(({ data }) => {
+            selectedComment.replies.push({ ...commentReplyObj, id: data.id });
             this.guest.reply = "";
           })
           .catch((err) => {
@@ -398,7 +409,6 @@ export default {
       this.request()
         .get("api/posts/discussion?post_id=" + this.post_id)
         .then(({ data }) => {
-
           data.forEach((element) => {
             element.replies.map((reply, i) => {
               return (reply.reply_to = JSON.parse(reply.reply_to));
