@@ -8,32 +8,43 @@
       <div
         v-for="comment in post_comments"
         :key="comment.id"
-        class="card border-2 mb-2"
+        class="card card-comment"
       >
         <div class="card-body">
-          <div>
-            <img
-              style="width: 50px; height: 50px"
-              src="https://www.svgrepo.com/show/77591/user.svg"
-              alt="user"
-            />
-            <h5 class="card-title">{{ comment.name }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              Commented on {{ post_slug }}
-            </h6>
+          <div class="row mt-0">
+            <div>
+              <!-- <img
+                class="mr-2"
+                style="width: 50px; height: 50px"
+                src="https://www.svgrepo.com/show/77591/user.svg"
+                alt="user"
+              /> -->
+              <i class="mr-2 profileImage" style="display: inline-block">{{
+                profileImageInitial(comment.name)
+              }}</i>
+            </div>
+            <div>
+              <h5 class="card-title">{{ comment.name }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                <!-- Commented on {{ post_slug }} -->
+                {{ date(comment.created_at) }}
+              </h6>
+            </div>
           </div>
-
-          <p class="card-text">
-            {{ comment.comment }}
-          </p>
-
-          <!-- Popover in Post Comment Section-->
-          <a
-            class="card-link pointer"
-            :id="'popover-reply-' + comment.id"
-            variant="primary"
-            ><i class="fas fa-reply"></i>&nbsp;Reply</a
-          >
+          <div class="row">
+            <p class="card-text">
+              {{ comment.comment }}
+            </p>
+            <!-- Popover in Post Comment Section-->
+          </div>
+          <div class="row">
+            <a
+              class="card-link badge badge-secondary pointer mt-4 py-1 px-1"
+              :id="'popover-reply-' + comment.id"
+              variant="primary"
+              ><i class="fas fa-reply"></i>&nbsp;Reply
+            </a>
+          </div>
           <b-popover
             ref="popover"
             :target="'popover-reply-' + comment.id"
@@ -42,6 +53,18 @@
             <p class="badge badge-secondary py-2 px-2">
               Reply to {{ comment.name }}
             </p>
+            <p
+              class="px-2 py-2"
+              style="
+                background: rgb(226, 226, 226);
+                border: none;
+                border-left: 2px solid grey;
+              "
+            >
+              {{ comment.comment }}
+            </p>
+
+            <p></p>
             <form onsubmit="return false">
               <template v-if="!guest.isSavedCredential">
                 <div class="mt-2">
@@ -89,7 +112,11 @@
               <button
                 @click="
                   postReplyComment({
-                    reply_to: { name: comment.name, email: comment.email },
+                    reply_to: {
+                      name: comment.name,
+                      email: comment.email,
+                      comment: comment.comment,
+                    },
                     comment_section_id: comment.id,
                   })
                 "
@@ -104,30 +131,65 @@
           <!-- Comment Replies Section -->
           <div v-if="comment.replies.length">
             <div v-for="reply in comment.replies" :key="reply.id">
-              <div class="card border-2 mb-2 mt-2">
+              <div class="card border-2 mt-2">
                 <div class="card-body">
-                  <img
-                    style="width: 50px; height: 50px"
-                    src="https://www.svgrepo.com/show/77591/user.svg"
-                    alt="user"
-                  />
-                  <h5 class="card-title">{{ reply.name }}</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">
-                    Replied to
-                    {{
-                      reply.reply_to.name + " (" + reply.reply_to.email + ")"
-                    }}
-                  </h6>
-                  <p class="card-text">{{ reply.comment }}</p>
+                  <div class="row">
+                    <!-- <img
+                      style="width: 50px; height: 50px"
+                      src="https://www.svgrepo.com/show/77591/user.svg"
+                      alt="user"
+                    /> -->
+                    <i class="mr-2 profileImage">{{
+                      profileImageInitial(reply.name)
+                    }}</i>
+                    <div class="ml-2">
+                      <h5 class="card-title">{{ reply.name }}</h5>
+                      <h6
+                        v-if="reply.email == reply.reply_to.email"
+                        class="card-subtitle mb-2 text-muted"
+                      >
+                        {{ date(reply.created_at) }}
+                      </h6>
+                      <h6 v-else class="card-subtitle mb-2 text-muted">
+                        replied to {{ reply.reply_to.name }} -
+                        {{ date(reply.created_at) }}
+                      </h6>
+                    </div>
+                  </div>
+                  <div
+                    class="row mt-2"
+                    style="padding-left: 57px; margin-bottom: -12px"
+                  >
+                    <p
+                      class="px-2 py-1"
+                      style="
+                        background: rgb(226, 226, 226);
+                        border: none;
+                        border-left: 2px solid grey;
+                      "
+                    >
+                      {{ reply.reply_to.comment }}
+                    </p>
+                  </div>
+                  <div class="row mt-0 pl-8" style="padding-left: 57px">
+                    <p class="card-text">{{ reply.comment }}</p>
+                  </div>
+
+                  <!-- Popover Trigger -->
+                  <div
+                    v-if="reply.email != guest.email"
+                    class="row mt-4"
+                    style="padding-left: 57px"
+                  >
+                    <a
+                      class="card-link pointer badge badge-secondary py-1 px-1"
+                      :id="'popover-reply-' + reply.id"
+                      variant="primary"
+                      ><i class="fas fa-reply"></i>&nbsp;Reply</a
+                    >
+                  </div>
 
                   <!-- Popover in Reply Comment Section-->
-                  <a
-                    v-if="reply.email != guest.email"
-                    class="card-link pointer"
-                    :id="'popover-reply-' + reply.id"
-                    variant="primary"
-                    ><i class="fas fa-reply"></i>&nbsp;Reply</a
-                  >
                   <b-popover
                     v-if="reply.email != guest.email"
                     ref="popover"
@@ -137,6 +199,20 @@
                     <p class="badge badge-secondary py-2 px-2">
                       Reply to {{ reply.name }}
                     </p>
+                    <p
+                      class="px-2 py-2"
+                      style="
+                        background: rgb(226, 226, 226);
+                        border: none;
+                        border-left: 2px solid grey;
+                        height: 120px;
+                        overflow: auto;
+                      "
+                    >
+                      {{ reply.comment }}
+                    </p>
+
+                    <p></p>
                     <form onsubmit="return false">
                       <template v-if="!guest.isSavedCredential">
                         <div class="mb-2">
@@ -186,7 +262,11 @@
                       <button
                         @click="
                           postReplyComment({
-                            reply_to: { name: reply.name, email: reply.email },
+                            reply_to: {
+                              name: reply.name,
+                              email: reply.email,
+                              comment: reply.comment,
+                            },
                             comment_section_id: comment.id,
                           })
                         "
@@ -208,35 +288,43 @@
     </div>
 
     <div v-if="!post_comments.length">
-      <center><h4>Be the first comment :(</h4></center>
+      <div class="my-5">
+        <p class="lead text-center text-muted mt-5">Be the first comment :(</p>
+      </div>
     </div>
 
     <!-- Write Post Comment -->
-    <div style="background: rgb(239 239 239)" class="mt-3 py-4 px-4 rounded">
+    <div style="background: rgb(239 239 239)" class="mt-1 py-3 px-3 rounded">
       <form onsubmit="return false">
         <template v-if="!guest.isSavedCredential">
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label"
-              >Email address</label
-            >
-            <input
-              type="email"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              v-model="guest.email"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="nameInput" class="form-label">Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="nameInput"
-              v-model="guest.name"
-              required
-            />
+            <div class="row">
+              <div class="col">
+                <label for="exampleInputEmail1" class="form-label"
+                  >Email address</label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  v-model="guest.email"
+                  required
+                />
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label for="nameInput" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nameInput"
+                    v-model="guest.name"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </template>
         <div class="mb-3">
@@ -264,9 +352,9 @@
           Post Comment
         </button>
 
-        <button @click="getCommentsReplies" class="btn btn-primary">
+        <!-- <button @click="getCommentsReplies" class="btn btn-primary">
           wwww
-        </button>
+        </button> -->
       </form>
     </div>
   </div>
@@ -305,7 +393,7 @@ export default {
         //       name: "iyan",
         //       email: "iyan@mail.com",
         //       comment: "i know right",
-        //       reply_to: { name: "Septian", email: "septian@mail.com" },
+        //       reply_to: { name: "Septian", email: "septian@mail.com", comment: "Great content" },
         //     },
         //     {
         //       id: 222,
@@ -313,7 +401,7 @@ export default {
         //       name: "brando",
         //       email: "brando@mail.com",
         //       comment: "yyyy",
-        //       reply_to: { name: "iyan", email: "iyan@mail.com" },
+        //       reply_to: { name: "iyan", email: "iyan@mail.com", comment: "i konw right" },
         //     },
         //   ],
         // },
@@ -330,7 +418,7 @@ export default {
   },
 
   async created() {
-    await Promise.all([this.getCommentsReplies()]);
+    await Promise.all([this.fetchPostDiscussions()]);
 
     const savedCredential = localStorage.getItem("ayocode_saved_credential");
     if (savedCredential) {
@@ -365,7 +453,11 @@ export default {
         this.request()
           .post("api/posts/comment", postCommentObj)
           .then(({ data }) => {
-            this.post_comments.push({ ...postCommentObj, id: data.id });
+            this.post_comments.push({
+              ...postCommentObj,
+              id: data.id,
+              created_at: data.created_at,
+            });
 
             //Empty textarea after postComment clicked
             this.guest.comment = "";
@@ -396,7 +488,11 @@ export default {
             reply_to: JSON.stringify(reply_to), //replace reply_to with json string format,
           })
           .then(({ data }) => {
-            selectedComment.replies.push({ ...commentReplyObj, id: data.id });
+            selectedComment.replies.push({
+              ...commentReplyObj,
+              id: data.id,
+              created_at: data.created_at,
+            });
             this.guest.reply = "";
           })
           .catch((err) => {
@@ -405,7 +501,7 @@ export default {
       }
     },
 
-    getCommentsReplies: function () {
+    fetchPostDiscussions: function () {
       this.request()
         .get("api/posts/discussion?post_id=" + this.post_id)
         .then(({ data }) => {
@@ -421,6 +517,29 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    date: function (date) {
+      let months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      var dateObj = new Date(date);
+      var month = months[dateObj.getMonth()]; //months from 1-12
+      var day = dateObj.getDate();
+      var year = dateObj.getFullYear();
+
+      return month + " " + day + ", " + year;
     },
 
     check: function (e) {
@@ -445,6 +564,15 @@ export default {
         }
       });
     },
+
+    profileImageInitial: function (name) {
+      const intials = name
+        .split(" ")
+        .map((name) => name[0])
+        .join("")
+        .toUpperCase();
+      return intials;
+    },
   },
 };
 </script>
@@ -459,7 +587,34 @@ button {
   color: whitesmoke;
 }
 
-a:hover {
+/* a:hover {
   color: rgb(94, 201, 228);
+} */
+
+.card {
+  border: none;
+  border-radius: 0px;
+  transition: none;
+  box-shadow: none;
+}
+
+.card-comment {
+  border-bottom: 1px solid rgb(226, 226, 226);
+}
+
+.card:hover {
+  /*  */
+  transition: none;
+}
+
+.profileImage {
+  font-family: sans-serif;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ec5858;
+  font-size: 30px;
+  color: #fff;
+  text-align: center;
 }
 </style>

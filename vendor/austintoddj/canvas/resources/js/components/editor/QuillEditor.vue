@@ -174,8 +174,8 @@ export default {
                 modules: {
                     syntax: true,
                     toolbar: [
-                        ['bold', 'italic', 'code', 'link', 'underline'],
-                        [{ header: '2' }, { header: '3' }, { align: 'center' }],
+                        ['bold', 'italic', 'code', 'link'],
+                        [{ header: '2' }, { header: '3' }],
                         ['blockquote', 'code-block'],
                     ],
                 },
@@ -336,10 +336,6 @@ export default {
 @import '../../../sass/utilities/variables';
 @import '~quill/dist/quill.bubble.css';
 
-body {
-    color: #444444;
-}
-
 .ql-container {
     font-size: 1.1rem;
     line-height: 2;
@@ -365,8 +361,7 @@ body {
 }
 
 .ql-editor p {
-    // margin: 1.5em 0 0 0 !important;
-    margin: 15px 0 0 0 !important;
+    margin: 1.5em 0 0 0 !important;
 }
 
 .ql-editor a {
@@ -444,7 +439,7 @@ div.embedded_image[data-layout='wide'] {
 }
 
 .ql-editor pre.ql-syntax {
-    border-radius: $border-radius !important;
+    border-radius: 2px !important;
     padding: 1em !important;
     margin-top: 2em !important;
 }

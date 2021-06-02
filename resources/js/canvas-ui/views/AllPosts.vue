@@ -12,27 +12,27 @@
               <span class="border-bottom border-dark pb-2">Featured Posts</span>
             </h4>
 
-            <div v-if="!loadingContent">
+            <div
+              v-if="!loadingContent"
+              class="row row-cols-1 row-cols-md-3 row-cols-sm-2"
+            >
               <div :key="`${index}-${post.id}`" v-for="(post, index) in posts">
                 <router-link
                   :to="{ name: 'show-post', params: { slug: post.slug } }"
                   class="text-decoration-none"
                 >
-                  <div class="card mb-4 border-0">
+                  <div class="card mb-4 border-0 ml-2 mr-2">
+                    <div v-if="post.featured_image">
+                      <img
+                        :src="post.featured_image"
+                        :alt="post.featured_image_caption"
+                        class="card-img-top"
+                      />
+                    </div>
                     <div class="card-body px-0">
                       <div
                         class="container d-lg-inline-flex align-items-center"
                       >
-                        <div
-                          v-if="post.featured_image"
-                          class="col-12 col-lg-3 p-0"
-                        >
-                          <img
-                            :src="post.featured_image"
-                            :alt="post.featured_image_caption"
-                            class="rounded w-100"
-                          />
-                        </div>
                         <section
                           class="col-12 mt-3 mt-lg-0 px-0 px-lg-3"
                           :class="post.featured_image ? 'col-lg-9' : ''"
@@ -141,8 +141,8 @@ export default {
       loadingContent: false,
       error: {
         status: Number,
-        message: String
-      }
+        message: String,
+      },
     };
   },
 
@@ -153,7 +153,7 @@ export default {
   },
 
   methods: {
-    fetchPosts(page) {
+    fetchPosts(page, $state) {
       return this.request()
         .get("api/posts", {
           params: {
@@ -165,6 +165,8 @@ export default {
             this.posts.push(...Object.values(data.data));
             this.rows = data.total;
             this.perPage = data.per_page;
+
+            NProgress.done();
           } else {
             this.posts = null;
           }
@@ -175,7 +177,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          
+
           NProgress.done();
         });
     },
@@ -188,6 +190,7 @@ export default {
 
       await Promise.all([this.fetchPosts(this.page)]);
       this.loadingContent = false;
+      NProgress.done();
     },
   },
 };
@@ -205,7 +208,7 @@ export default {
   position: absolute;
   left: 8px;
   width: 16px;
-  background: rgb(201, 201, 201);
+  background: rgb(49, 49, 49);
   animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 .lds-facebook div:nth-child(1) {

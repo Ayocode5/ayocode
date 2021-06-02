@@ -29,7 +29,13 @@
 
                     <div class="row">
                         <div
-                            class="col-sm-6 col-12 pb-sm-0 pb-3 pr-sm-0 d-flex justify-content-center justify-content-sm-start"
+                            class="
+                                col-sm-6 col-12
+                                pb-sm-0 pb-3
+                                pr-sm-0
+                                d-flex
+                                justify-content-center justify-content-sm-start
+                            "
                         >
                             <div class="d-flex align-items-center">
                                 <select

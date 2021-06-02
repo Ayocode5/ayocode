@@ -144,15 +144,13 @@
       <!-- Comment Reply Component -->
       <comment-reply-component :post_id="post.id" :post_slug="post.slug" />
       <!-- Related Posts Component -->
-      <div v-if="post.tags.length">
-        <div :key="tag.id" v-for="tag in post.tags">
-          <related-posts-component
-            :related_params="{
-              tag: tag.slug,
-              current_post_id: post.id,
-            }"
-          />
-        </div>
+      <div v-if="post.topic">
+        <related-posts-component
+          :related_params="{
+            topic: post.topic[0].id,
+            current_post_id: post.id,
+          }"
+        />
       </div>
       <!-- Popular Posts Component -->
       <popular-posts-component />
@@ -180,7 +178,7 @@ export default {
     PopularPostsComponent,
     RelatedPostsComponent,
     CommentReplyComponent,
-    Footer
+    Footer,
   },
 
   metaInfo() {
@@ -266,22 +264,28 @@ export default {
           NProgress.done();
         });
     },
+
+    randomColor() {
+      let colors = ["#ff0000", "#00ff00", "#0000ff"];
+      let random_color = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById("title").style.color = random_color;
+    },
   },
 
   watch: {
-      '$route.params.slug': async function() {
-            this.uri = this.$route.params.slug
-            this.page = 1;
-            this.post = null;
-            this.isReady = false;
+    "$route.params.slug": async function () {
+      this.uri = this.$route.params.slug;
+      this.page = 1;
+      this.post = null;
+      this.isReady = false;
 
-            await Promise.all([this.fetchPost()]);
+      await Promise.all([this.fetchPost()]);
 
-            this.isReady = true;
-            this.routeChangesIdentifier += 1;
-            NProgress.done();
-      },
-  }
+      this.isReady = true;
+      this.routeChangesIdentifier += 1;
+      NProgress.done();
+    },
+  },
 };
 </script>
 <style lang="scss">
@@ -300,7 +304,7 @@ pre.ql-syntax {
 
 .post-content {
   // margin: 1.5em 0 0 0 !important;
-  font-family: "Balsamiq Sans";
+  font-family: "Roboto" sans-serif !important;
   margin: 15px 0 0 0 !important;
 }
 </style>

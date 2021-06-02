@@ -29,7 +29,15 @@
                     <div class="card-deck mt-4 pt-2">
                         <div class="card shadow-lg">
                             <div
-                                class="card-header pb-0 bg-transparent d-flex justify-content-between align-middle border-0"
+                                class="
+                                    card-header
+                                    pb-0
+                                    bg-transparent
+                                    d-flex
+                                    justify-content-between
+                                    align-middle
+                                    border-0
+                                "
                             >
                                 <p class="font-weight-bold text-muted small text-uppercase">{{ trans.views }}</p>
                                 <p>
@@ -44,7 +52,15 @@
                         </div>
                         <div class="card shadow-lg">
                             <div
-                                class="card-header pb-0 bg-transparent d-flex justify-content-between align-middle border-0"
+                                class="
+                                    card-header
+                                    pb-0
+                                    bg-transparent
+                                    d-flex
+                                    justify-content-between
+                                    align-middle
+                                    border-0
+                                "
                             >
                                 <p class="font-weight-bold text-muted small text-uppercase">{{ trans.visitors }}</p>
                                 <p>

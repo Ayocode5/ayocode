@@ -2156,6 +2156,94 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CommentReplyComponent",
   props: {
@@ -2184,7 +2272,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         //       name: "iyan",
         //       email: "iyan@mail.com",
         //       comment: "i know right",
-        //       reply_to: { name: "Septian", email: "septian@mail.com" },
+        //       reply_to: { name: "Septian", email: "septian@mail.com", comment: "Great content" },
         //     },
         //     {
         //       id: 222,
@@ -2192,7 +2280,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         //       name: "brando",
         //       email: "brando@mail.com",
         //       comment: "yyyy",
-        //       reply_to: { name: "iyan", email: "iyan@mail.com" },
+        //       reply_to: { name: "iyan", email: "iyan@mail.com", comment: "i konw right" },
         //     },
         //   ],
         // },
@@ -2218,7 +2306,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return Promise.all([_this.getCommentsReplies()]);
+              return Promise.all([_this.fetchPostDiscussions()]);
 
             case 2:
               savedCredential = localStorage.getItem("ayocode_saved_credential");
@@ -2260,7 +2348,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           var data = _ref.data;
 
           _this2.post_comments.push(_objectSpread(_objectSpread({}, postCommentObj), {}, {
-            id: data.id
+            id: data.id,
+            created_at: data.created_at
           })); //Empty textarea after postComment clicked
 
 
@@ -2296,7 +2385,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         })).then(function (_ref4) {
           var data = _ref4.data;
           selectedComment.replies.push(_objectSpread(_objectSpread({}, commentReplyObj), {}, {
-            id: data.id
+            id: data.id,
+            created_at: data.created_at
           }));
           _this3.guest.reply = "";
         })["catch"](function (err) {
@@ -2304,7 +2394,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         });
       }
     },
-    getCommentsReplies: function getCommentsReplies() {
+    fetchPostDiscussions: function fetchPostDiscussions() {
       var _this4 = this;
 
       this.request().get("api/posts/discussion?post_id=" + this.post_id).then(function (_ref5) {
@@ -2321,6 +2411,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       })["catch"](function (err) {
         console.log(err);
       });
+    },
+    date: function date(_date) {
+      var months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      var dateObj = new Date(_date);
+      var month = months[dateObj.getMonth()]; //months from 1-12
+
+      var day = dateObj.getDate();
+      var year = dateObj.getFullYear();
+      return month + " " + day + ", " + year;
     },
     check: function check(e) {
       var _this5 = this;
@@ -2342,6 +2441,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           localStorage.removeItem("ayocode_saved_credential");
         }
       });
+    },
+    profileImageInitial: function profileImageInitial(name) {
+      var intials = name.split(" ").map(function (name) {
+        return name[0];
+      }).join("").toUpperCase();
+      return intials;
     }
   }
 });
@@ -2632,6 +2737,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "popular-post-component",
   data: function data() {
@@ -2773,12 +2881,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "related-post-component",
   props: {
     related_params: {
-      tag: '',
-      current_post_id: ''
+      topic: "",
+      current_post_id: ""
     }
   },
   data: function data() {
@@ -2813,12 +2935,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     fetchRelatedPosts: function fetchRelatedPosts() {
       var _this2 = this;
 
-      return this.request().get("api/posts/related?tag=" + this.related_params.tag + "&current_post=" + this.related_params.current_post_id).then(function (_ref) {
-        var _this2$posts;
-
+      return this.request().get("api/posts/related?topic=" + this.related_params.topic + "&current_post=" + this.related_params.current_post_id).then(function (_ref) {
         var data = _ref.data;
 
-        (_this2$posts = _this2.posts).push.apply(_this2$posts, _toConsumableArray(data));
+        if (data.length > 0) {
+          var _this2$posts;
+
+          (_this2$posts = _this2.posts).push.apply(_this2$posts, _toConsumableArray(data));
+        }
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -3035,7 +3159,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   methods: {
-    fetchPosts: function fetchPosts(page) {
+    fetchPosts: function fetchPosts(page, $state) {
       var _this2 = this;
 
       return this.request().get("api/posts", {
@@ -3052,6 +3176,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
           _this2.rows = data.total;
           _this2.perPage = data.per_page;
+          nprogress__WEBPACK_IMPORTED_MODULE_2___default().done();
         } else {
           _this2.posts = null;
         }
@@ -3079,8 +3204,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 this.loadingContent = false;
+                nprogress__WEBPACK_IMPORTED_MODULE_2___default().done();
 
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -3809,8 +3935,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 
 
@@ -3938,10 +4062,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       })["catch"](function () {
         nprogress__WEBPACK_IMPORTED_MODULE_1___default().done();
       });
+    },
+    randomColor: function randomColor() {
+      var colors = ["#ff0000", "#00ff00", "#0000ff"];
+      var random_color = colors[Math.floor(Math.random() * colors.length)];
+      document.getElementById("title").style.color = random_color;
     }
   },
   watch: {
-    '$route.params.slug': function () {
+    "$route.params.slug": function () {
       var _$routeParamsSlug = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
@@ -4779,6 +4908,40 @@ __webpack_require__.r(__webpack_exports__);
   name: 'catch-all',
   redirect: '/'
 }]);
+
+/***/ }),
+
+/***/ "./resources/js/canvas-ui/store/index.js":
+/*!***********************************************!*\
+  !*** ./resources/js/canvas-ui/store/index.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "store": () => (/* binding */ store)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+vue__WEBPACK_IMPORTED_MODULE_0__.default.use(vuex__WEBPACK_IMPORTED_MODULE_1__.default);
+var store = new vuex__WEBPACK_IMPORTED_MODULE_1__.default.Store({
+  state: {
+    relatedPostLoaded: true
+  },
+  mutations: {
+    relatedPostLoaded: function relatedPostLoaded(state, bool) {
+      state.relatedPostLoaded = bool;
+    }
+  },
+  getters: {
+    getRelatedPostLoaded: function getRelatedPostLoaded(state) {
+      return state.relatedPostLoaded;
+    }
+  }
+});
 
 /***/ }),
 
@@ -15452,7 +15615,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.pointer[data-v-47472ebd] {\n  cursor: pointer;\n}\nbutton[data-v-47472ebd] {\n  border-radius: 5px;\n  color: whitesmoke;\n}\na[data-v-47472ebd]:hover {\n  color: rgb(94, 201, 228);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.pointer[data-v-47472ebd] {\n  cursor: pointer;\n}\nbutton[data-v-47472ebd] {\n  border-radius: 5px;\n  color: whitesmoke;\n}\n\n/* a:hover {\n  color: rgb(94, 201, 228);\n} */\n.card[data-v-47472ebd] {\n  border: none;\n  border-radius: 0px;\n  transition: none;\n  box-shadow: none;\n}\n.card-comment[data-v-47472ebd] {\n  border-bottom: 1px solid rgb(226, 226, 226);\n}\n.card[data-v-47472ebd]:hover {\n  /*  */\n  transition: none;\n}\n.profileImage[data-v-47472ebd] {\n  font-family: sans-serif;\n  width: 50px;\n  height: 50px;\n  border-radius: 50%;\n  background: #ec5858;\n  font-size: 30px;\n  color: #fff;\n  text-align: center;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -15548,7 +15711,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.lds-dual-ring[data-v-19129b40] {\n  display: inline-block;\n  width: 50px;\n  height: 50px;\n  text-align: center;\n}\n.lds-dual-ring[data-v-19129b40]:after {\n  content: \" \";\n  display: block;\n  width: 64px;\n  height: 64px;\n  margin: 8px;\n  border-radius: 50%;\n  border: 6px solid rgb(56, 56, 56);\n  border-color: rgb(60, 60, 60) transparent rgb(60, 60, 60) transparent;\n  -webkit-animation: lds-dual-ring-data-v-19129b40 1.2s linear infinite;\n          animation: lds-dual-ring-data-v-19129b40 1.2s linear infinite;\n}\n@-webkit-keyframes lds-dual-ring-data-v-19129b40 {\n0% {\n    transform: rotate(0deg);\n}\n100% {\n    transform: rotate(360deg);\n}\n}\n@keyframes lds-dual-ring-data-v-19129b40 {\n0% {\n    transform: rotate(0deg);\n}\n100% {\n    transform: rotate(360deg);\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.lds-facebook[data-v-19129b40] {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div[data-v-19129b40] {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: rgb(157, 157, 157);\n  -webkit-animation: lds-facebook-data-v-19129b40 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook-data-v-19129b40 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div[data-v-19129b40]:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div[data-v-19129b40]:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div[data-v-19129b40]:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook-data-v-19129b40 {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook-data-v-19129b40 {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -15572,7 +15735,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: rgb(201, 201, 201);\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n*:focus {\n  outline: 0 !important;\n  box-shadow: none !important;\n}\n*:focus:not(:focus-visible) {\n  outline: 0 !important;\n  box-shadow: none !important;\n}\n.page-link {\n  border: none;\n  margin: 1px;\n}\n.page-link:hover {\n  z-index: 2;\n  color: black;\n  text-decoration: none;\n  background-color: #ffffff;\n  border-color: #ffffff;\n  border-bottom: 2px solid #eda5fc;\n}\n.page-item:last-child .page-link {\n  border-top-right-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n.page-item:first-child .page-link {\n  border-top-left-radius: 0px;\n  border-bottom-left-radius: 0px;\n}\n.page-item.active .page-link {\n  z-index: 3;\n  color: #be53d3;\n  border: none;\n  background-color: white;\n  /* border-color: #be53d3; */\n  border-bottom: 2px solid #be53d3;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.lds-facebook {\n  display: inline-block;\n  position: relative;\n  width: 80px;\n  height: 80px;\n}\n.lds-facebook div {\n  display: inline-block;\n  position: absolute;\n  left: 8px;\n  width: 16px;\n  background: rgb(49, 49, 49);\n  -webkit-animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n          animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;\n}\n.lds-facebook div:nth-child(1) {\n  left: 8px;\n  -webkit-animation-delay: -0.24s;\n          animation-delay: -0.24s;\n}\n.lds-facebook div:nth-child(2) {\n  left: 32px;\n  -webkit-animation-delay: -0.12s;\n          animation-delay: -0.12s;\n}\n.lds-facebook div:nth-child(3) {\n  left: 56px;\n  -webkit-animation-delay: 0;\n          animation-delay: 0;\n}\n@-webkit-keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n@keyframes lds-facebook {\n0% {\n    top: 8px;\n    height: 64px;\n}\n50%,\n  100% {\n    top: 24px;\n    height: 32px;\n}\n}\n*:focus {\n  outline: 0 !important;\n  box-shadow: none !important;\n}\n*:focus:not(:focus-visible) {\n  outline: 0 !important;\n  box-shadow: none !important;\n}\n.page-link {\n  border: none;\n  margin: 1px;\n}\n.page-link:hover {\n  z-index: 2;\n  color: black;\n  text-decoration: none;\n  background-color: #ffffff;\n  border-color: #ffffff;\n  border-bottom: 2px solid #eda5fc;\n}\n.page-item:last-child .page-link {\n  border-top-right-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n.page-item:first-child .page-link {\n  border-top-left-radius: 0px;\n  border-bottom-left-radius: 0px;\n}\n.page-item.active .page-link {\n  z-index: 3;\n  color: #be53d3;\n  border: none;\n  background-color: white;\n  /* border-color: #be53d3; */\n  border-bottom: 2px solid #be53d3;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -15596,7 +15759,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "pre.ql-syntax {\n  background-color: #f5f5f5;\n  overflow: none;\n}\n.ql-editor pre {\n  white-space: none;\n}\n.post-content pre {\n  border-radius: 3px;\n}\n.post-content {\n  font-family: \"Balsamiq Sans\";\n  margin: 15px 0 0 0 !important;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "pre.ql-syntax {\n  background-color: #f5f5f5;\n  overflow: none;\n}\n.ql-editor pre {\n  white-space: none;\n}\n.post-content pre {\n  border-radius: 3px;\n}\n.post-content {\n  font-family: \"Roboto\" sans-serif !important;\n  margin: 15px 0 0 0 !important;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -102846,58 +103009,74 @@ var render = function() {
           _vm._l(_vm.post_comments, function(comment) {
             return _c(
               "div",
-              { key: comment.id, staticClass: "card border-2 mb-2" },
+              { key: comment.id, staticClass: "card card-comment" },
               [
                 _c(
                   "div",
                   { staticClass: "card-body" },
                   [
-                    _c("div", [
-                      _c("img", {
-                        staticStyle: { width: "50px", height: "50px" },
-                        attrs: {
-                          src: "https://www.svgrepo.com/show/77591/user.svg",
-                          alt: "user"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("h5", { staticClass: "card-title" }, [
-                        _vm._v(_vm._s(comment.name))
+                    _c("div", { staticClass: "row mt-0" }, [
+                      _c("div", [
+                        _c(
+                          "i",
+                          {
+                            staticClass: "mr-2 profileImage",
+                            staticStyle: { display: "inline-block" }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(_vm.profileImageInitial(comment.name))
+                            )
+                          ]
+                        )
                       ]),
                       _vm._v(" "),
+                      _c("div", [
+                        _c("h5", { staticClass: "card-title" }, [
+                          _vm._v(_vm._s(comment.name))
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "h6",
+                          { staticClass: "card-subtitle mb-2 text-muted" },
+                          [
+                            _vm._v(
+                              "\n              " +
+                                _vm._s(_vm.date(comment.created_at)) +
+                                "\n            "
+                            )
+                          ]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("p", { staticClass: "card-text" }, [
+                        _vm._v(
+                          "\n            " +
+                            _vm._s(comment.comment) +
+                            "\n          "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
                       _c(
-                        "h6",
-                        { staticClass: "card-subtitle mb-2 text-muted" },
+                        "a",
+                        {
+                          staticClass:
+                            "card-link badge badge-secondary pointer mt-4 py-1 px-1",
+                          attrs: {
+                            id: "popover-reply-" + comment.id,
+                            variant: "primary"
+                          }
+                        },
                         [
-                          _vm._v(
-                            "\n            Commented on " +
-                              _vm._s(_vm.post_slug) +
-                              "\n          "
-                          )
+                          _c("i", { staticClass: "fas fa-reply" }),
+                          _vm._v(" Reply\n          ")
                         ]
                       )
                     ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "card-text" }, [
-                      _vm._v(
-                        "\n          " + _vm._s(comment.comment) + "\n        "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "card-link pointer",
-                        attrs: {
-                          id: "popover-reply-" + comment.id,
-                          variant: "primary"
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "fas fa-reply" }),
-                        _vm._v(" Reply")
-                      ]
-                    ),
                     _vm._v(" "),
                     _c(
                       "b-popover",
@@ -102921,6 +103100,27 @@ var render = function() {
                             )
                           ]
                         ),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            staticClass: "px-2 py-2",
+                            staticStyle: {
+                              background: "rgb(226, 226, 226)",
+                              border: "none",
+                              "border-left": "2px solid grey"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n            " +
+                                _vm._s(comment.comment) +
+                                "\n          "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("p"),
                         _vm._v(" "),
                         _c(
                           "form",
@@ -103128,7 +103328,8 @@ var render = function() {
                                     return _vm.postReplyComment({
                                       reply_to: {
                                         name: comment.name,
-                                        email: comment.email
+                                        email: comment.email,
+                                        comment: comment.comment
                                       },
                                       comment_section_id: comment.id
                                     })
@@ -103152,470 +103353,556 @@ var render = function() {
                           "div",
                           _vm._l(comment.replies, function(reply) {
                             return _c("div", { key: reply.id }, [
-                              _c(
-                                "div",
-                                { staticClass: "card border-2 mb-2 mt-2" },
-                                [
-                                  _c(
-                                    "div",
-                                    { staticClass: "card-body" },
-                                    [
-                                      _c("img", {
-                                        staticStyle: {
-                                          width: "50px",
-                                          height: "50px"
-                                        },
-                                        attrs: {
-                                          src:
-                                            "https://www.svgrepo.com/show/77591/user.svg",
-                                          alt: "user"
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c("h5", { staticClass: "card-title" }, [
-                                        _vm._v(_vm._s(reply.name))
-                                      ]),
-                                      _vm._v(" "),
+                              _c("div", { staticClass: "card border-2 mt-2" }, [
+                                _c(
+                                  "div",
+                                  { staticClass: "card-body" },
+                                  [
+                                    _c("div", { staticClass: "row" }, [
                                       _c(
-                                        "h6",
-                                        {
-                                          staticClass:
-                                            "card-subtitle mb-2 text-muted"
-                                        },
+                                        "i",
+                                        { staticClass: "mr-2 profileImage" },
                                         [
                                           _vm._v(
-                                            "\n                  Replied to\n                  " +
-                                              _vm._s(
-                                                reply.reply_to.name +
-                                                  " (" +
-                                                  reply.reply_to.email +
-                                                  ")"
-                                              ) +
-                                              "\n                "
+                                            _vm._s(
+                                              _vm.profileImageInitial(
+                                                reply.name
+                                              )
+                                            )
                                           )
                                         ]
                                       ),
                                       _vm._v(" "),
-                                      _c("p", { staticClass: "card-text" }, [
-                                        _vm._v(_vm._s(reply.comment))
-                                      ]),
-                                      _vm._v(" "),
-                                      reply.email != _vm.guest.email
-                                        ? _c(
-                                            "a",
-                                            {
-                                              staticClass: "card-link pointer",
-                                              attrs: {
-                                                id: "popover-reply-" + reply.id,
-                                                variant: "primary"
-                                              }
-                                            },
-                                            [
-                                              _c("i", {
-                                                staticClass: "fas fa-reply"
-                                              }),
-                                              _vm._v(" Reply")
-                                            ]
-                                          )
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      reply.email != _vm.guest.email
-                                        ? _c(
-                                            "b-popover",
-                                            {
-                                              ref: "popover",
-                                              refInFor: true,
-                                              attrs: {
-                                                target:
-                                                  "popover-reply-" + reply.id,
-                                                placement: "bottomright"
-                                              }
-                                            },
-                                            [
-                                              _c(
-                                                "p",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-secondary py-2 px-2"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                    Reply to " +
-                                                      _vm._s(reply.name) +
-                                                      "\n                  "
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "form",
-                                                {
-                                                  attrs: {
-                                                    onsubmit: "return false"
-                                                  }
-                                                },
-                                                [
-                                                  !_vm.guest.isSavedCredential
-                                                    ? [
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass: "mb-2"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "label",
-                                                              {
-                                                                staticClass:
-                                                                  "form-label",
-                                                                attrs: {
-                                                                  for:
-                                                                    "exampleInputEmail1"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Email address"
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c("input", {
-                                                              directives: [
-                                                                {
-                                                                  name: "model",
-                                                                  rawName:
-                                                                    "v-model",
-                                                                  value:
-                                                                    _vm.guest
-                                                                      .email,
-                                                                  expression:
-                                                                    "guest.email"
-                                                                }
-                                                              ],
-                                                              staticClass:
-                                                                "form-control",
-                                                              attrs: {
-                                                                type: "email",
-                                                                id:
-                                                                  "exampleInputEmail1",
-                                                                "aria-describedby":
-                                                                  "emailHelp"
-                                                              },
-                                                              domProps: {
-                                                                value:
-                                                                  _vm.guest
-                                                                    .email
-                                                              },
-                                                              on: {
-                                                                input: function(
-                                                                  $event
-                                                                ) {
-                                                                  if (
-                                                                    $event
-                                                                      .target
-                                                                      .composing
-                                                                  ) {
-                                                                    return
-                                                                  }
-                                                                  _vm.$set(
-                                                                    _vm.guest,
-                                                                    "email",
-                                                                    $event
-                                                                      .target
-                                                                      .value
-                                                                  )
-                                                                }
-                                                              }
-                                                            })
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass: "mb-2"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "label",
-                                                              {
-                                                                staticClass:
-                                                                  "form-label",
-                                                                attrs: {
-                                                                  for:
-                                                                    "nameInput"
-                                                                }
-                                                              },
-                                                              [_vm._v("Name")]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c("input", {
-                                                              directives: [
-                                                                {
-                                                                  name: "model",
-                                                                  rawName:
-                                                                    "v-model",
-                                                                  value:
-                                                                    _vm.guest
-                                                                      .name,
-                                                                  expression:
-                                                                    "guest.name"
-                                                                }
-                                                              ],
-                                                              staticClass:
-                                                                "form-control",
-                                                              attrs: {
-                                                                type: "text",
-                                                                id: "nameInput"
-                                                              },
-                                                              domProps: {
-                                                                value:
-                                                                  _vm.guest.name
-                                                              },
-                                                              on: {
-                                                                input: function(
-                                                                  $event
-                                                                ) {
-                                                                  if (
-                                                                    $event
-                                                                      .target
-                                                                      .composing
-                                                                  ) {
-                                                                    return
-                                                                  }
-                                                                  _vm.$set(
-                                                                    _vm.guest,
-                                                                    "name",
-                                                                    $event
-                                                                      .target
-                                                                      .value
-                                                                  )
-                                                                }
-                                                              }
-                                                            })
-                                                          ]
-                                                        )
-                                                      ]
-                                                    : _vm._e(),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "div",
-                                                    { staticClass: "mb-2" },
-                                                    [
+                                      _c("div", { staticClass: "ml-2" }, [
+                                        _c(
+                                          "h5",
+                                          { staticClass: "card-title" },
+                                          [_vm._v(_vm._s(reply.name))]
+                                        ),
+                                        _vm._v(" "),
+                                        reply.email == reply.reply_to.email
+                                          ? _c(
+                                              "h6",
+                                              {
+                                                staticClass:
+                                                  "card-subtitle mb-2 text-muted"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                      " +
+                                                    _vm._s(
+                                                      _vm.date(reply.created_at)
+                                                    ) +
+                                                    "\n                    "
+                                                )
+                                              ]
+                                            )
+                                          : _c(
+                                              "h6",
+                                              {
+                                                staticClass:
+                                                  "card-subtitle mb-2 text-muted"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                      replied to " +
+                                                    _vm._s(
+                                                      reply.reply_to.name
+                                                    ) +
+                                                    " -\n                      " +
+                                                    _vm._s(
+                                                      _vm.date(reply.created_at)
+                                                    ) +
+                                                    "\n                    "
+                                                )
+                                              ]
+                                            )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "row mt-2",
+                                        staticStyle: {
+                                          "padding-left": "57px",
+                                          "margin-bottom": "-12px"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "p",
+                                          {
+                                            staticClass: "px-2 py-1",
+                                            staticStyle: {
+                                              background: "rgb(226, 226, 226)",
+                                              border: "none",
+                                              "border-left": "2px solid grey"
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                    " +
+                                                _vm._s(reply.reply_to.comment) +
+                                                "\n                  "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "row mt-0 pl-8",
+                                        staticStyle: { "padding-left": "57px" }
+                                      },
+                                      [
+                                        _c("p", { staticClass: "card-text" }, [
+                                          _vm._v(_vm._s(reply.comment))
+                                        ])
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    reply.email != _vm.guest.email
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "row mt-4",
+                                            staticStyle: {
+                                              "padding-left": "57px"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "a",
+                                              {
+                                                staticClass:
+                                                  "card-link pointer badge badge-secondary py-1 px-1",
+                                                attrs: {
+                                                  id:
+                                                    "popover-reply-" + reply.id,
+                                                  variant: "primary"
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fas fa-reply"
+                                                }),
+                                                _vm._v(" Reply")
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    reply.email != _vm.guest.email
+                                      ? _c(
+                                          "b-popover",
+                                          {
+                                            ref: "popover",
+                                            refInFor: true,
+                                            attrs: {
+                                              target:
+                                                "popover-reply-" + reply.id,
+                                              placement: "bottomright"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "p",
+                                              {
+                                                staticClass:
+                                                  "badge badge-secondary py-2 px-2"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                    Reply to " +
+                                                    _vm._s(reply.name) +
+                                                    "\n                  "
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "p",
+                                              {
+                                                staticClass: "px-2 py-2",
+                                                staticStyle: {
+                                                  background:
+                                                    "rgb(226, 226, 226)",
+                                                  border: "none",
+                                                  "border-left":
+                                                    "2px solid grey",
+                                                  height: "120px",
+                                                  overflow: "auto"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                    " +
+                                                    _vm._s(reply.comment) +
+                                                    "\n                  "
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("p"),
+                                            _vm._v(" "),
+                                            _c(
+                                              "form",
+                                              {
+                                                attrs: {
+                                                  onsubmit: "return false"
+                                                }
+                                              },
+                                              [
+                                                !_vm.guest.isSavedCredential
+                                                  ? [
                                                       _c(
-                                                        "label",
-                                                        {
-                                                          staticClass:
-                                                            "form-label",
-                                                          attrs: {
-                                                            for: "commentInput"
-                                                          }
-                                                        },
-                                                        [_vm._v("Your Reply")]
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c("textarea", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value:
-                                                              _vm.guest.reply,
-                                                            expression:
-                                                              "guest.reply"
-                                                          }
-                                                        ],
-                                                        staticClass:
-                                                          "form-control",
-                                                        attrs: {
-                                                          id: "commentInput"
-                                                        },
-                                                        domProps: {
-                                                          value: _vm.guest.reply
-                                                        },
-                                                        on: {
-                                                          input: function(
-                                                            $event
-                                                          ) {
-                                                            if (
-                                                              $event.target
-                                                                .composing
-                                                            ) {
-                                                              return
-                                                            }
-                                                            _vm.$set(
-                                                              _vm.guest,
-                                                              "reply",
-                                                              $event.target
-                                                                .value
-                                                            )
-                                                          }
-                                                        }
-                                                      })
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "mb-3 form-check"
-                                                    },
-                                                    [
-                                                      _c("input", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value:
-                                                              _vm.guest
-                                                                .isSavedCredential,
-                                                            expression:
-                                                              "guest.isSavedCredential"
-                                                          }
-                                                        ],
-                                                        staticClass:
-                                                          "form-check-input",
-                                                        attrs: {
-                                                          type: "checkbox",
-                                                          id: "exampleCheck2"
-                                                        },
-                                                        domProps: {
-                                                          checked: Array.isArray(
-                                                            _vm.guest
-                                                              .isSavedCredential
-                                                          )
-                                                            ? _vm._i(
-                                                                _vm.guest
-                                                                  .isSavedCredential,
-                                                                null
-                                                              ) > -1
-                                                            : _vm.guest
-                                                                .isSavedCredential
-                                                        },
-                                                        on: {
-                                                          change: [
-                                                            function($event) {
-                                                              var $$a =
-                                                                  _vm.guest
-                                                                    .isSavedCredential,
-                                                                $$el =
-                                                                  $event.target,
-                                                                $$c = $$el.checked
-                                                                  ? true
-                                                                  : false
-                                                              if (
-                                                                Array.isArray(
-                                                                  $$a
-                                                                )
-                                                              ) {
-                                                                var $$v = null,
-                                                                  $$i = _vm._i(
-                                                                    $$a,
-                                                                    $$v
-                                                                  )
-                                                                if (
-                                                                  $$el.checked
-                                                                ) {
-                                                                  $$i < 0 &&
-                                                                    _vm.$set(
-                                                                      _vm.guest,
-                                                                      "isSavedCredential",
-                                                                      $$a.concat(
-                                                                        [$$v]
-                                                                      )
-                                                                    )
-                                                                } else {
-                                                                  $$i > -1 &&
-                                                                    _vm.$set(
-                                                                      _vm.guest,
-                                                                      "isSavedCredential",
-                                                                      $$a
-                                                                        .slice(
-                                                                          0,
-                                                                          $$i
-                                                                        )
-                                                                        .concat(
-                                                                          $$a.slice(
-                                                                            $$i +
-                                                                              1
-                                                                          )
-                                                                        )
-                                                                    )
-                                                                }
-                                                              } else {
-                                                                _vm.$set(
-                                                                  _vm.guest,
-                                                                  "isSavedCredential",
-                                                                  $$c
-                                                                )
+                                                        "div",
+                                                        { staticClass: "mb-2" },
+                                                        [
+                                                          _c(
+                                                            "label",
+                                                            {
+                                                              staticClass:
+                                                                "form-label",
+                                                              attrs: {
+                                                                for:
+                                                                  "exampleInputEmail1"
                                                               }
                                                             },
-                                                            _vm.check
-                                                          ]
-                                                        }
-                                                      }),
+                                                            [
+                                                              _vm._v(
+                                                                "Email address"
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c("input", {
+                                                            directives: [
+                                                              {
+                                                                name: "model",
+                                                                rawName:
+                                                                  "v-model",
+                                                                value:
+                                                                  _vm.guest
+                                                                    .email,
+                                                                expression:
+                                                                  "guest.email"
+                                                              }
+                                                            ],
+                                                            staticClass:
+                                                              "form-control",
+                                                            attrs: {
+                                                              type: "email",
+                                                              id:
+                                                                "exampleInputEmail1",
+                                                              "aria-describedby":
+                                                                "emailHelp"
+                                                            },
+                                                            domProps: {
+                                                              value:
+                                                                _vm.guest.email
+                                                            },
+                                                            on: {
+                                                              input: function(
+                                                                $event
+                                                              ) {
+                                                                if (
+                                                                  $event.target
+                                                                    .composing
+                                                                ) {
+                                                                  return
+                                                                }
+                                                                _vm.$set(
+                                                                  _vm.guest,
+                                                                  "email",
+                                                                  $event.target
+                                                                    .value
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                        ]
+                                                      ),
                                                       _vm._v(" "),
                                                       _c(
-                                                        "label",
-                                                        {
-                                                          staticClass:
-                                                            "form-check-label",
-                                                          attrs: {
-                                                            for: "exampleCheck2"
-                                                          }
-                                                        },
+                                                        "div",
+                                                        { staticClass: "mb-2" },
                                                         [
-                                                          _vm._v(
-                                                            "Save my name and email"
-                                                          )
+                                                          _c(
+                                                            "label",
+                                                            {
+                                                              staticClass:
+                                                                "form-label",
+                                                              attrs: {
+                                                                for: "nameInput"
+                                                              }
+                                                            },
+                                                            [_vm._v("Name")]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c("input", {
+                                                            directives: [
+                                                              {
+                                                                name: "model",
+                                                                rawName:
+                                                                  "v-model",
+                                                                value:
+                                                                  _vm.guest
+                                                                    .name,
+                                                                expression:
+                                                                  "guest.name"
+                                                              }
+                                                            ],
+                                                            staticClass:
+                                                              "form-control",
+                                                            attrs: {
+                                                              type: "text",
+                                                              id: "nameInput"
+                                                            },
+                                                            domProps: {
+                                                              value:
+                                                                _vm.guest.name
+                                                            },
+                                                            on: {
+                                                              input: function(
+                                                                $event
+                                                              ) {
+                                                                if (
+                                                                  $event.target
+                                                                    .composing
+                                                                ) {
+                                                                  return
+                                                                }
+                                                                _vm.$set(
+                                                                  _vm.guest,
+                                                                  "name",
+                                                                  $event.target
+                                                                    .value
+                                                                )
+                                                              }
+                                                            }
+                                                          })
                                                         ]
                                                       )
                                                     ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "button",
-                                                    {
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "mb-2" },
+                                                  [
+                                                    _c(
+                                                      "label",
+                                                      {
+                                                        staticClass:
+                                                          "form-label",
+                                                        attrs: {
+                                                          for: "commentInput"
+                                                        }
+                                                      },
+                                                      [_vm._v("Your Reply")]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("textarea", {
+                                                      directives: [
+                                                        {
+                                                          name: "model",
+                                                          rawName: "v-model",
+                                                          value:
+                                                            _vm.guest.reply,
+                                                          expression:
+                                                            "guest.reply"
+                                                        }
+                                                      ],
                                                       staticClass:
-                                                        "btn btn-primary",
+                                                        "form-control",
+                                                      attrs: {
+                                                        id: "commentInput"
+                                                      },
+                                                      domProps: {
+                                                        value: _vm.guest.reply
+                                                      },
                                                       on: {
-                                                        click: function(
+                                                        input: function(
                                                           $event
                                                         ) {
-                                                          return _vm.postReplyComment(
-                                                            {
-                                                              reply_to: {
-                                                                name:
-                                                                  reply.name,
-                                                                email:
-                                                                  reply.email
-                                                              },
-                                                              comment_section_id:
-                                                                comment.id
-                                                            }
+                                                          if (
+                                                            $event.target
+                                                              .composing
+                                                          ) {
+                                                            return
+                                                          }
+                                                          _vm.$set(
+                                                            _vm.guest,
+                                                            "reply",
+                                                            $event.target.value
                                                           )
                                                         }
                                                       }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                      Post Reply\n                    "
-                                                      )
-                                                    ]
-                                                  )
-                                                ],
-                                                2
-                                              )
-                                            ]
-                                          )
-                                        : _vm._e()
-                                    ],
-                                    1
-                                  )
-                                ]
-                              )
+                                                    })
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "mb-3 form-check"
+                                                  },
+                                                  [
+                                                    _c("input", {
+                                                      directives: [
+                                                        {
+                                                          name: "model",
+                                                          rawName: "v-model",
+                                                          value:
+                                                            _vm.guest
+                                                              .isSavedCredential,
+                                                          expression:
+                                                            "guest.isSavedCredential"
+                                                        }
+                                                      ],
+                                                      staticClass:
+                                                        "form-check-input",
+                                                      attrs: {
+                                                        type: "checkbox",
+                                                        id: "exampleCheck2"
+                                                      },
+                                                      domProps: {
+                                                        checked: Array.isArray(
+                                                          _vm.guest
+                                                            .isSavedCredential
+                                                        )
+                                                          ? _vm._i(
+                                                              _vm.guest
+                                                                .isSavedCredential,
+                                                              null
+                                                            ) > -1
+                                                          : _vm.guest
+                                                              .isSavedCredential
+                                                      },
+                                                      on: {
+                                                        change: [
+                                                          function($event) {
+                                                            var $$a =
+                                                                _vm.guest
+                                                                  .isSavedCredential,
+                                                              $$el =
+                                                                $event.target,
+                                                              $$c = $$el.checked
+                                                                ? true
+                                                                : false
+                                                            if (
+                                                              Array.isArray($$a)
+                                                            ) {
+                                                              var $$v = null,
+                                                                $$i = _vm._i(
+                                                                  $$a,
+                                                                  $$v
+                                                                )
+                                                              if (
+                                                                $$el.checked
+                                                              ) {
+                                                                $$i < 0 &&
+                                                                  _vm.$set(
+                                                                    _vm.guest,
+                                                                    "isSavedCredential",
+                                                                    $$a.concat([
+                                                                      $$v
+                                                                    ])
+                                                                  )
+                                                              } else {
+                                                                $$i > -1 &&
+                                                                  _vm.$set(
+                                                                    _vm.guest,
+                                                                    "isSavedCredential",
+                                                                    $$a
+                                                                      .slice(
+                                                                        0,
+                                                                        $$i
+                                                                      )
+                                                                      .concat(
+                                                                        $$a.slice(
+                                                                          $$i +
+                                                                            1
+                                                                        )
+                                                                      )
+                                                                  )
+                                                              }
+                                                            } else {
+                                                              _vm.$set(
+                                                                _vm.guest,
+                                                                "isSavedCredential",
+                                                                $$c
+                                                              )
+                                                            }
+                                                          },
+                                                          _vm.check
+                                                        ]
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "label",
+                                                      {
+                                                        staticClass:
+                                                          "form-check-label",
+                                                        attrs: {
+                                                          for: "exampleCheck2"
+                                                        }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "Save my name and email"
+                                                        )
+                                                      ]
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "button",
+                                                  {
+                                                    staticClass:
+                                                      "btn btn-primary",
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.postReplyComment(
+                                                          {
+                                                            reply_to: {
+                                                              name: reply.name,
+                                                              email:
+                                                                reply.email,
+                                                              comment:
+                                                                reply.comment
+                                                            },
+                                                            comment_section_id:
+                                                              comment.id
+                                                          }
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                      Post Reply\n                    "
+                                                    )
+                                                  ]
+                                                )
+                                              ],
+                                              2
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e()
+                                  ],
+                                  1
+                                )
+                              ])
                             ])
                           }),
                           0
@@ -103631,18 +103918,12 @@ var render = function() {
         2
       ),
       _vm._v(" "),
-      !_vm.post_comments.length
-        ? _c(
-            "div",
-            [_c("center", [_c("h4", [_vm._v("Be the first comment :(")])])],
-            1
-          )
-        : _vm._e(),
+      !_vm.post_comments.length ? _c("div", [_vm._m(1)]) : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
         {
-          staticClass: "mt-3 py-4 px-4 rounded",
+          staticClass: "mt-1 py-3 px-3 rounded",
           staticStyle: { background: "rgb(239 239 239)" }
         },
         [
@@ -103653,74 +103934,92 @@ var render = function() {
               !_vm.guest.isSavedCredential
                 ? [
                     _c("div", { staticClass: "mb-3" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "form-label",
-                          attrs: { for: "exampleInputEmail1" }
-                        },
-                        [_vm._v("Email address")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.guest.email,
-                            expression: "guest.email"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "email",
-                          id: "exampleInputEmail1",
-                          "aria-describedby": "emailHelp",
-                          required: ""
-                        },
-                        domProps: { value: _vm.guest.email },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col" }, [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "form-label",
+                              attrs: { for: "exampleInputEmail1" }
+                            },
+                            [_vm._v("Email address")]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.guest.email,
+                                expression: "guest.email"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "email",
+                              id: "exampleInputEmail1",
+                              "aria-describedby": "emailHelp",
+                              required: ""
+                            },
+                            domProps: { value: _vm.guest.email },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.guest,
+                                  "email",
+                                  $event.target.value
+                                )
+                              }
                             }
-                            _vm.$set(_vm.guest, "email", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "mb-3" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "form-label",
-                          attrs: { for: "nameInput" }
-                        },
-                        [_vm._v("Name")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.guest.name,
-                            expression: "guest.name"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", id: "nameInput", required: "" },
-                        domProps: { value: _vm.guest.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.guest, "name", $event.target.value)
-                          }
-                        }
-                      })
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col" }, [
+                          _c("div", { staticClass: "mb-3" }, [
+                            _c(
+                              "label",
+                              {
+                                staticClass: "form-label",
+                                attrs: { for: "nameInput" }
+                              },
+                              [_vm._v("Name")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.guest.name,
+                                  expression: "guest.name"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                id: "nameInput",
+                                required: ""
+                              },
+                              domProps: { value: _vm.guest.name },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.guest,
+                                    "name",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ])
+                        ])
+                      ])
                     ])
                   ]
                 : _vm._e(),
@@ -103823,15 +104122,6 @@ var render = function() {
                   on: { click: _vm.postComment }
                 },
                 [_vm._v("\n        Post Comment\n      ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  on: { click: _vm.getCommentsReplies }
-                },
-                [_vm._v("\n        wwww\n      ")]
               )
             ],
             2
@@ -103849,6 +104139,16 @@ var staticRenderFns = [
     return _c("h4", { staticClass: "my-4 border-bottom mt-5 pb-2" }, [
       _c("span", { staticClass: "border-bottom border-dark pb-2" }, [
         _vm._v("Discussion")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "my-5" }, [
+      _c("p", { staticClass: "lead text-center text-muted mt-5" }, [
+        _vm._v("Be the first comment :(")
       ])
     ])
   }
@@ -104216,7 +104516,15 @@ var render = function() {
               }),
               0
             )
-          : _c("center", [_c("div", { staticClass: "lds-facebook" })])
+          : _c("center", [
+              _c("div", { staticClass: "lds-facebook" }, [
+                _c("div"),
+                _vm._v(" "),
+                _c("div"),
+                _vm._v(" "),
+                _c("div")
+              ])
+            ])
       ],
       1
     )
@@ -104268,91 +104576,119 @@ var render = function() {
         _vm.isReady
           ? _c(
               "div",
-              _vm._l(_vm.posts, function(post, index) {
-                return _c(
-                  "div",
-                  { key: index * 2 + "-" + post.id },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "text-decoration-none",
-                        attrs: {
-                          to: { name: "show-post", params: { slug: post.slug } }
-                        }
-                      },
-                      [
-                        _c(
-                          "div",
-                          { staticClass: "card border-0 mb-4 shadow-4" },
-                          [
-                            _c("div", { staticClass: "card-body px-0" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "container d-lg-inline-flex align-items-center"
-                                },
-                                [
-                                  _c(
-                                    "section",
-                                    {
-                                      staticClass:
-                                        "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
-                                      class: post.featured_image
-                                        ? "col-lg-9"
-                                        : ""
-                                    },
-                                    [
-                                      _c(
-                                        "h5",
-                                        {
-                                          staticClass:
-                                            "card-title text-truncate mb-0"
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                    " +
-                                              _vm._s(post.title) +
-                                              "\n                  "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "p",
-                                        {
-                                          staticClass: "card-text text-truncate"
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                    " +
-                                              _vm._s(post.summary) +
-                                              "\n                  "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c("p", {
+              [
+                _vm._l(_vm.posts, function(post, index) {
+                  return _c(
+                    "div",
+                    { key: index * 2 + "-" + post.id },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-decoration-none",
+                          attrs: {
+                            to: {
+                              name: "show-post",
+                              params: { slug: post.slug }
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "card border-0 mb-4 shadow-4" },
+                            [
+                              _c("div", { staticClass: "card-body px-0" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "container d-lg-inline-flex align-items-center"
+                                  },
+                                  [
+                                    _c(
+                                      "section",
+                                      {
                                         staticClass:
-                                          "card-text mb-0 text-secondary"
-                                      })
-                                    ]
-                                  )
-                                ]
-                              )
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                )
-              }),
-              0
+                                          "col-12 mt-3 mt-lg-0 px-0 px-lg-3",
+                                        class: post.featured_image
+                                          ? "col-lg-9"
+                                          : ""
+                                      },
+                                      [
+                                        _c(
+                                          "h5",
+                                          {
+                                            staticClass:
+                                              "card-title text-truncate mb-0"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                    " +
+                                                _vm._s(post.title) +
+                                                "\n                  "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "p",
+                                          {
+                                            staticClass:
+                                              "card-text text-truncate"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                    " +
+                                                _vm._s(post.summary) +
+                                                "\n                  "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("p", {
+                                          staticClass:
+                                            "card-text mb-0 text-secondary"
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                }),
+                _vm._v(" "),
+                _vm.posts.length < 1
+                  ? _c("div", [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "text-left",
+                          attrs: { slot: "no-results" },
+                          slot: "no-results"
+                        },
+                        [_vm._m(1)]
+                      )
+                    ])
+                  : _vm._e()
+              ],
+              2
             )
-          : _c("center", [_c("div", { staticClass: "lds-dual-ring" })])
+          : _c("center", [
+              _c("div", { staticClass: "lds-facebook" }, [
+                _c("div"),
+                _vm._v(" "),
+                _c("div"),
+                _vm._v(" "),
+                _c("div")
+              ])
+            ])
       ],
       1
     )
@@ -104363,9 +104699,21 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("h4", { staticClass: "my-4 border-bottom mt-5 pb-2" }, [
+    return _c("h4", { staticClass: "my-4 border-bottom mt-2 pb-2" }, [
       _c("span", { staticClass: "border-bottom border-dark pb-2" }, [
         _vm._v("Related Posts")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "my-5" }, [
+      _c("p", { staticClass: "lead text-center text-muted mt-5" }, [
+        _vm._v(
+          "\n              No related post mathed for this post\n            "
+        )
       ])
     ])
   }
@@ -104420,6 +104768,10 @@ var render = function() {
                         !_vm.loadingContent
                           ? _c(
                               "div",
+                              {
+                                staticClass:
+                                  "row row-cols-1 row-cols-md-3 row-cols-sm-2"
+                              },
                               _vm._l(_vm.posts, function(post, index) {
                                 return _c(
                                   "div",
@@ -104439,8 +104791,24 @@ var render = function() {
                                       [
                                         _c(
                                           "div",
-                                          { staticClass: "card mb-4 border-0" },
+                                          {
+                                            staticClass:
+                                              "card mb-4 border-0 ml-2 mr-2"
+                                          },
                                           [
+                                            post.featured_image
+                                              ? _c("div", [
+                                                  _c("img", {
+                                                    staticClass: "card-img-top",
+                                                    attrs: {
+                                                      src: post.featured_image,
+                                                      alt:
+                                                        post.featured_image_caption
+                                                    }
+                                                  })
+                                                ])
+                                              : _vm._e(),
+                                            _vm._v(" "),
                                             _c(
                                               "div",
                                               { staticClass: "card-body px-0" },
@@ -104452,28 +104820,6 @@ var render = function() {
                                                       "container d-lg-inline-flex align-items-center"
                                                   },
                                                   [
-                                                    post.featured_image
-                                                      ? _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "col-12 col-lg-3 p-0"
-                                                          },
-                                                          [
-                                                            _c("img", {
-                                                              staticClass:
-                                                                "rounded w-100",
-                                                              attrs: {
-                                                                src:
-                                                                  post.featured_image,
-                                                                alt:
-                                                                  post.featured_image_caption
-                                                              }
-                                                            })
-                                                          ]
-                                                        )
-                                                      : _vm._e(),
-                                                    _vm._v(" "),
                                                     _c(
                                                       "section",
                                                       {
@@ -105635,27 +105981,20 @@ var render = function() {
                 attrs: { post_id: _vm.post.id, post_slug: _vm.post.slug }
               }),
               _vm._v(" "),
-              _vm.post.tags.length
+              _vm.post.topic
                 ? _c(
                     "div",
-                    _vm._l(_vm.post.tags, function(tag) {
-                      return _c(
-                        "div",
-                        { key: tag.id },
-                        [
-                          _c("related-posts-component", {
-                            attrs: {
-                              related_params: {
-                                tag: tag.slug,
-                                current_post_id: _vm.post.id
-                              }
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    }),
-                    0
+                    [
+                      _c("related-posts-component", {
+                        attrs: {
+                          related_params: {
+                            topic: _vm.post.topic[0].id,
+                            current_post_id: _vm.post.id
+                          }
+                        }
+                      })
+                    ],
+                    1
                   )
                 : _vm._e(),
               _vm._v(" "),
@@ -123987,6 +124326,1272 @@ Vue.compile = compileToFunctions;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Vue);
 
 
+/***/ }),
+
+/***/ "./node_modules/vuex/dist/vuex.esm.js":
+/*!********************************************!*\
+  !*** ./node_modules/vuex/dist/vuex.esm.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "Store": () => (/* binding */ Store),
+/* harmony export */   "createLogger": () => (/* binding */ createLogger),
+/* harmony export */   "createNamespacedHelpers": () => (/* binding */ createNamespacedHelpers),
+/* harmony export */   "install": () => (/* binding */ install),
+/* harmony export */   "mapActions": () => (/* binding */ mapActions),
+/* harmony export */   "mapGetters": () => (/* binding */ mapGetters),
+/* harmony export */   "mapMutations": () => (/* binding */ mapMutations),
+/* harmony export */   "mapState": () => (/* binding */ mapState)
+/* harmony export */ });
+/*!
+ * vuex v3.6.2
+ * (c) 2021 Evan You
+ * @license MIT
+ */
+function applyMixin (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
+
+  if (version >= 2) {
+    Vue.mixin({ beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = typeof options.store === 'function'
+        ? options.store()
+        : options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+  }
+}
+
+var target = typeof window !== 'undefined'
+  ? window
+  : typeof __webpack_require__.g !== 'undefined'
+    ? __webpack_require__.g
+    : {};
+var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook;
+
+  devtoolHook.emit('vuex:init', store);
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
+  });
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  }, { prepend: true });
+
+  store.subscribeAction(function (action, state) {
+    devtoolHook.emit('vuex:action', action, state);
+  }, { prepend: true });
+}
+
+/**
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
+function find (list, f) {
+  return list.filter(f)[0]
+}
+
+/**
+ * Deep copy the given object considering circular structure.
+ * This function caches all nested objects and its copies.
+ * If it detects circular structure, use cached copy to avoid infinite loop.
+ *
+ * @param {*} obj
+ * @param {Array<Object>} cache
+ * @return {*}
+ */
+function deepCopy (obj, cache) {
+  if ( cache === void 0 ) cache = [];
+
+  // just return if obj is immutable value
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  // if obj is hit, it is in circular structure
+  var hit = find(cache, function (c) { return c.original === obj; });
+  if (hit) {
+    return hit.copy
+  }
+
+  var copy = Array.isArray(obj) ? [] : {};
+  // put the copy into cache at first
+  // because we want to refer it in recursive deepCopy
+  cache.push({
+    original: obj,
+    copy: copy
+  });
+
+  Object.keys(obj).forEach(function (key) {
+    copy[key] = deepCopy(obj[key], cache);
+  });
+
+  return copy
+}
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
+  }
+}
+
+// Base data struct for store's module, package with some attribute and method
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  // Store some children item
+  this._children = Object.create(null);
+  // Store the origin module object which passed by programmer
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+
+  // Store the origin module's state
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors = { namespaced: { configurable: true } };
+
+prototypeAccessors.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.hasChild = function hasChild (key) {
+  return key in this._children
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  if ((true)) {
+    assertRawModule(path, rawModule);
+  }
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  var child = parent.getChild(key);
+
+  if (!child) {
+    if ((true)) {
+      console.warn(
+        "[vuex] trying to unregister module '" + key + "', which is " +
+        "not registered"
+      );
+    }
+    return
+  }
+
+  if (!child.runtime) {
+    return
+  }
+
+  parent.removeChild(key);
+};
+
+ModuleCollection.prototype.isRegistered = function isRegistered (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+
+  if (parent) {
+    return parent.hasChild(key)
+  }
+
+  return false
+};
+
+function update (path, targetModule, newModule) {
+  if ((true)) {
+    assertRawModule(path, newModule);
+  }
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        if ((true)) {
+          console.warn(
+            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+            'manual reload is needed'
+          );
+        }
+        return
+      }
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+var functionAssert = {
+  assert: function (value) { return typeof value === 'function'; },
+  expected: 'function'
+};
+
+var objectAssert = {
+  assert: function (value) { return typeof value === 'function' ||
+    (typeof value === 'object' && typeof value.handler === 'function'); },
+  expected: 'function or object with "handler" function'
+};
+
+var assertTypes = {
+  getters: functionAssert,
+  mutations: functionAssert,
+  actions: objectAssert
+};
+
+function assertRawModule (path, rawModule) {
+  Object.keys(assertTypes).forEach(function (key) {
+    if (!rawModule[key]) { return }
+
+    var assertOptions = assertTypes[key];
+
+    forEachValue(rawModule[key], function (value, type) {
+      assert(
+        assertOptions.assert(value),
+        makeAssertionMessage(path, key, type, value, assertOptions.expected)
+      );
+    });
+  });
+}
+
+function makeAssertionMessage (path, key, type, value, expected) {
+  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
+  if (path.length > 0) {
+    buf += " in module \"" + (path.join('.')) + "\"";
+  }
+  buf += " is " + (JSON.stringify(value)) + ".";
+  return buf
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #731
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  if ((true)) {
+    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+    assert(this instanceof Store, "store must be called with the new operator.");
+  }
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+  this._makeLocalGettersCache = Object.create(null);
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  var state = this._modules.root.state;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1); });
+
+  var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
+  if (useDevtools) {
+    devtoolPlugin(this);
+  }
+};
+
+var prototypeAccessors$1 = { state: { configurable: true } };
+
+prototypeAccessors$1.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors$1.state.set = function (v) {
+  if ((true)) {
+    assert(false, "use store.replaceState() to explicit replace store state.");
+  }
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown mutation type: " + type));
+    }
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+
+  this._subscribers
+    .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+    .forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (
+    ( true) &&
+    options && options.silent
+  ) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown action type: " + type));
+    }
+    return
+  }
+
+  try {
+    this._actionSubscribers
+      .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+      .filter(function (sub) { return sub.before; })
+      .forEach(function (sub) { return sub.before(action, this$1.state); });
+  } catch (e) {
+    if ((true)) {
+      console.warn("[vuex] error in before action subscribers: ");
+      console.error(e);
+    }
+  }
+
+  var result = entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload);
+
+  return new Promise(function (resolve, reject) {
+    result.then(function (res) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.after; })
+          .forEach(function (sub) { return sub.after(action, this$1.state); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in after action subscribers: ");
+          console.error(e);
+        }
+      }
+      resolve(res);
+    }, function (error) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.error; })
+          .forEach(function (sub) { return sub.error(action, this$1.state, error); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in error action subscribers: ");
+          console.error(e);
+        }
+      }
+      reject(error);
+    });
+  })
+};
+
+Store.prototype.subscribe = function subscribe (fn, options) {
+  return genericSubscribe(fn, this._subscribers, options)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn, options) {
+  var subs = typeof fn === 'function' ? { before: fn } : fn;
+  return genericSubscribe(subs, this._actionSubscribers, options)
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  if ((true)) {
+    assert(typeof getter === 'function', "store.watch only accepts a function.");
+  }
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+    assert(path.length > 0, 'cannot register the root module by using registerModule.');
+  }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hasModule = function hasModule (path) {
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  return this._modules.isRegistered(path)
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+
+function genericSubscribe (fn, subs, options) {
+  if (subs.indexOf(fn) < 0) {
+    options && options.prepend
+      ? subs.unshift(fn)
+      : subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  // reset local getters cache
+  store._makeLocalGettersCache = Object.create(null);
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    // direct inline function use will lead to closure preserving oldVm.
+    // using partial to return function with only arguments preserved in closure environment.
+    computed[key] = partial(fn, store);
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
+      });
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    if (store._modulesNamespaceMap[namespace] && ("development" !== 'production')) {
+      console.error(("[vuex] duplicate namespace " + namespace + " for the namespaced module " + (path.join('/'))));
+    }
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      if ((true)) {
+        if (moduleName in parentState) {
+          console.warn(
+            ("[vuex] state field \"" + moduleName + "\" was overridden by a module with the same name at \"" + (path.join('.')) + "\"")
+          );
+        }
+      }
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  if (!store._makeLocalGettersCache[namespace]) {
+    var gettersProxy = {};
+    var splitPos = namespace.length;
+    Object.keys(store.getters).forEach(function (type) {
+      // skip if the target getter is not match this namespace
+      if (type.slice(0, splitPos) !== namespace) { return }
+
+      // extract local getter type
+      var localType = type.slice(splitPos);
+
+      // Add a port to the getters proxy.
+      // Define as getter property because
+      // we do not want to evaluate the getters in this time.
+      Object.defineProperty(gettersProxy, localType, {
+        get: function () { return store.getters[type]; },
+        enumerable: true
+      });
+    });
+    store._makeLocalGettersCache[namespace] = gettersProxy;
+  }
+
+  return store._makeLocalGettersCache[namespace]
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    if ((true)) {
+      console.error(("[vuex] duplicate getter key: " + type));
+    }
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    if ((true)) {
+      assert(store._committing, "do not mutate vuex store state outside mutation handlers.");
+    }
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.reduce(function (state, key) { return state[key]; }, state)
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  if ((true)) {
+    assert(typeof type === 'string', ("expects string as the type, but found " + (typeof type) + "."));
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    if ((true)) {
+      console.error(
+        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+/**
+ * Reduce the code which written in Vue.js for getting the state.
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
+ * @param {Object}
+ */
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  if (( true) && !isValidMap(states)) {
+    console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for committing the mutation
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} mutations # Object's item can be a function which accept `commit` function as the first param, it can accept another params. You can commit mutation and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  if (( true) && !isValidMap(mutations)) {
+    console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // Get the commit method from store
+      var commit = this.$store.commit;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
+        if (!module) {
+          return
+        }
+        commit = module.context.commit;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [commit].concat(args))
+        : commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for getting the getters
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} getters
+ * @return {Object}
+ */
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  if (( true) && !isValidMap(getters)) {
+    console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    // The namespace has been mutated by normalizeNamespace
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if (( true) && !(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for dispatch the action
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  if (( true) && !isValidMap(actions)) {
+    console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // get dispatch function from store
+      var dispatch = this.$store.dispatch;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
+        if (!module) {
+          return
+        }
+        dispatch = module.context.dispatch;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [dispatch].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
+ * @param {String} namespace
+ * @return {Object}
+ */
+var createNamespacedHelpers = function (namespace) { return ({
+  mapState: mapState.bind(null, namespace),
+  mapGetters: mapGetters.bind(null, namespace),
+  mapMutations: mapMutations.bind(null, namespace),
+  mapActions: mapActions.bind(null, namespace)
+}); };
+
+/**
+ * Normalize the map
+ * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
+ * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
+ * @param {Array|Object} map
+ * @return {Object}
+ */
+function normalizeMap (map) {
+  if (!isValidMap(map)) {
+    return []
+  }
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+/**
+ * Validate whether given map is valid or not
+ * @param {*} map
+ * @return {Boolean}
+ */
+function isValidMap (map) {
+  return Array.isArray(map) || isObject(map)
+}
+
+/**
+ * Return a function expect two param contains namespace and map. it will normalize the namespace and then the param's function will handle the new namespace and the map.
+ * @param {Function} fn
+ * @return {Function}
+ */
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+/**
+ * Search a special module from store by namespace. if module not exist, print error message.
+ * @param {Object} store
+ * @param {String} helper
+ * @param {String} namespace
+ * @return {Object}
+ */
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if (( true) && !module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+// Credits: borrowed code from fcomb/redux-logger
+
+function createLogger (ref) {
+  if ( ref === void 0 ) ref = {};
+  var collapsed = ref.collapsed; if ( collapsed === void 0 ) collapsed = true;
+  var filter = ref.filter; if ( filter === void 0 ) filter = function (mutation, stateBefore, stateAfter) { return true; };
+  var transformer = ref.transformer; if ( transformer === void 0 ) transformer = function (state) { return state; };
+  var mutationTransformer = ref.mutationTransformer; if ( mutationTransformer === void 0 ) mutationTransformer = function (mut) { return mut; };
+  var actionFilter = ref.actionFilter; if ( actionFilter === void 0 ) actionFilter = function (action, state) { return true; };
+  var actionTransformer = ref.actionTransformer; if ( actionTransformer === void 0 ) actionTransformer = function (act) { return act; };
+  var logMutations = ref.logMutations; if ( logMutations === void 0 ) logMutations = true;
+  var logActions = ref.logActions; if ( logActions === void 0 ) logActions = true;
+  var logger = ref.logger; if ( logger === void 0 ) logger = console;
+
+  return function (store) {
+    var prevState = deepCopy(store.state);
+
+    if (typeof logger === 'undefined') {
+      return
+    }
+
+    if (logMutations) {
+      store.subscribe(function (mutation, state) {
+        var nextState = deepCopy(state);
+
+        if (filter(mutation, prevState, nextState)) {
+          var formattedTime = getFormattedTime();
+          var formattedMutation = mutationTransformer(mutation);
+          var message = "mutation " + (mutation.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c prev state', 'color: #9E9E9E; font-weight: bold', transformer(prevState));
+          logger.log('%c mutation', 'color: #03A9F4; font-weight: bold', formattedMutation);
+          logger.log('%c next state', 'color: #4CAF50; font-weight: bold', transformer(nextState));
+          endMessage(logger);
+        }
+
+        prevState = nextState;
+      });
+    }
+
+    if (logActions) {
+      store.subscribeAction(function (action, state) {
+        if (actionFilter(action, state)) {
+          var formattedTime = getFormattedTime();
+          var formattedAction = actionTransformer(action);
+          var message = "action " + (action.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c action', 'color: #03A9F4; font-weight: bold', formattedAction);
+          endMessage(logger);
+        }
+      });
+    }
+  }
+}
+
+function startMessage (logger, message, collapsed) {
+  var startMessage = collapsed
+    ? logger.groupCollapsed
+    : logger.group;
+
+  // render
+  try {
+    startMessage.call(logger, message);
+  } catch (e) {
+    logger.log(message);
+  }
+}
+
+function endMessage (logger) {
+  try {
+    logger.groupEnd();
+  } catch (e) {
+    logger.log('—— log end ——');
+  }
+}
+
+function getFormattedTime () {
+  var time = new Date();
+  return (" @ " + (pad(time.getHours(), 2)) + ":" + (pad(time.getMinutes(), 2)) + ":" + (pad(time.getSeconds(), 2)) + "." + (pad(time.getMilliseconds(), 3)))
+}
+
+function repeat (str, times) {
+  return (new Array(times + 1)).join(str)
+}
+
+function pad (num, maxLength) {
+  return repeat('0', maxLength - num.toString().length) + num
+}
+
+var index = {
+  Store: Store,
+  install: install,
+  version: '3.6.2',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions,
+  createNamespacedHelpers: createNamespacedHelpers,
+  createLogger: createLogger
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (index);
+
+
+
 /***/ })
 
 /******/ 	});
@@ -124091,15 +125696,16 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! nprogress */ "./node_modules/nprogress/nprogress.js");
 /* harmony import */ var nprogress__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(nprogress__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vue_meta__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-meta */ "./node_modules/vue-meta/dist/vue-meta.esm.js");
 /* harmony import */ var _mixins_base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mixins/base */ "./resources/js/canvas-ui/mixins/base.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./routes */ "./resources/js/canvas-ui/routes.js");
-/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/components/pagination/pagination.js");
-/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/components/popover/popover.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store */ "./resources/js/canvas-ui/store/index.js");
+/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/components/pagination/pagination.js");
+/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/components/popover/popover.js");
 
 
 
@@ -124108,23 +125714,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.component('b-pagination', bootstrap_vue__WEBPACK_IMPORTED_MODULE_6__.BPagination);
-vue__WEBPACK_IMPORTED_MODULE_5__.default.component('b-popover', bootstrap_vue__WEBPACK_IMPORTED_MODULE_7__.BPopover);
+
+vue__WEBPACK_IMPORTED_MODULE_6__.default.component('b-pagination', bootstrap_vue__WEBPACK_IMPORTED_MODULE_7__.BPagination);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.component('b-popover', bootstrap_vue__WEBPACK_IMPORTED_MODULE_8__.BPopover);
 
 __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 
 window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js").default;
-vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_3___default());
-vue__WEBPACK_IMPORTED_MODULE_5__.default.config.productionTip = false;
-vue__WEBPACK_IMPORTED_MODULE_5__.default.mixin(_mixins_base__WEBPACK_IMPORTED_MODULE_2__.default);
-vue__WEBPACK_IMPORTED_MODULE_5__.default.use(vue_meta__WEBPACK_IMPORTED_MODULE_1__.default);
-vue__WEBPACK_IMPORTED_MODULE_5__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_8__.default);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.prototype.moment = (moment__WEBPACK_IMPORTED_MODULE_3___default());
+vue__WEBPACK_IMPORTED_MODULE_6__.default.config.productionTip = false;
+vue__WEBPACK_IMPORTED_MODULE_6__.default.mixin(_mixins_base__WEBPACK_IMPORTED_MODULE_2__.default);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vue_meta__WEBPACK_IMPORTED_MODULE_1__.default);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_9__.default);
 nprogress__WEBPACK_IMPORTED_MODULE_0___default().configure({
   showSpinner: false,
   easing: 'ease',
   speed: 300
 });
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_8__.default({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_9__.default({
   base: 'blog',
   mode: 'history',
   routes: _routes__WEBPACK_IMPORTED_MODULE_4__.default
@@ -124134,8 +125741,9 @@ router.beforeEach(function (to, from, next) {
   nprogress__WEBPACK_IMPORTED_MODULE_0___default().start();
   next();
 });
-new vue__WEBPACK_IMPORTED_MODULE_5__.default({
+new vue__WEBPACK_IMPORTED_MODULE_6__.default({
   el: '#ui',
+  store: _store__WEBPACK_IMPORTED_MODULE_5__.store,
   router: router
 });
 })();

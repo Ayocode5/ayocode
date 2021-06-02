@@ -16,9 +16,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
     {{-- <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Karla&family=Merriweather:wght@400;700&display=swap"> --}}
-    
+
     {{-- Sintax Highlighting --}}
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atelier-cave-light.min.css">
+    <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atelier-cave-light.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/go.min.js"></script>
 </head>
@@ -37,7 +38,8 @@
     <script type="text/javascript" src="{{ mix('js/canvas-ui.js') }}"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
+        /* @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap'); */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
         .ql-syntax {
             counter-reset: line;
@@ -55,7 +57,7 @@
         }
 
         body {
-            font-family: "Balsamiq Sans";
+            font-family: 'Roboto', sans-serif;
         }
 
     </style>

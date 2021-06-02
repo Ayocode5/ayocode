@@ -5,6 +5,7 @@ import VueMeta from 'vue-meta';
 import base from './mixins/base';
 import moment from 'moment';
 import routes from './routes';
+import {store} from  './store';
 import { BPagination, BPopover } from 'bootstrap-vue'
 
 Vue.component('b-pagination', BPagination);
@@ -45,5 +46,6 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     el: '#ui',
+    store: store,
     router,
 });

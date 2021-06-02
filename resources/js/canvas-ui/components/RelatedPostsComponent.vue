@@ -2,7 +2,7 @@
   <div>
     <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
       <!-- Popular Posts -->
-      <h4 class="my-4 border-bottom mt-5 pb-2">
+      <h4 class="my-4 border-bottom mt-2 pb-2">
         <span class="border-bottom border-dark pb-2">Related Posts</span>
       </h4>
 
@@ -51,9 +51,23 @@
             </div>
           </router-link>
         </div>
+
+        <div v-if="posts.length < 1">
+          <div slot="no-results" class="text-left">
+            <div class="my-5">
+              <p class="lead text-center text-muted mt-5">
+                No related post mathed for this post
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
       <center v-else>
-        <div class="lds-dual-ring">
+        <div class="lds-facebook">
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </center>
       <!-- End Popular Posts -->
@@ -65,9 +79,9 @@ export default {
   name: "related-post-component",
   props: {
     related_params: {
-      tag: '',
-      current_post_id: ''
-    }
+      topic: "",
+      current_post_id: "",
+    },
   },
 
   data() {
@@ -85,9 +99,16 @@ export default {
   methods: {
     fetchRelatedPosts() {
       return this.request()
-        .get("api/posts/related?tag="+this.related_params.tag+"&current_post="+this.related_params.current_post_id)
+        .get(
+          "api/posts/related?topic=" +
+            this.related_params.topic +
+            "&current_post=" +
+            this.related_params.current_post_id
+        )
         .then(({ data }) => {
-          this.posts.push(...data);
+          if (data.length > 0) {
+            this.posts.push(...data);
+          }
         })
         .catch((err) => console.log(err));
     },
@@ -96,29 +117,41 @@ export default {
 </script>
 
 <style scoped>
-.lds-dual-ring {
+.lds-facebook {
   display: inline-block;
-  width: 50px;
-  height: 50px;
-  text-align: center;
+  position: relative;
+  width: 80px;
+  height: 80px;
 }
-.lds-dual-ring:after {
-  content: " ";
-  display: block;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border-radius: 50%;
-  border: 6px solid rgb(56, 56, 56);
-  border-color: rgb(60, 60, 60) transparent rgb(60, 60, 60) transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 8px;
+  width: 16px;
+  background: rgb(157, 157, 157);
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
-@keyframes lds-dual-ring {
+.lds-facebook div:nth-child(1) {
+  left: 8px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 32px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 56px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
   0% {
-    transform: rotate(0deg);
+    top: 8px;
+    height: 64px;
   }
+  50%,
   100% {
-    transform: rotate(360deg);
+    top: 24px;
+    height: 32px;
   }
 }
 </style>

@@ -54,6 +54,9 @@
       </div>
       <center v-else>
         <div class="lds-facebook">
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </center>
       <!-- End Popular Posts -->

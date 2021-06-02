@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewDiscussion;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Guest;
@@ -172,9 +173,10 @@ class CanvasUiController extends Controller
     }
 
     // Mengambil Post populer dalam rentang bulan saat ini
-    public function getPopularPosts(Request $request): JsonResponse
+    public function getPopularPosts(): JsonResponse
     {
-        $posts = Post::select(['id', 'slug', 'title', 'summary', 'featured_image', 'featured_image_caption'])
+        $posts = Post::query()
+            ->select(['id', 'slug', 'title', 'summary', 'featured_image', 'featured_image_caption'])
             ->with('topic')
             ->limit(4)
             ->withCount([
@@ -198,19 +200,18 @@ class CanvasUiController extends Controller
     // Mengambil Post yang tema nya masih berhubungan dengan post yang sedang dibuka
     public function getRelatedPosts(Request $request): JsonResponse
     {
-        $tag = $request->input('tag');
+        $topic_id = $request->input('topic');
         $current_post_id = $request->input('current_post');
 
-        $tag = DB::table('canvas_tags')->where('slug', strval($tag))->first();
+        if ($topic_id && $current_post_id) {
 
-        if ($tag && $current_post_id) {
-            $posts_id = DB::table('canvas_posts_tags')->select('post_id')->limit(4)
-                ->where('tag_id', $tag->id)
-                ->where('post_id', '!=', strval($current_post_id))
-                ->orderBy(DB::raw('RAND()'))
-                ->get();
+            $related_posts = Topic::select('id')->where('id', $topic_id)->with(['posts' => function ($query) use ($current_post_id) {
+                $query->select('id', 'title', 'summary', 'slug', 'featured_image', 'featured_image_caption')
+                    ->where('id', '!=', $current_post_id)
+                    ->published()
+                    ->orderBy(DB::raw('RAND()'));
+            }])->get()->pluck('posts')[0];
 
-            $related_posts = Post::select(['id', 'slug', 'title', 'summary'])->whereIn('id', $posts_id->pluck('post_id'))->get();
             return response()->json($related_posts, 200);
         }
 
@@ -223,7 +224,7 @@ class CanvasUiController extends Controller
         $post_id = $request->input('post_id');
 
         $comments = DB::table('comments as c')
-            ->select('c.id', 'c.post_id', 'g.name', 'g.email', 'c.comment')
+            ->select('c.id', 'c.post_id', 'g.name', 'g.email', 'c.comment', 'c.created_at')
             ->where('post_id', $post_id)
             ->leftJoin('guests as g', 'g.id', '=', 'c.guest_id')
             ->get();
@@ -231,7 +232,7 @@ class CanvasUiController extends Controller
         $comments = collect($comments);
         $comments->map(function ($comment) {
             return $comment->replies = DB::table('replies as r')
-                ->select('r.id', 'r.comment_section_id', 'g.name', 'g.email', 'r.comment', 'r.reply_to')
+                ->select('r.id', 'r.comment_section_id', 'g.name', 'g.email', 'r.comment', 'r.reply_to', 'r.created_at')
                 ->where('comment_section_id', $comment->id)
                 ->leftJoin('guests as g', 'g.id', '=', 'r.guest_id')
                 ->get();
@@ -253,6 +254,9 @@ class CanvasUiController extends Controller
             $comment = $guest->comments()->create(['post_id' => $request->input('post_id'), 'comment' => $request->input('comment')]);
 
             if ($guest) {
+
+                event(new NewDiscussion($comment)); 
+
                 return response()->json($comment, 200);
             }
         }
@@ -279,6 +283,8 @@ class CanvasUiController extends Controller
             ]);
 
             if ($guest) {
+                event(new NewDiscussion($reply));
+
                 return response()->json($reply, 200);
             }
         }

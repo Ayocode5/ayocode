@@ -97,8 +97,8 @@ $text-muted: $gray-500;
 }
 
 .card:hover {
-    -webkit-transform: translateY(-5px);
-    transform: translateY(-5px);
+    // -webkit-transform: translateY(-5px);
+    // transform: translateY(-5px);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
@@ -106,7 +106,8 @@ $text-muted: $gray-500;
     font-size: 1.1rem;
     line-height: 2;
     word-wrap: normal;
-    font-family: $font-family-serif;
+    // font-family: $font-family-serif;
+    font-family: 'Roboto', sans-serif;
     padding-left: 0;
     padding-right: 0;
     overflow-y: visible;
