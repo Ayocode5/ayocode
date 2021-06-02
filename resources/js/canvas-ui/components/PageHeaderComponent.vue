@@ -109,7 +109,9 @@ export default {
     },
 
     searchPost() {
-      this.$router.push({name: 'search-post', params: {keyword: this.keyword}}).catch({});
+      if(this.keyword) {
+        this.$router.push({name: 'search-post', params: {keyword: this.keyword}}).catch({});
+      }
     },
   },
 };

@@ -2632,12 +2632,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     searchPost: function searchPost() {
-      this.$router.push({
-        name: 'search-post',
-        params: {
-          keyword: this.keyword
-        }
-      })["catch"]({});
+      if (this.keyword) {
+        this.$router.push({
+          name: 'search-post',
+          params: {
+            keyword: this.keyword
+          }
+        })["catch"]({});
+      }
     }
   }
 });
@@ -15615,7 +15617,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.pointer[data-v-47472ebd] {\n  cursor: pointer;\n}\nbutton[data-v-47472ebd] {\n  border-radius: 5px;\n  color: whitesmoke;\n}\n\n/* a:hover {\n  color: rgb(94, 201, 228);\n} */\n.card[data-v-47472ebd] {\n  border: none;\n  border-radius: 0px;\n  transition: none;\n  box-shadow: none;\n}\n.card-comment[data-v-47472ebd] {\n  border-bottom: 1px solid rgb(226, 226, 226);\n}\n.card[data-v-47472ebd]:hover {\n  /*  */\n  transition: none;\n}\n.profileImage[data-v-47472ebd] {\n  font-family: sans-serif;\n  width: 50px;\n  height: 50px;\n  border-radius: 50%;\n  background: #ec5858;\n  font-size: 30px;\n  color: #fff;\n  text-align: center;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.pointer[data-v-47472ebd] {\n  cursor: pointer;\n}\nbutton[data-v-47472ebd] {\n  border-radius: 5px;\n  color: whitesmoke;\n}\n\n/* a:hover {\n  color: rgb(94, 201, 228);\n} */\n.card[data-v-47472ebd] {\n  border: none;\n  border-radius: 0px;\n  transition: none;\n  box-shadow: none;\n}\n.card-comment[data-v-47472ebd] {\n  border-bottom: 1px solid rgb(226, 226, 226);\n}\n.card[data-v-47472ebd]:hover {\n  /*  */\n  transition: none;\n}\n.profileImage[data-v-47472ebd] {\n  font-family: sans-serif;\n  width: 50px;\n  height: 50px;\n  border-radius: 50%;\n  background: #ee9090;\n  font-size: 30px;\n  color: #fff;\n  text-align: center;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -103067,7 +103069,7 @@ var render = function() {
                           staticClass:
                             "card-link badge badge-secondary pointer mt-4 py-1 px-1",
                           attrs: {
-                            id: "popover-reply-" + comment.id,
+                            id: "popover-post-" + comment.id,
                             variant: "primary"
                           }
                         },
@@ -103084,7 +103086,7 @@ var render = function() {
                         ref: "popover",
                         refInFor: true,
                         attrs: {
-                          target: "popover-reply-" + comment.id,
+                          target: "popover-post-" + comment.id,
                           placement: "rightbottom"
                         }
                       },
@@ -103401,7 +103403,10 @@ var render = function() {
                                               "h6",
                                               {
                                                 staticClass:
-                                                  "card-subtitle mb-2 text-muted"
+                                                  "card-subtitle mb-2 text-muted",
+                                                staticStyle: {
+                                                  "word-break": "break-all"
+                                                }
                                               },
                                               [
                                                 _vm._v(

@@ -40,14 +40,14 @@
           <div class="row">
             <a
               class="card-link badge badge-secondary pointer mt-4 py-1 px-1"
-              :id="'popover-reply-' + comment.id"
+              :id="'popover-post-' + comment.id"
               variant="primary"
               ><i class="fas fa-reply"></i>&nbsp;Reply
             </a>
           </div>
           <b-popover
             ref="popover"
-            :target="'popover-reply-' + comment.id"
+            :target="'popover-post-' + comment.id"
             placement="rightbottom"
           >
             <p class="badge badge-secondary py-2 px-2">
@@ -150,7 +150,7 @@
                       >
                         {{ date(reply.created_at) }}
                       </h6>
-                      <h6 v-else class="card-subtitle mb-2 text-muted">
+                      <h6 v-else class="card-subtitle mb-2 text-muted" style="word-break: break-all;">
                         replied to {{ reply.reply_to.name }} -
                         {{ date(reply.created_at) }}
                       </h6>
@@ -612,7 +612,7 @@ button {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #ec5858;
+  background: #ee9090;
   font-size: 30px;
   color: #fff;
   text-align: center;
