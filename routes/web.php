@@ -3,7 +3,10 @@
 use App\Events\NewDiscussion;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CanvasUiController;
+use App\Mail\DiscussionNotification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/hello', function () {
+    // return event(new NewDiscussion('Hellooooo'));
+    // Mail::to('akiyan2002@gmail.com')->send(new DiscussionNotification());
 });
 
 Route::get('/sitemap.xml', SitemapController::class);

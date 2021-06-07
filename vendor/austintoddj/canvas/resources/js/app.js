@@ -9,6 +9,8 @@ require('bootstrap');
 
 window.Popper = require('popper.js').default;
 
+window.Pusher = require('pusher-js');
+
 Vue.prototype.moment = moment;
 
 Vue.use(Toasted, {

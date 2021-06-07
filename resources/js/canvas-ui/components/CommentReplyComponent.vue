@@ -32,22 +32,22 @@
             </div>
           </div>
           <div class="row">
-            <p class="card-text">
+            <p class="card-text" style="padding-left: 59px">
               {{ comment.comment }}
             </p>
             <!-- Popover in Post Comment Section-->
           </div>
-          <div class="row">
+          <div class="row" style="padding-left: 59px">
             <a
-              class="card-link badge badge-secondary pointer mt-4 py-1 px-1"
-              :id="'popover-post-' + comment.id"
+              class="card-link disable-select badge badge-secondary pointer mt-4 py-1 px-1"
+              :id="'popover-comment-' + comment.id"
               variant="primary"
               ><i class="fas fa-reply"></i>&nbsp;Reply
             </a>
           </div>
           <b-popover
             ref="popover"
-            :target="'popover-post-' + comment.id"
+            :target="'popover-comment-' + comment.id"
             placement="rightbottom"
           >
             <p class="badge badge-secondary py-2 px-2">
@@ -150,7 +150,7 @@
                       >
                         {{ date(reply.created_at) }}
                       </h6>
-                      <h6 v-else class="card-subtitle mb-2 text-muted" style="word-break: break-all;">
+                      <h6 v-else class="card-subtitle mb-2 text-muted" style="word-break: keep-all;">
                         replied to {{ reply.reply_to.name }} -
                         {{ date(reply.created_at) }}
                       </h6>
@@ -158,7 +158,7 @@
                   </div>
                   <div
                     class="row mt-2"
-                    style="padding-left: 57px; margin-bottom: -12px"
+                    style="padding-left: 65px; margin-bottom: -12px"
                   >
                     <p
                       class="px-2 py-1"
@@ -171,18 +171,18 @@
                       {{ reply.reply_to.comment }}
                     </p>
                   </div>
-                  <div class="row mt-0 pl-8" style="padding-left: 57px">
+                  <div class="row mt-0 pl-8" style="padding-left: 65px">
                     <p class="card-text">{{ reply.comment }}</p>
                   </div>
 
-                  <!-- Popover Trigger -->
+                  <!--Reply  Popover Trigger -->
                   <div
                     v-if="reply.email != guest.email"
                     class="row mt-4"
-                    style="padding-left: 57px"
+                    style="padding-left: 65px"
                   >
                     <a
-                      class="card-link pointer badge badge-secondary py-1 px-1"
+                      class="card-link disable-select pointer badge badge-secondary py-1 px-1"
                       :id="'popover-reply-' + reply.id"
                       variant="primary"
                       ><i class="fas fa-reply"></i>&nbsp;Reply</a

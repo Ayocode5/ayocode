@@ -3937,6 +3937,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -103053,32 +103058,46 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "row" }, [
-                      _c("p", { staticClass: "card-text" }, [
-                        _vm._v(
-                          "\n            " +
-                            _vm._s(comment.comment) +
-                            "\n          "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "row" }, [
                       _c(
-                        "a",
+                        "p",
                         {
-                          staticClass:
-                            "card-link badge badge-secondary pointer mt-4 py-1 px-1",
-                          attrs: {
-                            id: "popover-post-" + comment.id,
-                            variant: "primary"
-                          }
+                          staticClass: "card-text",
+                          staticStyle: { "padding-left": "59px" }
                         },
                         [
-                          _c("i", { staticClass: "fas fa-reply" }),
-                          _vm._v(" Reply\n          ")
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(comment.comment) +
+                              "\n          "
+                          )
                         ]
                       )
                     ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "row",
+                        staticStyle: { "padding-left": "59px" }
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "card-link disable-select badge badge-secondary pointer mt-4 py-1 px-1",
+                            attrs: {
+                              id: "popover-comment-" + comment.id,
+                              variant: "primary"
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-reply" }),
+                            _vm._v(" Reply\n          ")
+                          ]
+                        )
+                      ]
+                    ),
                     _vm._v(" "),
                     _c(
                       "b-popover",
@@ -103086,7 +103105,7 @@ var render = function() {
                         ref: "popover",
                         refInFor: true,
                         attrs: {
-                          target: "popover-post-" + comment.id,
+                          target: "popover-comment-" + comment.id,
                           placement: "rightbottom"
                         }
                       },
@@ -103405,7 +103424,7 @@ var render = function() {
                                                 staticClass:
                                                   "card-subtitle mb-2 text-muted",
                                                 staticStyle: {
-                                                  "word-break": "break-all"
+                                                  "word-break": "keep-all"
                                                 }
                                               },
                                               [
@@ -103430,7 +103449,7 @@ var render = function() {
                                       {
                                         staticClass: "row mt-2",
                                         staticStyle: {
-                                          "padding-left": "57px",
+                                          "padding-left": "65px",
                                           "margin-bottom": "-12px"
                                         }
                                       },
@@ -103460,7 +103479,7 @@ var render = function() {
                                       "div",
                                       {
                                         staticClass: "row mt-0 pl-8",
-                                        staticStyle: { "padding-left": "57px" }
+                                        staticStyle: { "padding-left": "65px" }
                                       },
                                       [
                                         _c("p", { staticClass: "card-text" }, [
@@ -103475,7 +103494,7 @@ var render = function() {
                                           {
                                             staticClass: "row mt-4",
                                             staticStyle: {
-                                              "padding-left": "57px"
+                                              "padding-left": "65px"
                                             }
                                           },
                                           [
@@ -103483,7 +103502,7 @@ var render = function() {
                                               "a",
                                               {
                                                 staticClass:
-                                                  "card-link pointer badge badge-secondary py-1 px-1",
+                                                  "card-link disable-select pointer badge badge-secondary py-1 px-1",
                                                 attrs: {
                                                   id:
                                                     "popover-reply-" + reply.id,
@@ -105917,7 +105936,8 @@ var render = function() {
                               {
                                 key: tag.id,
                                 staticClass:
-                                  "badge badge-warning p-2 my-1 mr-2 text-decoration-none text-uppercase",
+                                  "badge p-2 my-1 mr-2 text-decoration-none text-uppercase",
+                                staticStyle: { "background-color": "#d6d6d6" },
                                 attrs: {
                                   to: {
                                     name: "show-tag",

@@ -12,6 +12,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "pusher/pusher-php-server": "^7.0",
         "watson/sitemap": "^4.0"
     },
     "require-dev": {

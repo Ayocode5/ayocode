@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewDiscussion
+class NewDiscussion implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -33,6 +33,10 @@ class NewDiscussion
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('postDiscussionsChannel');
+    }
+
+    public function broadcastAs() {
+        return 'NewDiscussionEvent';
     }
 }

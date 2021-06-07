@@ -6,6 +6,8 @@ use App\Events\NewDiscussion;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DiscussionNotification;
 
 class sendDiscussionNotification
 {
@@ -27,6 +29,14 @@ class sendDiscussionNotification
      */
     public function handle(NewDiscussion $event)
     {
-        Log::info($event->discussion);
+
+        $reply_target = $event->discussion['reply_to'] ?? null;
+
+        if($reply_target) {
+
+            $reply_target = json_decode($reply_target, true);
+            Mail::to($reply_target['email'])->send(new DiscussionNotification((object) $event->discussion));
+        }
+
     }
 }

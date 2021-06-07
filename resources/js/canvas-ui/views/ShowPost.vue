@@ -119,7 +119,8 @@
             :key="tag.id"
             v-for="tag in post.tags"
             :to="{ name: 'show-tag', params: { slug: tag.slug } }"
-            class="badge badge-warning p-2 my-1 mr-2 text-decoration-none text-uppercase"
+            class="badge p-2 my-1 mr-2 text-decoration-none text-uppercase"
+            style="background-color: #d6d6d6"
           >
             {{ tag.name }}
           </router-link>
@@ -141,8 +142,10 @@
           </p>
         </div>
       </div>
+
       <!-- Comment Reply Component -->
       <comment-reply-component :post_id="post.id" :post_slug="post.slug" />
+
       <!-- Related Posts Component -->
       <div v-if="post.topic">
         <related-posts-component
@@ -152,8 +155,10 @@
           }"
         />
       </div>
+
       <!-- Popular Posts Component -->
       <popular-posts-component />
+      
       <!-- Footer Component -->
       <Footer />
     </div>

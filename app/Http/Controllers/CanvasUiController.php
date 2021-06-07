@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CanvasUiController extends Controller
 {
@@ -283,7 +284,7 @@ class CanvasUiController extends Controller
             ]);
 
             if ($guest) {
-                event(new NewDiscussion($reply));
+                event(new NewDiscussion($request->all()));
 
                 return response()->json($reply, 200);
             }
