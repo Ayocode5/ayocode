@@ -158,6 +158,7 @@ export default {
         .get("api/posts", {
           params: {
             page: page,
+            limit: 3,
           },
         })
         .then(({ data }) => {

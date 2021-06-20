@@ -99,14 +99,16 @@ export default {
   methods: {
     fetchRelatedPosts() {
       return this.request()
-        .get(
-          "api/posts/related?topic=" +
-            this.related_params.topic +
-            "&current_post=" +
-            this.related_params.current_post_id
+        .get("api/posts/related", {
+              params: {
+                topic: this.related_params.topic,
+                current_post: this.related_params.current_post_id
+              }
+            }
         )
         .then(({ data }) => {
           if (data.length > 0) {
+            // console.log(data)
             this.posts.push(...data);
           }
         })

@@ -11,6 +11,7 @@
         class="card card-comment"
       >
         <div class="card-body">
+          <!-- Guest Short Information -->
           <div class="row mt-0">
             <div>
               <!-- <img
@@ -20,7 +21,7 @@
                 alt="user"
               /> -->
               <i class="mr-2 profileImage" style="display: inline-block">{{
-                profileImageInitial(comment.name)
+                getInitialName(comment.name)
               }}</i>
             </div>
             <div>
@@ -31,41 +32,64 @@
               </h6>
             </div>
           </div>
+          <!-- End of Guest Short Information -->
+
+          <!-- Guest Comments -->
           <div class="row">
             <p class="card-text" style="padding-left: 59px">
-              {{ comment.comment }}
+              <span v-html="comment.comment"></span>
             </p>
-            <!-- Popover in Post Comment Section-->
           </div>
+
+          <!-- Reply Button -->
           <div class="row" style="padding-left: 59px">
             <a
-              class="card-link disable-select badge badge-secondary pointer mt-4 py-1 px-1"
-              :id="'popover-comment-' + comment.id"
+              class="
+                card-link
+                disable-select
+                badge badge-secondary
+                pointer
+                mt-4
+                py-1
+                px-1
+              "
               variant="primary"
+              data-toggle="collapse"
+              :href="'#reply-input-' + comment.id"
+              role="button"
+              aria-expanded="true"
+              :aria-controls="'reply-input-' + comment.id"
               ><i class="fas fa-reply"></i>&nbsp;Reply
             </a>
-          </div>
-          <b-popover
-            ref="popover"
-            :target="'popover-comment-' + comment.id"
-            placement="rightbottom"
-          >
-            <p class="badge badge-secondary py-2 px-2">
-              Reply to {{ comment.name }}
-            </p>
-            <p
-              class="px-2 py-2"
-              style="
-                background: rgb(226, 226, 226);
-                border: none;
-                border-left: 2px solid grey;
+            <a
+              v-if="comment.total_replies > 0"
+              class="
+                card-link
+                disable-select
+                badge badge-secondary
+                pointer
+                mt-4
+                py-1
+                px-1
               "
-            >
-              {{ comment.comment }}
-            </p>
+              @click="fetchPostReplies(comment.id)"
+              ><i class="fas fa-comment"></i>&nbsp;All Replies
+            </a>
+            <!-- <a class="card-link badge badge-primary disable-select pointer ml-2" @click="fetchPostReplies(comment.id)">Load All Replies</a> -->
+          </div>
+          <!-- End of Reply Button -->
 
-            <p></p>
-            <form onsubmit="return false">
+          <!-- Reply InputBox -->
+          <div
+            class="mt-2 collapse"
+            :id="'reply-input-' + comment.id"
+            style="margin-left: 45px"
+          >
+            <form
+              onsubmit="return false"
+              class="py-3 px-3 rounded"
+              style="background: rgb(239 239 239)"
+            >
               <template v-if="!guest.isSavedCredential">
                 <div class="mt-2">
                   <label for="exampleInputEmail1" class="form-label"
@@ -89,14 +113,15 @@
                   />
                 </div>
               </template>
+
               <div class="mb-2">
-                <label for="commentInput" class="form-label">Your Reply</label>
-                <textarea
-                  class="form-control"
-                  id="commentInput"
-                  v-model="guest.reply"
-                />
+                <label for="commentInput" class="form-label"
+                  >Reply to {{ comment.name }}</label
+                >
+                <ckeditor v-model="guest.reply"></ckeditor>
               </div>
+
+              <!-- Save Guest Information -->
               <div class="mb-3 form-check">
                 <input
                   type="checkbox"
@@ -109,39 +134,43 @@
                   >Save my name and email</label
                 >
               </div>
+
+              <!-- Post Reply Button -->
               <button
                 @click="
-                  postReplyComment({
-                    reply_to: {
-                      name: comment.name,
-                      email: comment.email,
-                      comment: comment.comment,
+                  postReply(
+                    {
+                      reply_to: {
+                        name: comment.name,
+                        email: comment.email,
+                        comment: comment.comment,
+                      },
+                      comment_section_id: comment.id,
                     },
-                    comment_section_id: comment.id,
-                  })
+                    `replyInputBox${comment.id}`
+                  )
                 "
                 class="btn btn-primary"
               >
                 Post Reply
               </button>
             </form>
-          </b-popover>
-          <!-- End of Popover in Post Comment Section-->
+          </div>
+          <!-- End of Reply InputBox -->
 
           <!-- Comment Replies Section -->
           <div v-if="comment.replies.length">
             <div v-for="reply in comment.replies" :key="reply.id">
-              <div class="card border-2 mt-2">
+              <div class="card border-2 mt-2" style="padding-left: 40px">
                 <div class="card-body">
+                  <!-- Guest -->
                   <div class="row">
-                    <!-- <img
-                      style="width: 50px; height: 50px"
-                      src="https://www.svgrepo.com/show/77591/user.svg"
-                      alt="user"
-                    /> -->
+                    <!-- Guest Alias -->
                     <i class="mr-2 profileImage">{{
-                      profileImageInitial(reply.name)
+                      getInitialName(reply.name)
                     }}</i>
+
+                    <!-- Guest Short Info -->
                     <div class="ml-2">
                       <h5 class="card-title">{{ reply.name }}</h5>
                       <h6
@@ -150,12 +179,18 @@
                       >
                         {{ date(reply.created_at) }}
                       </h6>
-                      <h6 v-else class="card-subtitle mb-2 text-muted" style="word-break: keep-all;">
+                      <h6
+                        v-else
+                        class="card-subtitle mb-2 text-muted"
+                        style="word-break: keep-all"
+                      >
                         replied to {{ reply.reply_to.name }} -
                         {{ date(reply.created_at) }}
                       </h6>
                     </div>
                   </div>
+
+                  <!-- Reply Target Message -->
                   <div
                     class="row mt-2"
                     style="padding-left: 65px; margin-bottom: -12px"
@@ -166,63 +201,79 @@
                         background: rgb(226, 226, 226);
                         border: none;
                         border-left: 2px solid grey;
+                        border-radius: 3px;
+                        display: inline;
                       "
                     >
-                      {{ reply.reply_to.comment }}
+                      <span v-html="reply.reply_to.comment"></span>
                     </p>
                   </div>
-                  <div class="row mt-0 pl-8" style="padding-left: 65px">
-                    <p class="card-text">{{ reply.comment }}</p>
-                  </div>
+                  <!-- End of Reply Target Message -->
 
-                  <!--Reply  Popover Trigger -->
+                  <!-- Reply Message -->
+                  <div class="row mt-0 pl-8" style="padding-left: 65px">
+                    <p class="card-text">
+                      <span v-html="reply.comment"></span>
+                    </p>
+                  </div>
+                  <!-- End of Reply Message -->
+
+                  <!-- Reply Button Trigger -->
                   <div
                     v-if="reply.email != guest.email"
                     class="row mt-4"
                     style="padding-left: 65px"
                   >
                     <a
-                      class="card-link disable-select pointer badge badge-secondary py-1 px-1"
-                      :id="'popover-reply-' + reply.id"
+                      class="
+                        card-link
+                        disable-select
+                        pointer
+                        badge badge-secondary
+                        py-1
+                        px-1
+                      "
                       variant="primary"
+                      data-toggle="collapse"
+                      :href="'#reply-input-' + reply.id"
+                      role="button"
+                      aria-expanded="true"
+                      :aria-controls="'reply-input-' + reply.id"
                       ><i class="fas fa-reply"></i>&nbsp;Reply</a
                     >
                   </div>
+                  <!-- End of Reply Button Trigger -->
 
-                  <!-- Popover in Reply Comment Section-->
-                  <b-popover
-                    v-if="reply.email != guest.email"
-                    ref="popover"
-                    :target="'popover-reply-' + reply.id"
-                    placement="bottomright"
+                  <!-- Reply InputBox in Reply Section -->
+                  <div
+                    class="mt-2 collapse px-3 py-3 rounded"
+                    :id="'reply-input-' + reply.id"
+                    style="margin-left: 50px; background: rgb(239, 239, 239)"
                   >
-                    <p class="badge badge-secondary py-2 px-2">
-                      Reply to {{ reply.name }}
-                    </p>
                     <p
                       class="px-2 py-2"
                       style="
                         background: rgb(226, 226, 226);
                         border: none;
                         border-left: 2px solid grey;
-                        height: 120px;
                         overflow: auto;
+                        border-radius: 3px;
                       "
                     >
-                      {{ reply.comment }}
+                      <span v-html="reply.comment"></span>
                     </p>
+                    <!-- End of Reply Target Info -->
 
-                    <p></p>
                     <form onsubmit="return false">
                       <template v-if="!guest.isSavedCredential">
                         <div class="mb-2">
-                          <label for="exampleInputEmail1" class="form-label"
+                          <label for="exampleInputEmail2" class="form-label"
                             >Email address</label
                           >
                           <input
                             type="email"
                             class="form-control"
-                            id="exampleInputEmail1"
+                            id="exampleInputEmail2"
                             aria-describedby="emailHelp"
                             v-model="guest.email"
                           />
@@ -239,13 +290,9 @@
                       </template>
                       <div class="mb-2">
                         <label for="commentInput" class="form-label"
-                          >Your Reply</label
+                          >Reply to {{ reply.name }}</label
                         >
-                        <textarea
-                          class="form-control"
-                          id="commentInput"
-                          v-model="guest.reply"
-                        />
+                        <ckeditor v-model="guest.reply"></ckeditor>
                       </div>
                       <div class="mb-3 form-check">
                         <input
@@ -261,7 +308,7 @@
                       </div>
                       <button
                         @click="
-                          postReplyComment({
+                          postReply({
                             reply_to: {
                               name: reply.name,
                               email: reply.email,
@@ -275,8 +322,8 @@
                         Post Reply
                       </button>
                     </form>
-                  </b-popover>
-                  <!--End of Popover in Reply Comment Section-->
+                  </div>
+                  <!-- End of Reply InputBox in Reply Section -->
                 </div>
               </div>
             </div>
@@ -293,20 +340,29 @@
       </div>
     </div>
 
+    <button
+      v-if="state.can_reload_comments"
+      class="btn btn-primary mt-2"
+      @click="fetchPostComments()"
+      style="width: 100%"
+    >
+      Load more comments
+    </button>
+
     <!-- Write Post Comment -->
-    <div style="background: rgb(239 239 239)" class="mt-1 py-3 px-3 rounded">
+    <div style="background: rgb(239 239 239)" class="mt-2 py-3 px-3 rounded">
       <form onsubmit="return false">
         <template v-if="!guest.isSavedCredential">
           <div class="mb-3">
             <div class="row">
               <div class="col">
-                <label for="exampleInputEmail1" class="form-label"
+                <label for="exampleInputEmail3" class="form-label"
                   >Email address</label
                 >
                 <input
                   type="email"
                   class="form-control"
-                  id="exampleInputEmail1"
+                  id="exampleInputEmail3"
                   aria-describedby="emailHelp"
                   v-model="guest.email"
                   required
@@ -328,13 +384,10 @@
           </div>
         </template>
         <div class="mb-3">
-          <label for="commentInput" class="form-label">Your Comment</label>
-          <textarea
-            class="form-control"
-            ref="write_comment"
-            id="commentInput"
-            v-model="guest.comment"
-          />
+          <label for="commentInput" class="form-label"
+            >Write Your Comment</label
+          >
+          <ckeditor v-model="guest.comment"></ckeditor>
         </div>
         <div class="mb-3 form-check">
           <input
@@ -351,7 +404,6 @@
         <button @click="postComment" class="btn btn-primary">
           Post Comment
         </button>
-
         <!-- <button @click="getCommentsReplies" class="btn btn-primary">
           wwww
         </button> -->
@@ -372,11 +424,17 @@ export default {
   data() {
     return {
       guest: {
+        editorConfig: "standard",
         name: "",
         email: "",
         comment: "",
         reply: "",
         isSavedCredential: false,
+      },
+
+      state: {
+        can_reload_comments: true,
+        post_comment_page: 0,
       },
 
       post_comments: [
@@ -418,7 +476,7 @@ export default {
   },
 
   async created() {
-    await Promise.all([this.fetchPostDiscussions()]);
+    await Promise.all([this.fetchPostComments()]);
 
     const savedCredential = localStorage.getItem("ayocode_saved_credential");
     if (savedCredential) {
@@ -436,63 +494,70 @@ export default {
   },
 
   methods: {
-    postComment: function () {
+    postComment: async function () {
       if (this.guest.comment) {
         //PostComment Object Structure
-        const postCommentObj = {
+        const PostCommentObj = {
           id: Math.floor(Math.random() * 999),
           post_id: this.post_id,
+          post_slug: this.post_slug,
           name: this.guest.name,
           email: this.guest.email,
           comment: this.guest.comment,
           replies: [],
+          created_at: null,
         };
 
         //Save comment onto the server and push the object into array
-        //with given id
-        this.request()
-          .post("api/posts/comment", postCommentObj)
+        //with the given id
+        await this.request()
+          .post("api/posts/comment", PostCommentObj)
           .then(({ data }) => {
-            this.post_comments.push({
-              ...postCommentObj,
+            this.post_comments.unshift({
+              ...PostCommentObj,
               id: data.id,
               created_at: data.created_at,
             });
 
-            //Empty textarea after postComment clicked
+            //Empty textarea after postComment successfully posted
             this.guest.comment = "";
           })
           .catch((err) => console.log(err));
       }
     },
 
-    postReplyComment: function ({ reply_to, comment_section_id }) {
+    postReply: async function ({ reply_to, comment_section_id }) {
       const selectedComment = this.post_comments.find(
         ({ id }) => id == comment_section_id
       );
 
       if (this.guest.reply) {
         //Reply Object Structure
-        const commentReplyObj = {
+        const PostReplyObj = {
           id: Math.floor(Math.random() * 999),
+          post_id: this.post_id,
+          post_slug: this.post_slug,
           comment_section_id: comment_section_id,
           name: this.guest.name,
           email: this.guest.email,
           comment: this.guest.reply,
           reply_to: reply_to,
+          created_at: null,
         };
 
-        this.request()
+        await this.request()
           .post("api/posts/reply", {
-            ...commentReplyObj,
-            reply_to: JSON.stringify(reply_to), //replace reply_to with json string format,
+            ...PostReplyObj,
+            reply_to: JSON.stringify(reply_to), //stringify the reply target into string format,
           })
           .then(({ data }) => {
             selectedComment.replies.push({
-              ...commentReplyObj,
+              ...PostReplyObj,
               id: data.id,
               created_at: data.created_at,
             });
+
+            //Empty textarea after postReply successfully posted
             this.guest.reply = "";
           })
           .catch((err) => {
@@ -501,45 +566,67 @@ export default {
       }
     },
 
-    fetchPostDiscussions: function () {
+    fetchPostComments: function () {
+      this.state.post_comment_page += 1;
+
       this.request()
-        .get("api/posts/discussion?post_id=" + this.post_id)
+        .get(`api/posts/comment`, {
+          params: {
+            page: this.state.post_comment_page,
+            post_id: this.post_id,
+          },
+        })
         .then(({ data }) => {
-          data.forEach((element) => {
-            element.replies.map((reply, i) => {
-              return (reply.reply_to = JSON.parse(reply.reply_to));
-            });
+          console.log(data);
+          //determine if user still can reload more comments
+          data.to == null || data.to < data.per_page ? (this.state.can_reload_comments = false) : "";
+          //create 'replies' property in each comment object with an empty array
+          data.data.map((val) => (val.replies = []));
+
+          //avoid element that already pushed being pushed twice
+          data.data.forEach((element) => {
+            const post = this.post_comments.find((el) => el.id == element.id);
+            if (post == undefined) {
+              this.post_comments.push(element);
+            }
           });
 
-          // console.log(data);
-          this.post_comments.push(...data);
+          // this.post_comments.push(...data.data);
         })
         .catch((err) => {
           console.log(err);
         });
     },
 
-    date: function (date) {
-      let months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mei",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      var dateObj = new Date(date);
-      var month = months[dateObj.getMonth()]; //months from 1-12
-      var day = dateObj.getDate();
-      var year = dateObj.getFullYear();
+    fetchPostReplies: async function (comment_id) {
+      await this.request()
+        .get(`api/posts/reply`, {
+          params: {
+            comment_id: comment_id,
+          },
+        })
+        .then(({ data }) => {
+          const selectedComment = this.post_comments.find(
+            (comment) => comment.id == comment_id
+          );
+          data.map((val) => (val.reply_to = JSON.parse(val.reply_to)));
+          selectedComment.replies = [];
+          selectedComment.replies.push(...data);
+        })
+        .catch((err) => console.log(err));
+    },
 
-      return month + " " + day + ", " + year;
+    date: function (date) {
+      return new Date(date)
+        .toDateString()
+        .split(" ")
+        .map((val, index) => {
+          if (index == 0) {
+            return val + ",";
+          }
+          return val;
+        })
+        .join(" ");
     },
 
     check: function (e) {
@@ -556,7 +643,7 @@ export default {
               })
             );
           } else {
-            console.log("email and name required before you save it");
+            console.log("email and name required before you can save it");
             this.guest.isSavedCredential = false;
           }
         } else {
@@ -565,13 +652,12 @@ export default {
       });
     },
 
-    profileImageInitial: function (name) {
-      const intials = name
+    getInitialName: function (name) {
+      return name
         .split(" ")
         .map((name) => name[0])
         .join("")
         .toUpperCase();
-      return intials;
     },
   },
 };
@@ -586,10 +672,6 @@ button {
   border-radius: 5px;
   color: whitesmoke;
 }
-
-/* a:hover {
-  color: rgb(94, 201, 228);
-} */
 
 .card {
   border: none;
@@ -612,9 +694,10 @@ button {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #ee9090;
+  background: #a1a1a1;
   font-size: 30px;
   color: #fff;
   text-align: center;
+  user-select: none;
 }
 </style>

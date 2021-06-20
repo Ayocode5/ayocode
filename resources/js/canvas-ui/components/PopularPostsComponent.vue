@@ -81,7 +81,11 @@ export default {
   methods: {
     fetchPopularPosts() {
       return this.request()
-        .get("api/posts/popular")
+        .get("api/posts/popular", {
+          params: {
+            limit: 5
+          }
+        })
         .then(({ data }) => {
           this.posts.push(...data);
         })

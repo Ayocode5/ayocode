@@ -174,12 +174,14 @@ class CanvasUiController extends Controller
     }
 
     // Mengambil Post populer dalam rentang bulan saat ini
-    public function getPopularPosts(): JsonResponse
+    public function getPopularPosts(Request $request): JsonResponse
     {
+        $limit = $request->input('limit') ?: 5;
+
         $posts = Post::query()
             ->select(['id', 'slug', 'title', 'summary', 'featured_image', 'featured_image_caption'])
             ->with('topic')
-            ->limit(4)
+            ->limit($limit)
             ->withCount([
                 'views as views_count' => function ($q) {
                     $q->whereBetween('created_at', [
@@ -216,30 +218,44 @@ class CanvasUiController extends Controller
             return response()->json($related_posts, 200);
         }
 
-        return response()->json(null, 200);
+        return response()->json(['message' => 'topic_id and post_id required!'], 200);
     }
 
     //fetch discussion by specific post_id
-    public function getCommentsReplies(Request $request): JsonResponse
+    public function getPostComments(Request $request): JsonResponse
     {
         $post_id = $request->input('post_id');
+        // $page = $request->input('page') ?? 1;
 
         $comments = DB::table('comments as c')
             ->select('c.id', 'c.post_id', 'g.name', 'g.email', 'c.comment', 'c.created_at')
             ->where('post_id', $post_id)
             ->leftJoin('guests as g', 'g.id', '=', 'c.guest_id')
-            ->get();
+            ->orderBy('c.created_at', 'desc')
+            ->simplePaginate(3);
 
         $comments = collect($comments);
-        $comments->map(function ($comment) {
-            return $comment->replies = DB::table('replies as r')
-                ->select('r.id', 'r.comment_section_id', 'g.name', 'g.email', 'r.comment', 'r.reply_to', 'r.created_at')
-                ->where('comment_section_id', $comment->id)
-                ->leftJoin('guests as g', 'g.id', '=', 'r.guest_id')
-                ->get();
-        });
+
+        array_map(function($comment){
+            return $comment->total_replies = DB::table('replies')
+            ->select(DB::raw('COUNT(id) AS total_replies'))
+            ->where('comment_section_id', $comment->id)
+            ->get()[0]->total_replies;
+        }, $comments['data']);
 
         return response()->json($comments, 200);
+    }
+
+    public function getPostReply(Request $request) {
+        $comment_section_id = $request->input('comment_id');
+
+        $replies = DB::table('replies as r')
+                ->select('r.id', 'r.comment_section_id', 'g.name', 'g.email', 'r.comment', 'r.reply_to', 'r.created_at')
+                ->where('comment_section_id', $comment_section_id)
+                ->leftJoin('guests as g', 'g.id', '=', 'r.guest_id')
+                ->get();
+
+        return response()->json($replies, 200);
     }
 
     //Perform Post Comment
@@ -247,6 +263,7 @@ class CanvasUiController extends Controller
     {
         if ($request->validate([
             'post_id' => 'required',
+            'post_slug' => 'required',
             'name' => 'required|max:100',
             'email' => 'required|email|max:100',
             'comment' => 'required|string'
@@ -266,7 +283,7 @@ class CanvasUiController extends Controller
     }
 
     //perform Reply Comment
-    public function storeReplyComment(Request $request): JsonResponse
+    public function storePostReply(Request $request): JsonResponse
     {
         if ($request->validate([
             'comment_section_id' => 'required',
@@ -284,24 +301,12 @@ class CanvasUiController extends Controller
             ]);
 
             if ($guest) {
-                event(new NewDiscussion($request->all()));
+                event(new NewDiscussion($reply));
 
                 return response()->json($reply, 200);
             }
         }
 
         return response()->json('Validation failed!', 200);
-    }
-
-    /**
-     * Get id and slug for sitemap
-     *
-     * @return JsonResponse
-     */
-    public function getSlug(Request $request): JsonResponse
-    {
-        $summary = Post::query()->select('id', 'slug')->latest()->get();
-
-        return response()->json($summary);
     }
 }

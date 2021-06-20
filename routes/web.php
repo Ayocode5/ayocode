@@ -1,10 +1,7 @@
 <?php
 
-use App\Events\NewDiscussion;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CanvasUiController;
-use App\Mail\DiscussionNotification;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,11 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function () {
-    // return event(new NewDiscussion('Hellooooo'));
-    // Mail::to('akiyan2002@gmail.com')->send(new DiscussionNotification());
-});
-
 Route::get('/sitemap.xml', SitemapController::class);
 
 Route::prefix('blog')->group(function () {
@@ -35,12 +27,14 @@ Route::prefix('blog')->group(function () {
         Route::get('posts', [CanvasUiController::class, 'getPosts']);
         Route::get('posts/popular', [CanvasUiController::class, 'getPopularPosts']);
         Route::get('posts/related', [CanvasUiController::class, 'getRelatedPosts']);
-        Route::get('posts/discussion', [CanvasUiController::class, 'getCommentsReplies']);
+        Route::get('posts/comment', [CanvasUiController::class, 'getPostComments']);
+        Route::post('posts/comment',  [CanvasUiController::class, 'storePostComment']);
+        Route::post('posts/reply', [CanvasUiController::class, 'storePostReply']);
+        Route::get('posts/reply', [CanvasUiController::class, 'getPostReply']);
+        
         Route::get('posts/{slug}', [CanvasUiController::class, 'showPost'])
              ->middleware('Canvas\Http\Middleware\Session');
-        Route::post('posts/comment',  [CanvasUiController::class, 'storePostComment']);
-        Route::post('posts/reply', [CanvasUiController::class, 'storeReplyComment']);
-        
+
         Route::get('tags', [CanvasUiController::class, 'getTags']);
         Route::get('tags/{slug}', [CanvasUiController::class, 'showTag']);
         Route::get('tags/{slug}/posts', [CanvasUiController::class, 'getPostsForTag']);

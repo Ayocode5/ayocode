@@ -5,11 +5,11 @@ import VueMeta from 'vue-meta';
 import base from './mixins/base';
 import moment from 'moment';
 import routes from './routes';
-import {store} from  './store';
-import { BPagination, BPopover } from 'bootstrap-vue'
+import { store } from './store';
+import { BPagination } from 'bootstrap-vue'
+import CKEditor from 'ckeditor4-vue';
 
 Vue.component('b-pagination', BPagination);
-Vue.component('b-popover', BPopover);
 
 require('bootstrap');
 
@@ -18,6 +18,8 @@ window.Popper = require('popper.js').default;
 Vue.prototype.moment = moment;
 
 Vue.config.productionTip = false;
+
+Vue.use(CKEditor);
 
 Vue.mixin(base);
 
@@ -36,8 +38,6 @@ const router = new Router({
     mode: 'history',
     routes,
 });
-
-// router.options.routes.forEach(val => { console.log(val.path) })
 
 router.beforeEach((to, from, next) => {
     NProgress.start();

@@ -30,13 +30,7 @@ class sendDiscussionNotification
     public function handle(NewDiscussion $event)
     {
 
-        $reply_target = $event->discussion['reply_to'] ?? null;
-
-        if($reply_target) {
-
-            $reply_target = json_decode($reply_target, true);
-            Mail::to($reply_target['email'])->send(new DiscussionNotification((object) $event->discussion));
-        }
+        dispatch(new \App\Jobs\SendEmailJob($event->discussion));
 
     }
 }

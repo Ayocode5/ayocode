@@ -1,5 +1,5 @@
 <template>
-  <div class="border-bottom">
+  <div class="shadow-sm">
     <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12">
       <nav class="navbar d-flex px-0 py-1">
         <router-link

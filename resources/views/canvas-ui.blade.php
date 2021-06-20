@@ -30,13 +30,6 @@
         <router-view></router-view>
     </div>
 
-    <script>
-        window.CanvasUI = @json($config);
-
-    </script>
-
-    <script type="text/javascript" src="{{ mix('js/canvas-ui.js') }}"></script>
-
     <style>
         /* @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap'); */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
@@ -61,6 +54,18 @@
         }
 
     </style>
+
+    <script>
+        window.CanvasUI = @json($config);
+
+    </script>
+
+    <script type="text/javascript" src="{{ mix('js/canvas-ui.js') }}"></script>
+    {{-- <script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script> --}}
+
 </body>
 
 </html>

@@ -25,8 +25,5 @@ class Reply extends Model
     public function guest() {
         return $this->belongsTo(Guest::class, 'guest_id', 'id');
     }
-
-    public function discussion() {
-
-    }
+    
 }

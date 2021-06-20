@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hello pler</title>
+    {{-- <title>Hello pler</title> --}}
 </head>
 <body>
     <div>
-        <h1>
-            {{ $discussion->name }} sent you a message {{ $discussion->comment }}
-        </h1>
+        <h4>
+            {{ $reply->guest->name }} in post <a href="#">Post ID</a> reply your comment
+        </h4>
+        <div>
+            {!! $reply->comment !!}
+        <div>
     </div>
 </body>
 </html>
