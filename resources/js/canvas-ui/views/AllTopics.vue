@@ -89,3 +89,11 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.card {
+    border: none;
+    background: rgb(224,224,224);
+background: linear-gradient(90deg, rgba(224,224,224,1) 0%, rgba(238,238,238,1) 35%, rgba(245,245,245,1) 100%);
+}
+</style>

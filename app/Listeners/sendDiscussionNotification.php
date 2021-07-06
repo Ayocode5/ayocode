@@ -3,34 +3,37 @@
 namespace App\Listeners;
 
 use App\Events\NewDiscussion;
+use App\Models\CommentUser;
+use App\Notifications\NewPostDiscussionNotification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\DiscussionNotification;
+use Illuminate\Support\Facades\Notification;
 
-class sendDiscussionNotification
+class sendDiscussionNotification implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param  NewDiscussion  $event
-     * @return void
-     */
-    public function handle(NewDiscussion $event)
+    use Queueable;
+ 
+    public function handle(NewDiscussion $event): void
     {
 
-        dispatch(new \App\Jobs\SendEmailJob($event->discussion));
+        $reply_target = $event->discussion->reply_target ?? null;
 
+        //USING LARAVEL JOB
+        // $reply_target 
+        // ? dispatch(new \App\Jobs\ReplyEmailNotificationJob($event->discussion))
+        // : dispatch(new \App\Jobs\CommentEmailNotificationJob($event->discussion));
+
+        // USING LARAVEL NOTIFICATION
+        if($reply_target) {
+
+            $recipent = CommentUser::where('email', json_parse($reply_target)->email)->get()[0];
+            $recipent->notify(new NewPostDiscussionNotification($event->discussion));
+
+        } else {
+            
+            Notification::route('mail', 'ayocode.id@gmail.com')
+            ->notify((new NewPostDiscussionNotification($event->discussion)));
+        }           
     }
 }

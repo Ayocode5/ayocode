@@ -12,3 +12,11 @@ export default {
 }
 	
 </script>
+
+<style scoped>
+/* h1 {
+	font-family: 'Kirang Haerang', cursive;
+	font-size: 60px;
+	color: rgb(120, 59, 161);
+} */
+</style>

@@ -5,26 +5,23 @@ import VueMeta from 'vue-meta';
 import base from './mixins/base';
 import moment from 'moment';
 import routes from './routes';
-import { store } from './store';
-import { BPagination } from 'bootstrap-vue'
 import CKEditor from 'ckeditor4-vue';
-
-Vue.component('b-pagination', BPagination);
+import { store } from './store';
+import { BPagination } from 'bootstrap-vue';
 
 require('bootstrap');
 
 window.Popper = require('popper.js').default;
 
 Vue.prototype.moment = moment;
-
 Vue.config.productionTip = false;
 
-Vue.use(CKEditor);
+Vue.component('b-pagination', BPagination);
 
 Vue.mixin(base);
 
+Vue.use(CKEditor);
 Vue.use(VueMeta);
-
 Vue.use(Router);
 
 NProgress.configure({

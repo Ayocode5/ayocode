@@ -1,12 +1,19 @@
 <template>
-  <div class="shadow-sm">
+  <div class="shadow-sm navigation">
     <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12">
-      <nav class="navbar d-flex px-0 py-1">
+      <!-- <nav class="navbar d-flex px-0 py-1">
         <router-link
           :to="{ name: 'posts' }"
           class="navbar-brand hover font-weight-bolder mr-3"
         >
-          Ayocode Blogs
+          <div class="pl-4 flex items-center">
+            <img
+              style="height: 45px"
+              src="/storage/images/content/logo.png"
+              alt="ayocode logo"
+            />
+            Blogs
+          </div>
         </router-link>
         <div class="mr-auto border-left pl-1">
           <router-link
@@ -34,14 +41,14 @@
               id="inlineFormInputGroup"
               placeholder="Search"
             />
-            <div v-on:click="searchPost()" class="input-group-prepend bg-white">
+            <div v-on:click="searchPost()" class="input-group-prepend">
               <div class="input-group-text"><i class="fas fa-search"></i></div>
             </div>
           </div>
         </div>
 
         <slot v-if="user" name="options" />
-        <!-- 
+        
                 <div v-if="user" class="dropdown ml-3">
                     <a
                         id="navbarDropdown"
@@ -79,7 +86,74 @@
                     </div>
                 </div>
 
-                <a v-if="!user" :href="`/${canvasPath}/login`" class="btn btn-link text-decoration-none">Sign in</a> -->
+                <a v-if="!user" :href="`/${canvasPath}/login`" class="btn btn-link text-decoration-none">Sign in</a>
+      </nav> -->
+
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <router-link
+          :to="{ name: 'posts' }"
+          class="navbar-brand hover font-weight-bolder mr-3"
+        >
+          <div class="flex items-center">
+            <img
+              style="height: 45px"
+              src="/storage/images/content/logo.png"
+              alt="ayocode logo"
+            />
+            AYOCODE
+          </div>
+        </router-link>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarText"
+          aria-controls="navbarText"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- <div class="mr-auto border-left pl-1"></div> -->
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item " :class="{ active: $route.path == '/tags' }">
+              <router-link
+                :to="{ name: 'tags' }"
+                class="nav-link py-0 text-decoration-none"
+              >
+                Tags
+              </router-link>
+            </li>
+            <li class="nav-item " :class="{ active: $route.path == '/topics' }">
+              <router-link
+                :to="{ name: 'topics' }"
+                class="nav-link py-0 text-decoration-none"
+              >
+                Topics
+              </router-link>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="#">Pricing</a>
+            </li> -->
+          </ul>
+          <div class="align-items-center">
+          <label class="sr-only" for="inlineFormInputGroup">Search</label>
+          <div class="input-group mb-2 mt-2">
+            <input
+              v-on:keyup.enter="searchPost()"
+              v-model="keyword"
+              type="text"
+              class=""
+              id="inlineFormInputGroup"
+              placeholder="Search"
+            />
+            <div v-on:click="searchPost()" class="input-group-prepend">
+              <div class="input-group-text"><i class="fas fa-search"></i></div>
+            </div>
+          </div>
+        </div>
+        </div>
       </nav>
     </div>
   </div>
@@ -87,7 +161,6 @@
 
 <script>
 import axios from "axios";
-import VueRouter from "vue-router";
 
 export default {
   name: "page-header-component",
@@ -98,7 +171,13 @@ export default {
       canvasPath: CanvasUI.canvasPath, // eslint-disable-line no-undef
 
       keyword: this.$route.params.keyword ?? null,
+
+      path: this.$route.path
     };
+  },
+
+  created() {
+    // console.log(this.$route.path)
   },
 
   methods: {
@@ -109,39 +188,48 @@ export default {
     },
 
     searchPost() {
-      if(this.keyword) {
-        this.$router.push({name: 'search-post', params: {keyword: this.keyword}}).catch({});
+      if (this.keyword) {
+        this.$router
+          .push({ name: "search-post", params: { keyword: this.keyword } })
+          .catch({});
       }
     },
   },
 };
 </script>
 <style scoped>
+.navigation {
+  background: rgb(251,251,251);
+background: linear-gradient(90deg, rgba(251,251,251,1) 0%, rgba(247,247,247,1) 50%, rgba(242,242,242,1) 100%);
+}
+
 input {
   border: none;
+  background: transparent;
   border-bottom: 2px solid #e9e9e9;
   border-radius: 0px;
-  color: #666666;
+  color: #8b8b8b;
   padding: 5px 10px;
   outline: none;
   padding-left: 2px;
 }
 
 input:focus {
-  background: white;
+  background: transparent;
 }
 
 [placeholder]:focus::-webkit-input-placeholder {
   transition: text-indent 0.4s 0.4s ease;
   text-indent: -100%;
   opacity: 1;
+  color: rgb(207, 206, 206);
 }
 
 .input-group-text {
-  background: white;
+  background: transparent;
   border: none;
   border-bottom: 2px solid #e9e9e9;
   border-radius: 0px;
-  color: #b6b6b6;
+  color: #adadad;
 }
 </style>

@@ -9,7 +9,7 @@
 <body>
     <div>
         <h4>
-            {{ $reply->guest->name }} in post <a href="#">Post ID</a> reply your comment
+            {{ $reply->guest->name }} in post <a href="https://ayocode.my.id/blog/posts/{{ $reply->post_id }}">{{ $reply->post_id }}</a> reply your comment
         </h4>
         <div>
             {!! $reply->comment !!}

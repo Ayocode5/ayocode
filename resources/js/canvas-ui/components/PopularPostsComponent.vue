@@ -25,6 +25,7 @@
                           class="rounded w-100"
                         />
                       </div> -->
+                  <i class="fas fa-angle-right"></i>
                   <section
                     class="col-12 mt-3 mt-lg-0 px-0 px-lg-3"
                     :class="post.featured_image ? 'col-lg-9' : ''"
@@ -38,7 +39,7 @@
                     <p class="card-text mb-0 text-secondary">
                       <!-- {{ post.user.name }} -->
                       <span v-if="post.topic.length">
-                        topic {{ post.topic[0].name }}
+                        {{ post.topic[0].name }}
                       </span>
                     </p>
                     <!-- <p class="card-text text-secondary">
@@ -83,8 +84,8 @@ export default {
       return this.request()
         .get("api/posts/popular", {
           params: {
-            limit: 5
-          }
+            limit: 5,
+          },
         })
         .then(({ data }) => {
           this.posts.push(...data);
@@ -98,6 +99,18 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  border: none;
+  background: rgb(245, 245, 245);
+  background: linear-gradient(
+    90deg,
+    rgba(245, 245, 245, 1) 0%,
+    rgba(247, 247, 247, 1) 50%,
+    rgba(250, 250, 250, 1) 100%
+  );
+}
+
+/* Loading Animation */
 .lds-facebook {
   display: inline-block;
   position: relative;

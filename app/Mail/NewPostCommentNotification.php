@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use Canvas\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -21,6 +22,8 @@ class NewPostCommentNotification extends Mailable
     public function __construct($comment)
     {
         $this->comment = $comment;
+        $this->comment->{'post'} = Post::select('slug','title','summary')->where('slug', $comment->post_id)->get()[0];
+
     }
 
     /**

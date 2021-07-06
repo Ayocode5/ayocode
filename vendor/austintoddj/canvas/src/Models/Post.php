@@ -2,6 +2,7 @@
 
 namespace Canvas\Models;
 
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -135,6 +136,11 @@ class Post extends Model
         return $this->hasMany(Visit::class);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'id');
+    }
+
     /**
      * Check to see if the post is published.
      *
@@ -154,6 +160,28 @@ class Post extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('published_at', '<=', now()->toDateTimeString());
+    }
+
+    public function scopePopular(Builder $query): Builder
+    {
+        return $query->withCount([
+            // 'views as views_count' => function ($q) {
+            //     $q
+            //     // ->select('id')
+            //     ->whereBetween('created_at', [
+            //         today()->startOfMonth()->startOfDay()->toDateTimeString(),
+            //         today()->endOfMonth()->endOfDay()->toDateTimeString()
+            //     ]);
+            // },
+            'visits as visits_count' => function ($q) {
+                $q
+                // ->select('id')
+                ->whereBetween('created_at', [
+                    today()->startOfMonth()->startOfDay()->toDateTimeString(),
+                    today()->endOfMonth()->endOfDay()->toDateTimeString()
+                ]);
+            }
+        ])->orderBy('visits_count', 'desc');
     }
 
     /**

@@ -2,8 +2,16 @@
 
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\CanvasUiController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostAuthorController;
+use App\Http\Controllers\PostCommentController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostPopularController;
+use App\Http\Controllers\PostRelatedController;
+use App\Http\Controllers\PostTagController;
+use App\Http\Controllers\PostTopicController;
+use App\Models\{Comment, Guest};
 
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,37 +25,56 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
+});
+
+Route::get('/test', function() {
+
+    $c = Comment::findOrFail(81);
+
+    return new \App\Mail\NewPostCommentNotification($c);
 });
 
 Route::get('/sitemap.xml', SitemapController::class);
 
 Route::prefix('blog')->group(function () {
     Route::prefix('api')->group(function () {
-        Route::get('posts', [CanvasUiController::class, 'getPosts']);
-        Route::get('posts/popular', [CanvasUiController::class, 'getPopularPosts']);
-        Route::get('posts/related', [CanvasUiController::class, 'getRelatedPosts']);
-        Route::get('posts/comment', [CanvasUiController::class, 'getPostComments']);
-        Route::post('posts/comment',  [CanvasUiController::class, 'storePostComment']);
-        Route::post('posts/reply', [CanvasUiController::class, 'storePostReply']);
-        Route::get('posts/reply', [CanvasUiController::class, 'getPostReply']);
+
+        //Handle Post
+        Route::get('posts', [PostController::class, 'posts']);
+
+        //Handle Popular Post
+        Route::get('posts/popular', PostPopularController::class);
         
-        Route::get('posts/{slug}', [CanvasUiController::class, 'showPost'])
+        //Handle Related Post
+        Route::get('posts/related', PostRelatedController::class);
+             
+        //Handle Comment and Reply for Posts
+        Route::get('posts/comment', [PostCommentController::class, 'comments']);
+        Route::get('posts/reply', [PostCommentController::class, 'replies']);
+        Route::post('posts/comment',  [PostCommentController::class, 'saveComment']);
+        Route::post('posts/reply', [PostCommentController::class, 'saveReply']);
+
+        //Handle Specific Post
+        Route::get('posts/{slug}', [PostController::class, 'showPost'])
              ->middleware('Canvas\Http\Middleware\Session');
+        
+        //Handle Post Tags
+        Route::get('tags', [PostTagController::class, 'tags']);
+        Route::get('tags/{slug}', [PostTagController::class, 'showTag']);
+        Route::get('tags/{slug}/posts', [PostTagController::class, 'postsForTag']);
 
-        Route::get('tags', [CanvasUiController::class, 'getTags']);
-        Route::get('tags/{slug}', [CanvasUiController::class, 'showTag']);
-        Route::get('tags/{slug}/posts', [CanvasUiController::class, 'getPostsForTag']);
+        //Handle Post Topics
+        Route::get('topics', [PostTopicController::class, 'topics']);
+        Route::get('topics/{slug}', [PostTopicController::class, 'showTopic']);
+        Route::get('topics/{slug}/posts', [PostTopicController::class, 'postsForTopic']);
 
-        Route::get('topics', [CanvasUiController::class, 'getTopics']);
-        Route::get('topics/{slug}', [CanvasUiController::class, 'showTopic']);
-        Route::get('topics/{slug}/posts', [CanvasUiController::class, 'getPostsForTopic']);
-
-        Route::get('users/{id}', [CanvasUiController::class, 'showUser']);
-        Route::get('users/{id}/posts', [CanvasUiController::class, 'getPostsForUser']);
+        //Handle Post User
+        Route::get('users/{id}', [PostAuthorController::class, 'show']);
+        Route::get('users/{id}/posts', [PostAuthorController::class, 'getPostsForAuthor']);
     });
 
-    Route::get('/{view?}', [CanvasUiController::class, 'index'])
+    Route::get('/{view?}', CanvasUiController::class)
          ->where('view', '(.*)')
          ->name('blog');
 });

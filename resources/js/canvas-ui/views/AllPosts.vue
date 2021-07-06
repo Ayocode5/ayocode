@@ -163,6 +163,7 @@ export default {
         })
         .then(({ data }) => {
           if (!isEmpty(data) && !isEmpty(data.data)) {
+           
             this.posts.push(...Object.values(data.data));
             this.rows = data.total;
             this.perPage = data.per_page;
@@ -198,6 +199,8 @@ export default {
 </script>
 
 <style>
+
+/* Loading Animation */
 .lds-facebook {
   display: inline-block;
   position: relative;
@@ -209,7 +212,7 @@ export default {
   position: absolute;
   left: 8px;
   width: 16px;
-  background: rgb(49, 49, 49);
+  background: rgb(131, 131, 131);
   animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 .lds-facebook div:nth-child(1) {
@@ -278,4 +281,13 @@ export default {
   /* border-color: #be53d3; */
   border-bottom: 2px solid #be53d3;
 }
+</style>
+
+<style scoped>
+.card {
+  border: none;
+  background: rgb(255,255,255);
+background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(247,247,247,1) 50%, rgba(242,242,242,1) 100%);
+}
+
 </style>

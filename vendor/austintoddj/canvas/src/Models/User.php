@@ -3,13 +3,15 @@
 namespace Canvas\Models;
 
 use Canvas\Canvas;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use SoftDeletes;
+    use SoftDeletes, Notifiable, HasFactory;
 
     /**
      * Role identifier for a Contributor.
@@ -182,5 +184,12 @@ class User extends Authenticatable
     public function getDefaultLocaleAttribute(): string
     {
         return config('app.locale');
+    }
+
+    public function routeNotificationFor($notification)
+    {
+
+        return 'ayocode.id@gmail.com';
+
     }
 }

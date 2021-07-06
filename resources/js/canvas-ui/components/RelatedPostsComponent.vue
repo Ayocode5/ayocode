@@ -25,6 +25,7 @@
                           class="rounded w-100"
                         />
                       </div> -->
+                  <i class="fas fa-angle-right"></i>
                   <section
                     class="col-12 mt-3 mt-lg-0 px-0 px-lg-3"
                     :class="post.featured_image ? 'col-lg-9' : ''"
@@ -61,7 +62,6 @@
             </div>
           </div>
         </div>
-
       </div>
       <center v-else>
         <div class="lds-facebook">
@@ -100,12 +100,11 @@ export default {
     fetchRelatedPosts() {
       return this.request()
         .get("api/posts/related", {
-              params: {
-                topic: this.related_params.topic,
-                current_post: this.related_params.current_post_id
-              }
-            }
-        )
+          params: {
+            topic: this.related_params.topic,
+            current_post: this.related_params.current_post_id,
+          },
+        })
         .then(({ data }) => {
           if (data.length > 0) {
             // console.log(data)
@@ -119,6 +118,18 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  border: none;
+  background: rgb(245, 245, 245);
+  background: linear-gradient(
+    90deg,
+    rgba(245, 245, 245, 1) 0%,
+    rgba(247, 247, 247, 1) 50%,
+    rgba(250, 250, 250, 1) 100%
+  );
+}
+
+/* Loading Animation */
 .lds-facebook {
   display: inline-block;
   position: relative;

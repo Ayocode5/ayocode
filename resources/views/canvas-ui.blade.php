@@ -13,8 +13,10 @@
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="{{ mix('css/canvas-ui.css') }}">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
+    {{-- Google Fonts --}}
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kirang+Haerang:wght@400;700&display=swap" rel="stylesheet">
     {{-- <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Karla&family=Merriweather:wght@400;700&display=swap"> --}}
 
     {{-- Sintax Highlighting --}}
@@ -31,8 +33,7 @@
     </div>
 
     <style>
-        /* @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap'); */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
 
         .ql-syntax {
             counter-reset: line;
@@ -50,7 +51,11 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        body p {
+            margin-bottom: 0;
         }
 
     </style>

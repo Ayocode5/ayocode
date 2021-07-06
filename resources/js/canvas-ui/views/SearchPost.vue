@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <Footer />
+    <!-- <Footer /> -->
   </section>
 </template>
 
@@ -99,7 +99,7 @@ import InfiniteLoading from "vue-infinite-loading";
 import NProgress from "nprogress";
 import PageHeader from "../components/PageHeaderComponent";
 import JumbotronBlog from "../components/JumbotronBlog";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 import isEmpty from "lodash/isEmpty";
 
 export default {
@@ -109,7 +109,7 @@ export default {
     InfiniteLoading,
     PageHeader,
     JumbotronBlog,
-    Footer,
+    // Footer,
   },
 
   metaInfo() {
@@ -186,3 +186,13 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.card {
+  border: none;
+  background: rgb(255,255,255);
+background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(247,247,247,1) 50%, rgba(242,242,242,1) 100%);
+}
+
+</style>
