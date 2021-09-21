@@ -2,10 +2,10 @@
   <section>
     <page-header />
 
-    <div v-if="isReady" class="mt-5">
+    <div v-if="isReady">
       <div :key="routeChangesIdentifier">
-        <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
-          <JumbotronBlog />
+        <JumbotronComponent />
+        <div class="col-10 offset-1 col-sm-10 offset-sm-1 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-10 offset-md-1 mt-3">
           <main role="main" class="mt-5">
             <div>
               <h4 class="my-4 border-bottom mt-5 pb-2">
@@ -19,10 +19,10 @@
                   :to="{ name: 'show-post', params: { slug: post.slug } }"
                   class="text-decoration-none"
                 >
-                  <div class="card mb-4 shadow-lg" style="border: none;">
+                  <div class="card mb-4">
                     <div class="card-body px-0">
                       <div
-                        class="container d-lg-inline-flex align-items-center"
+                        class="container-fluid d-lg-inline-flex align-items-center"
                       >
                         <div
                           v-if="post.featured_image"
@@ -31,7 +31,7 @@
                           <img
                             :src="post.featured_image"
                             :alt="post.featured_image_caption"
-                            class="rounded w-100"
+                            class="card-img-top rounded w-100"
                           />
                         </div>
                         <section
@@ -91,6 +91,7 @@
       </div>
     </div>
     <!-- <Footer /> -->
+    <PageFooterComponent />
   </section>
 </template>
 
@@ -98,8 +99,9 @@
 import InfiniteLoading from "vue-infinite-loading";
 import NProgress from "nprogress";
 import PageHeader from "../components/PageHeaderComponent";
-import JumbotronBlog from "../components/JumbotronBlog";
+import JumbotronComponent from "../components/JumbotronComponent";
 // import Footer from "../components/Footer";
+import PageFooterComponent from "../components/PageFooterComponent";
 import isEmpty from "lodash/isEmpty";
 
 export default {
@@ -108,7 +110,8 @@ export default {
   components: {
     InfiniteLoading,
     PageHeader,
-    JumbotronBlog,
+    JumbotronComponent,
+    PageFooterComponent
     // Footer,
   },
 
@@ -187,12 +190,11 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.card {
+/* .card {
   border: none;
   background: rgb(255,255,255);
 background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(247,247,247,1) 50%, rgba(242,242,242,1) 100%);
-}
+} */
 
 </style>

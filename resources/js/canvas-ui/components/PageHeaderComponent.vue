@@ -1,6 +1,86 @@
 <template>
-  <div class="shadow-sm navigation">
-    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12">
+  <div>
+     <!-- Navigation V2 -->
+      <nav
+        id="navbar"
+        class="navbar navbar-expand-lg navbar-light border-bottom p-4 w-100"
+      >
+        <div class="container-fluid">
+          <img
+            src="/storage/images/content/logo.png"
+            class="navbar-brand p-0"
+            width="50"
+            height="50"
+            alt="agency-icon"
+          />
+          <router-link
+            class="navbar-brand"
+            style="font-family: 'Acme', sans-serif"
+            :to="{name: 'posts'}"
+            >Blog</router-link
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <router-link 
+                  class="nav-link" :class="{ active: $route.path == '/tags' }"
+                  :to="{name: 'tags'}">
+                    Tags
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link 
+                  class="nav-link" 
+                  :class="{ active: $route.path == '/topics' }"
+                  :to="{name: 'topics'}">
+                    Topics
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" tabindex="-1" aria-disabled="true"
+                  >Portfolio</a
+                >
+              </li>
+            </ul>
+
+            <!-- Search Input -->
+            <label class="sr-only" for="inlineFormInputGroup">Search</label>
+            
+            <div class="input-group-prepend float-right mb-2 mt-2">
+              <input
+                v-on:keyup.enter="searchPost()"
+                v-model="keyword"
+                type="text"
+                class=""
+                id="inlineFormInputGroup"
+                placeholder="Search"
+              />
+              <!-- <div v-on:click="searchPost()" class="input-group-prepend">
+                <div class="input-group-text">
+                  <i class="fas fa-search"></i>
+                </div>
+              </div> -->
+            </div>
+
+          </div>
+
+        </div>
+      </nav>
+
+    <!-- CANVAS DEFAULT NAVBAR -->
+    <!-- <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12"> -->
       <!-- <nav class="navbar d-flex px-0 py-1">
         <router-link
           :to="{ name: 'posts' }"
@@ -88,74 +168,7 @@
 
                 <a v-if="!user" :href="`/${canvasPath}/login`" class="btn btn-link text-decoration-none">Sign in</a>
       </nav> -->
-
-      <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link
-          :to="{ name: 'posts' }"
-          class="navbar-brand hover font-weight-bolder mr-3"
-        >
-          <div class="flex items-center">
-            <img
-              style="height: 45px"
-              src="/storage/images/content/logo.png"
-              alt="ayocode logo"
-            />
-            AYOCODE
-          </div>
-        </router-link>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- <div class="mr-auto border-left pl-1"></div> -->
-        <div class="collapse navbar-collapse" id="navbarText">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item " :class="{ active: $route.path == '/tags' }">
-              <router-link
-                :to="{ name: 'tags' }"
-                class="nav-link py-0 text-decoration-none"
-              >
-                Tags
-              </router-link>
-            </li>
-            <li class="nav-item " :class="{ active: $route.path == '/topics' }">
-              <router-link
-                :to="{ name: 'topics' }"
-                class="nav-link py-0 text-decoration-none"
-              >
-                Topics
-              </router-link>
-            </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
-            </li> -->
-          </ul>
-          <div class="align-items-center">
-          <label class="sr-only" for="inlineFormInputGroup">Search</label>
-          <div class="input-group mb-2 mt-2">
-            <input
-              v-on:keyup.enter="searchPost()"
-              v-model="keyword"
-              type="text"
-              class=""
-              id="inlineFormInputGroup"
-              placeholder="Search"
-            />
-            <div v-on:click="searchPost()" class="input-group-prepend">
-              <div class="input-group-text"><i class="fas fa-search"></i></div>
-            </div>
-          </div>
-        </div>
-        </div>
-      </nav>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -172,7 +185,7 @@ export default {
 
       keyword: this.$route.params.keyword ?? null,
 
-      path: this.$route.path
+      path: this.$route.path,
     };
   },
 
@@ -197,12 +210,8 @@ export default {
   },
 };
 </script>
-<style scoped>
-.navigation {
-  background: rgb(251,251,251);
-background: linear-gradient(90deg, rgba(251,251,251,1) 0%, rgba(247,247,247,1) 50%, rgba(242,242,242,1) 100%);
-}
 
+<style scoped>
 input {
   border: none;
   background: transparent;

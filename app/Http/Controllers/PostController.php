@@ -50,7 +50,7 @@ class PostController extends Controller
 
         } else {
 
-            $posts = Post::latest()->published()->with('user', 'topic')->paginate($limit);
+            $posts = Post::latest()->published()->with('user', 'tags')->paginate($limit);
             $posts = collect($posts);
 
             //insert 'read_time' attribute

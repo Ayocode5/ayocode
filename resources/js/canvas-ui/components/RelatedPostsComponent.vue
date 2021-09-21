@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
+    <div class="col-10 offset-1 col-xl-8 offset-xl-2 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-10 offset-sm-1 mt-3">
       <!-- Popular Posts -->
       <h4 class="my-4 border-bottom mt-2 pb-2">
         <span class="border-bottom border-dark pb-2">Related Posts</span>

@@ -2,62 +2,86 @@
   <section>
     <page-header />
 
-    <div v-if="isReady" class="mt-5">
-      <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
-        <JumbotronBlog />
-        <main role="main" class="mt-5">
-          <div>
-            <!-- Featured Posts -->
-            <h4 class="my-4 border-bottom mt-5 pb-2">
+    <div v-if="isReady">
+      <JumbotronComponent />
+
+      <!-- Posts Card Style v2 -->
+      <div class="p-3">
+        <div id="post" class="row">
+          <!-- Posts -->
+          <div
+            class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-10"
+          >
+            <h4 class="mb-4 border-bottom pb-2">
               <span class="border-bottom border-dark pb-2">Featured Posts</span>
             </h4>
 
-            <div
-              v-if="!loadingContent"
-              class="row row-cols-1 row-cols-md-3 row-cols-sm-2"
-            >
-              <div :key="`${index}-${post.id}`" v-for="(post, index) in posts">
-                <router-link
-                  :to="{ name: 'show-post', params: { slug: post.slug } }"
-                  class="text-decoration-none"
+            <div v-if="!loadingContent">
+              <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <!-- Do Loop Here -->
+                <div
+                  :key="`${index}-${post.id}`"
+                  v-for="(post, index) in posts"
+                  class="col"
                 >
-                  <div class="card mb-4 border-0 ml-2 mr-2">
+                  <router-link
+                    :to="{ name: 'show-post', params: { slug: post.slug } }"
+                    class="card card-link border-1"
+                  >
                     <div v-if="post.featured_image">
                       <img
+                        class="card-img-top"
+                        style="height: 200px"
                         :src="post.featured_image"
                         :alt="post.featured_image_caption"
-                        class="card-img-top"
                       />
                     </div>
-                    <div class="card-body px-0">
-                      <div
-                        class="container d-lg-inline-flex align-items-center"
-                      >
-                        <section
-                          class="col-12 mt-3 mt-lg-0 px-0 px-lg-3"
-                          :class="post.featured_image ? 'col-lg-9' : ''"
+                    <div class="card-body">
+                      <h4 class="card-title">
+                        {{ post.title }}
+                      </h4>
+                      <p class="card-text cut-text">
+                        {{ post.summary }}
+                      </p>
+                      <strong>{{ post.read_time }} to read.</strong>
+
+                      <br />
+                      Tags:
+                      <!-- <span class="badge bg-info">Programming</span>
+                      <span class="badge bg-warning">Javascript</span> -->
+                      <span v-if="post.tags.length">
+                        <span
+                          v-for="(tag, index) in post.tags"
+                          :key="'tag' + index"
+                          class="badge" :class="getRandomColour()"
+                          style="margin-left: 2px"
                         >
-                          <h5 class="card-title text-truncate mb-0">
-                            {{ post.title }}
-                          </h5>
-                          <p class="card-text text-truncate">
-                            {{ post.summary }}
-                          </p>
-                          <p class="card-text mb-0 text-secondary">
+                          {{ tag.name }}
+                        </span>
+                      </span>
+
+                      <br /><br />
+
+                      <div class="row row-cols-auto">
+                        <div class="col">
+                          <img
+                            :src="post.user.default_avatar"
+                            class="author-avatar"
+                            alt="..."
+                          />
+                        </div>
+                        <div class="col" style="margin-left: -10px">
+                          <p class="card-text">
                             {{ post.user.name }}
-                            <span v-if="post.topic.length">
-                              in {{ post.topic[0].name }}
-                            </span>
+                            <i class="fas fa-pen"></i><br />
+                            Published at
+                            {{ moment(post.published_at).format("MMM D, Y") }}
                           </p>
-                          <p class="card-text text-secondary">
-                            {{ moment(post.published_at).format("MMM D, Y") }} —
-                            {{ post.read_time }}
-                          </p>
-                        </section>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </router-link>
+                  </router-link>
+                </div>
               </div>
             </div>
             <center v-else>
@@ -68,39 +92,40 @@
               </div>
             </center>
 
+            <!-- If posts are not exists -->
             <div v-if="!posts">
               <div slot="no-results" class="text-left">
                 <div class="my-5">
                   <p class="lead text-center text-muted mt-5">
                     You have no published posts
                   </p>
-                  <p class="lead text-center text-muted mt-1">
-                    Write on the go with our mobile-ready app!
-                  </p>
                 </div>
               </div>
             </div>
 
+            <!-- Pagination -->
             <div v-else class="mt-3">
               <h4 class="border-bottom mt-2"></h4>
               <b-pagination
                 pills
-                v-model="page"
-                :total-rows="rows"
-                :per-page="perPage"
+                v-model="pagination.page"
+                :total-rows="pagination.rows"
+                :per-page="pagination.perPage"
                 first-number
                 last-number
                 align="center"
               ></b-pagination>
             </div>
-
-            <!-- End Featured Posts -->
           </div>
-        </main>
+
+          <!-- Popular Posts -->
+          <div class="col col-sm-0 col-md-0 col-lg-0 col-xl-0 col-xxl-2">
+            <popular-posts-component />
+          </div>
+        </div>
       </div>
 
-      <popular-posts-component />
-      <Footer />
+      <PageFooterComponent />
     </div>
   </section>
 </template>
@@ -109,9 +134,9 @@
 import InfiniteLoading from "vue-infinite-loading";
 import NProgress from "nprogress";
 import PageHeader from "../components/PageHeaderComponent";
-import JumbotronBlog from "../components/JumbotronBlog";
+import JumbotronComponent from "../components/JumbotronComponent";
 import PopularPostsComponent from "../components/PopularPostsComponent";
-import Footer from "../components/Footer";
+import PageFooterComponent from "../components/PageFooterComponent";
 import isEmpty from "lodash/isEmpty";
 
 export default {
@@ -120,9 +145,9 @@ export default {
   components: {
     InfiniteLoading,
     PageHeader,
-    JumbotronBlog,
+    JumbotronComponent,
     PopularPostsComponent,
-    Footer,
+    PageFooterComponent,
   },
 
   metaInfo() {
@@ -133,13 +158,22 @@ export default {
 
   data() {
     return {
-      page: 1,
-      rows: 0,
-      perPage: 0,
-      posts: [],
       isReady: false,
+
+      pagination: {
+        page: 1, // Pagination Variable
+        rows: 0,
+        perPage: 0,
+      },
+
+      posts: [],
+
       loadingContent: false,
+
+      colours: ["danger", "info", "primary", "secondary", "success", "warning"],
+
       error: {
+        // Error Message
         status: Number,
         message: String,
       },
@@ -147,7 +181,7 @@ export default {
   },
 
   async created() {
-    await Promise.all([this.fetchPosts(this.page)]);
+    await Promise.all([this.fetchPosts(this.pagination.page)]);
     this.isReady = true;
     NProgress.done();
   },
@@ -163,10 +197,9 @@ export default {
         })
         .then(({ data }) => {
           if (!isEmpty(data) && !isEmpty(data.data)) {
-           
             this.posts.push(...Object.values(data.data));
-            this.rows = data.total;
-            this.perPage = data.per_page;
+            this.pagination.rows = data.total;
+            this.pagination.perPage = data.per_page;
 
             NProgress.done();
           } else {
@@ -178,19 +211,23 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
 
           NProgress.done();
         });
     },
+
+    getRandomColour() {
+      return 'bg-' + this.colours[Math.floor(Math.random() * this.colours.length)];
+    }
   },
 
   watch: {
-    page: async function () {
+    "pagination.page": async function () {
       this.posts = [];
       this.loadingContent = true;
 
-      await Promise.all([this.fetchPosts(this.page)]);
+      await Promise.all([this.fetchPosts(this.pagination.page)]);
       this.loadingContent = false;
       NProgress.done();
     },
@@ -199,8 +236,41 @@ export default {
 </script>
 
 <style>
+/* Posts Card Style */
+.card-link {
+  text-decoration: none;
+  color: rgb(22, 22, 22);
+}
 
-/* Loading Animation */
+.card-link:hover {
+  color: rgb(85, 85, 85);
+}
+
+.author-avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+#post {
+  margin: 3% 10%;
+}
+
+@media (max-width: 576px) {
+  #post {
+    margin: 3% auto;
+  }
+}
+/*End Posts Card Style */
+
+.cut-text {
+  white-space: nowrap;
+  width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Loading Progress Animation */
 .lds-facebook {
   display: inline-block;
   position: relative;
@@ -248,7 +318,9 @@ export default {
   outline: 0 !important;
   box-shadow: none !important;
 }
+/* End Loading Progress Animation */
 
+/* Pagination Button Style */
 .page-link {
   border: none;
   margin: 1px;
@@ -281,13 +353,5 @@ export default {
   /* border-color: #be53d3; */
   border-bottom: 2px solid #be53d3;
 }
-</style>
-
-<style scoped>
-.card {
-  border: none;
-  background: rgb(255,255,255);
-background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(247,247,247,1) 50%, rgba(242,242,242,1) 100%);
-}
-
+/* End Of Pagination Button Style */
 </style>

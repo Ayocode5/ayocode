@@ -3,7 +3,7 @@
     <page-header />
 
     <div v-if="isReady" class="mt-5">
-      <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
+      <div class="col-10 offset-1 col-sm-10 offset-sm-1 col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-10 offset-md-1 mt-3">
         <h3 class="my-0">Tag: {{ tag.name }}</h3>
         <p class="text-secondary">
           Created {{ moment(tag.created_at).fromNow() }}
@@ -20,7 +20,7 @@
                 :to="{ name: 'show-post', params: { slug: post.slug } }"
                 class="text-decoration-none"
               >
-                <div class="card mb-4 shadow">
+                <div class="card mb-4">
                   <div class="card-body px-0">
                     <div class="container d-lg-inline-flex align-items-center">
                       <div
@@ -161,7 +161,7 @@ export default {
 </script>
 
 <style scoped>
-.card {
+/* .card {
   border: none;
   background: rgb(255, 255, 255);
   background: linear-gradient(
@@ -170,5 +170,5 @@ export default {
     rgba(247, 247, 247, 1) 50%,
     rgba(242, 242, 242, 1) 100%
   );
-}
+} */
 </style>

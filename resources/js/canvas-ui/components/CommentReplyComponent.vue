@@ -1,5 +1,19 @@
 <template>
-  <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-5">
+  <div
+    class="
+      col-10
+      offset-1
+      col-xl-8
+      offset-xl-2
+      col-lg-8
+      offset-lg-2
+      col-md-10
+      offset-md-1
+      col-sm-10
+      offset-sm-1
+      mt-5
+    "
+  >
     <div class="posts-comment">
       <h4 class="my-4 border-bottom mt-5 pb-2">
         <span class="border-bottom border-dark pb-2">Discussion</span>
@@ -12,19 +26,16 @@
       >
         <div class="card-body">
           <!-- Guest Short Information -->
-          <div class="row mt-0">
-            <div>
+          <div class="row row-cols-auto mt-0">
+            <div class="col">
               <img
                 class="mr-3"
                 style="width: 50px; height: 50px; border-radius: 50%"
                 :src="comment.avatar"
                 alt="user"
               />
-              <!-- <i class="mr-3 profileImage" style="display: inline-block">{{
-                getInitialName(comment.name)
-              }}</i> -->
             </div>
-            <div>
+            <div class="col offset-0">
               <h5 class="card-title">{{ comment.name }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">
                 <!-- Commented on {{ post_slug }} -->
@@ -36,35 +47,51 @@
 
           <!-- Guest Comments -->
           <div class="row mt-2">
-            <p class="card-text" style="padding-left: 66px">
+            <p class="card-text">
               <span v-html="comment.comment"></span>
             </p>
           </div>
 
           <!-- Reply Button -->
-          <div class="mt-3" style="padding-left: 47px">
+          <div class="mt-3 ml-3">
             <a
               class="card-link input-box disable-select pointer mt-4 py-1 px-1"
               variant="primary"
-              data-toggle="collapse"
+              data-bs-toggle="collapse"
               :href="'#reply-input-' + comment.id"
               role="button"
-              aria-expanded="true"
+              aria-expanded="false"
               :aria-controls="'reply-input-' + comment.id"
               ><i class="fas fa-reply"></i>&nbsp;Reply
             </a>
             <a
               v-if="comment.total_replies || comment.replies.length > 0"
-              class="card-link load-replies disable-select pointer mt-4 py-1 px-1"
-              data-toggle="collapse"
+              class="
+                card-link
+                load-replies
+                disable-select
+                pointer
+                mt-4
+                py-1
+                px-1
+              "
+              data-bs-toggle="collapse"
               variant="primary"
               :href="'#reply-section-' + comment.id"
               role="button"
               aria-expanded="true"
               :aria-controls="'reply-section-' + comment.id"
               @click="fetchPostReplies(comment.id)"
-              ><i :ref="'total-replies'+comment.id" class="fas fa-angle-right mr-1"></i>&nbsp;
-              {{ comment.replies.length > 0 ? comment.replies.length : comment.total_replies }}
+              ><i
+                :ref="'total-replies' + comment.id"
+                class="fas fa-angle-right mr-1"
+              ></i
+              >&nbsp;
+              {{
+                comment.replies.length > 0
+                  ? comment.replies.length
+                  : comment.total_replies
+              }}
               Replies
             </a>
             <!-- <a class="card-link badge badge-primary disable-select pointer ml-2" @click="fetchPostReplies(comment.id)">Load All Replies</a> -->
@@ -72,11 +99,7 @@
           <!-- End of Reply Button -->
 
           <!-- Reply InputBox -->
-          <div
-            class="mt-2 collapse"
-            :id="'reply-input-' + comment.id"
-            style="margin-left: 52px"
-          >
+          <div class="mt-2 collapse" :id="'reply-input-' + comment.id">
             <form onsubmit="return false">
               <template v-if="!guest.isSaved">
                 <div class="row">
@@ -158,23 +181,20 @@
           <div class="collapse" :id="'reply-section-' + comment.id">
             <div v-if="comment.replies.length > 0">
               <div v-for="reply in comment.replies" :key="reply.id">
-                <div class="card border-2 mt-2" style="padding-left: 40px">
+                <div class="card border-2 mt-2" style="padding-left: 10px">
                   <div class="card-body">
                     <!-- Guest -->
-                    <div class="row">
+                    <div class="row row-cols-auto">
                       <!-- Guest Alias -->
                       <img
-                        class="mr-2"
-                        style="width: 50px; height: 50px; border-radius: 50%"
+                        class="col mr-2"
+                        style="width: 75px; height: 50px; border-radius: 50%"
                         :src="reply.avatar"
                         alt="user"
                       />
-                      <!-- <i class="mr-2 profileImage">{{
-                      getInitialName(reply.name)
-                    }}</i> -->
 
                       <!-- Guest Short Info -->
-                      <div class="ml-2">
+                      <div class="col ml-2">
                         <h5 class="card-title">{{ reply.name }}</h5>
                         <h6
                           v-if="reply.email == reply.reply_target.email"
@@ -200,7 +220,7 @@
                     </div>
 
                     <!-- Reply Target Message -->
-                    <div class="row mt-2" style="padding-left: 65px">
+                    <div class="row mt-2" style="padding-left: 15px">
                       <p
                         class="px-2 py-1"
                         style="
@@ -218,7 +238,7 @@
                     <!-- End of Reply Target Message -->
 
                     <!-- Reply Message -->
-                    <div class="row mt-1 pl-8" style="padding-left: 65px">
+                    <div class="row mt-1 pl-8" style="padding-left: 12px">
                       <p class="card-text">
                         <span v-html="reply.comment"></span>
                       </p>
@@ -229,31 +249,30 @@
                     <div
                       v-if="reply.email != guest.email"
                       class="mt-3"
-                      style="padding-left: 47px"
                     >
                       <a
                         class="card-link disable-select pointer py-1 px-1"
                         variant="primary"
-                        data-toggle="collapse"
+                        data-bs-toggle="collapse"
                         :href="'#reply-input-' + reply.id"
                         role="button"
-                        aria-expanded="true"
+                        aria-expanded="false"
                         :aria-controls="'reply-input-' + reply.id"
                         ><i class="fas fa-reply"></i>&nbsp;Reply</a
                       >
                     </div>
                     <!-- End of Reply Button Trigger -->
 
-                    <!-- Reply InputBox in Reply Section -->
+                    <!-- Reply InputBox in Replies Section -->
                     <div
                       class="mt-2 collapse"
                       :id="'reply-input-' + reply.id"
-                      style="margin-left: 50px"
+                      style="margin-left: 3px"
                     >
                       <form onsubmit="return false">
                         <template v-if="!guest.isSaved">
                           <div class="row mt-2 mb-2">
-                            <div class="col">
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                               <label for="exampleInputEmail2" class="form-label"
                                 >Email address</label
                               >
@@ -265,7 +284,7 @@
                                 v-model="guest.email"
                               />
                             </div>
-                            <div class="col">
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                               <label for="nameInput" class="form-label"
                                 >Name</label
                               >
@@ -343,7 +362,7 @@
       @click="fetchPostComments()"
       style="width: 100%"
     >
-       <i class="fas fa-comment"></i> Load more comments
+      <i class="fas fa-comment"></i> Load more comments
     </button>
 
     <!-- Write Post Comment -->
@@ -352,20 +371,22 @@
         <template v-if="!guest.isSaved">
           <div class="mb-3">
             <div class="row">
-              <div class="col">
-                <label for="exampleInputEmail3" class="form-label"
-                  >Email address</label
-                >
-                <input
-                  type="email"
-                  class="form-control"
-                  id="exampleInputEmail3"
-                  aria-describedby="emailHelp"
-                  v-model="guest.email"
-                  required
-                />
+              <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="mb-3">
+                  <label for="exampleInputEmail3" class="form-label"
+                    >Email address</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="exampleInputEmail3"
+                    aria-describedby="emailHelp"
+                    v-model="guest.email"
+                    required
+                  />
+                </div>
               </div>
-              <div class="col">
+              <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                 <div class="mb-3">
                   <label for="nameInput" class="form-label">Name</label>
                   <input
@@ -585,7 +606,6 @@ export default {
     },
 
     fetchPostComments: function () {
-
       this.request()
         .get(`api/posts/comment`, {
           params: {
@@ -620,7 +640,6 @@ export default {
 
     fetchPostReplies: async function (comment_id) {
       if (!this.loaded_replies.includes(comment_id)) {
-
         await this.request()
           .get(`api/posts/reply`, {
             params: {
@@ -675,7 +694,8 @@ export default {
               })
             );
           } else {
-            console.log("email and name required before you can save it");
+            // console.log("email and name required before you can save it");
+            alert('"email and name required!');
             this.guest.isSaved = false;
           }
         } else {
@@ -683,7 +703,6 @@ export default {
         }
       });
     },
-
   },
 };
 </script>
@@ -731,8 +750,13 @@ button {
 }
 
 .btn-secondary {
-  background: rgb(251,251,251);
-background: linear-gradient(90deg, rgba(251,251,251,1) 0%, rgba(247,247,247,1) 50%, rgba(242,242,242,1) 100%);
+  background: rgb(251, 251, 251);
+  background: linear-gradient(
+    90deg,
+    rgba(251, 251, 251, 1) 0%,
+    rgba(247, 247, 247, 1) 50%,
+    rgba(242, 242, 242, 1) 100%
+  );
   color: rgb(53, 53, 53);
   border: none;
 }
@@ -741,6 +765,5 @@ background: linear-gradient(90deg, rgba(251,251,251,1) 0%, rgba(247,247,247,1) 5
   background-color: #878787;
   /* color: rgb(53, 53, 53);
   border: none; */
-  
 }
 </style>

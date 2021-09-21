@@ -1,68 +1,30 @@
 <template>
-  <div>
-    <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
-      <!-- Popular Posts -->
-      <h4 class="my-4 border-bottom mt-5 pb-2">
-        <span class="border-bottom border-dark pb-2">Popular Posts</span>
-      </h4>
+  <!-- Popular Posts -->
+  
+  <span>
+    <h4 class="mb-4 border-bottom pb-2">
+      <span class="border-bottom border-dark pb-2">Popular Posts</span>
+    </h4>
 
-      <div v-if="isReady">
-        <div :key="`${index * 2}-${post.id}`" v-for="(post, index) in posts">
-          <router-link
-            :to="{ name: 'show-post', params: { slug: post.slug } }"
-            class="text-decoration-none"
-          >
-            <div class="card border-0 mb-4 shadow-4">
-              <div class="card-body px-0">
-                <div class="container d-lg-inline-flex align-items-center">
-                  <!-- <div
-                        v-if="post.featured_image"
-                        class="col-12 col-lg-3 p-0"
-                      >
-                        <img
-                          :src="post.featured_image"
-                          :alt="post.featured_image_caption"
-                          class="rounded w-100"
-                        />
-                      </div> -->
-                  <i class="fas fa-angle-right"></i>
-                  <section
-                    class="col-12 mt-3 mt-lg-0 px-0 px-lg-3"
-                    :class="post.featured_image ? 'col-lg-9' : ''"
-                  >
-                    <h5 class="card-title text-truncate mb-0">
-                      {{ post.title }}
-                    </h5>
-                    <p class="card-text text-truncate">
-                      {{ post.summary }}
-                    </p>
-                    <p class="card-text mb-0 text-secondary">
-                      <!-- {{ post.user.name }} -->
-                      <span v-if="post.topic.length">
-                        {{ post.topic[0].name }}
-                      </span>
-                    </p>
-                    <!-- <p class="card-text text-secondary">
-                          {{ moment(post.published_at).format("MMM D, Y") }} —
-                          {{ post.read_time }}
-                        </p> -->
-                  </section>
-                </div>
-              </div>
-            </div>
-          </router-link>
-        </div>
+    <div>
+      <div :key="`${index * 2}-${post.id}`" v-for="(post, index) in posts">
+        <router-link
+          :to="{ name: 'show-post', params: { slug: post.slug } }"
+          class="card card-link border-0 mb-2"
+        >
+          <div class="card-body p-0" style="margin-left: 2%">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <h6 v-if="post.topic.length" class="card-subtitle mb-2 text-muted">in {{post.topic[0].name}}</h6>
+            <p class="card-text">
+              {{ post.summary }}
+            </p>
+          </div>
+        </router-link>
       </div>
-      <center v-else>
-        <div class="lds-facebook">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </center>
-      <!-- End Popular Posts -->
     </div>
-  </div>
+  
+  </span>
+
 </template>
 <script>
 export default {
@@ -89,6 +51,7 @@ export default {
         })
         .then(({ data }) => {
           this.posts.push(...data);
+          // console.log(data)
         })
         .catch((err) => {
           // console.log(err.response.status);
@@ -99,7 +62,16 @@ export default {
 </script>
 
 <style scoped>
-.card {
+#post {
+  margin: 3% 10%;
+}
+@media (max-width: 576px) {
+  #post {
+    margin: 3% auto;
+  }
+}
+
+/* .card {
   border: none;
   background: rgb(245, 245, 245);
   background: linear-gradient(
@@ -108,7 +80,7 @@ export default {
     rgba(247, 247, 247, 1) 50%,
     rgba(250, 250, 250, 1) 100%
   );
-}
+} */
 
 /* Loading Animation */
 .lds-facebook {

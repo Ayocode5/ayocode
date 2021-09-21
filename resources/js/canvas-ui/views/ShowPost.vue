@@ -48,48 +48,67 @@
     </page-header>
 
     <div v-if="isReady" class="mt-5">
-      <div class="col-xl-8 offset-xl-2 col-lg-10 offset-lg-1 col-md-12 mt-3">
+      <div
+        class="
+          col-10
+          offset-1
+          col-sm-10
+          offset-sm-1
+          col-md-10
+          offset-md-1
+          col-lg-8
+          offset-lg-2
+          col-xl-8
+          offset-xl-2
+          col-xxl-8
+          offset-xxl-2
+        "
+      >
         <h1>{{ post.title }}</h1>
 
-        <div class="media pt-1 pb-5">
-          <router-link
-            :to="{ name: 'show-user', params: { id: post.user.id } }"
-          >
-            <img
-              :src="post.user.avatar || post.user.default_avatar"
-              class="mr-3 rounded-circle shadow-inner"
-              style="width: 50px"
-              :alt="post.user.name"
-            />
-          </router-link>
-
-          <div class="media-body">
-            <p class="my-0">
-              <span>
-                <router-link
-                  :to="{ name: 'show-user', params: { id: post.user.id } }"
-                  class="text-decoration-none"
-                >
-                  {{ post.user.name }}
-                </router-link>
-              </span>
-              <span v-if="post.topic.length">
-                in
-                <router-link
-                  :to="{
-                    name: 'show-topic',
-                    params: { slug: post.topic[0].slug },
-                  }"
-                  class="text-decoration-none"
-                >
-                  {{ post.topic[0].name }}
-                </router-link>
-              </span>
-            </p>
-            <span class="text-secondary"
-              >{{ moment(post.published_at).format("MMM D, Y") }} —
-              {{ post.read_time }}</span
+        <div class="row row-cols-auto media pt-1 pb-5">
+          <div class="col">
+            <router-link
+              :to="{ name: 'show-user', params: { id: post.user.id } }"
             >
+              <img
+                :src="post.user.avatar || post.user.default_avatar"
+                class="mr-3 rounded-circle shadow-inner"
+                style="width: 50px"
+                :alt="post.user.name"
+              />
+            </router-link>
+          </div>
+
+          <div class="col">
+            <div class="media-body">
+              <p class="my-0">
+                <span>
+                  <router-link
+                    :to="{ name: 'show-user', params: { id: post.user.id } }"
+                    class="text-decoration-none"
+                  >
+                    {{ post.user.name }}
+                  </router-link>
+                </span>
+                <span v-if="post.topic.length">
+                  in
+                  <router-link
+                    :to="{
+                      name: 'show-topic',
+                      params: { slug: post.topic[0].slug },
+                    }"
+                    class="text-decoration-none"
+                  >
+                    {{ post.topic[0].name }}
+                  </router-link>
+                </span>
+              </p>
+              <span class="text-secondary"
+                >{{ moment(post.published_at).format("MMM D, Y") }} —
+                {{ post.read_time }}</span
+              >
+            </div>
           </div>
         </div>
 
@@ -108,27 +127,37 @@
         />
 
         <div
-          class="post-content position-relative align-items-center overflow-y-visible mt-4"
+          class="
+            post-content
+            position-relative
+            align-items-center
+            overflow-y-visible
+            mt-4
+          "
         >
           <div v-html="post.body" />
         </div>
 
         <div v-if="post.tags.length" class="mt-5">
           Tags:
-          <router-link
-            :key="tag.id"
-            v-for="tag in post.tags"
-            :to="{ name: 'show-tag', params: { slug: tag.slug } }"
-            class="badge p-2 my-1 mr-2 text-decoration-none text-uppercase"
-            style="background-color: #d6d6d6"
-          >
-            {{ tag.name }}
-          </router-link>
+          <div v-for="tag in post.tags" :key="tag.id" class="badge p-2 my-1 bg-info" style="margin-right: 2px">
+            <router-link
+              :to="{ name: 'show-tag', params: { slug: tag.slug } }" class="text-decoration-none text-white"
+            >
+              {{ tag.name }}
+            </router-link>
+          </div>
         </div>
 
         <div
           v-if="post.meta.canonical_link"
-          class="post-content position-relative align-items-center overflow-y-visible font-arial"
+          class="
+            post-content
+            position-relative
+            align-items-center
+            overflow-y-visible
+            font-arial
+          "
         >
           <hr />
           <p class="text-center font-italic mb-5">
@@ -157,10 +186,29 @@
       </div>
 
       <!-- Popular Posts Component -->
-      <popular-posts-component />
-      
+
+      <div
+        class="
+          col-10
+          offset-1
+          col-sm-10
+          offset-sm-1
+          col-md-10
+          offset-md-1
+          col-lg-8
+          offset-lg-2
+          col-xl-8
+          offset-xl-2
+          col-xxl-8
+          offset-xxl-2
+          mb-5
+        "
+      >
+        <popular-posts-component />
+      </div>
+
       <!-- Footer Component -->
-      <Footer />
+      <PageFooterComponent />
     </div>
   </section>
 </template>
@@ -171,7 +219,7 @@ import PageHeader from "../components/PageHeaderComponent";
 import PopularPostsComponent from "../components/PopularPostsComponent";
 import RelatedPostsComponent from "../components/RelatedPostsComponent";
 import CommentReplyComponent from "../components/CommentReplyComponent";
-import Footer from "../components/Footer";
+import PageFooterComponent from "../components/PageFooterComponent";
 import hljs from "highlight.js";
 import mediumZoom from "medium-zoom";
 
@@ -183,7 +231,7 @@ export default {
     PopularPostsComponent,
     RelatedPostsComponent,
     CommentReplyComponent,
-    Footer,
+    PageFooterComponent,
   },
 
   metaInfo() {

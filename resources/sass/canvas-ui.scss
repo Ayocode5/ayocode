@@ -94,13 +94,13 @@ $text-muted: $gray-500;
     transition: transform 0.3s cubic-bezier(0.34, 2, 0.6, 1), box-shadow 0.2s ease;
     transition: transform 0.3s cubic-bezier(0.34, 2, 0.6, 1), box-shadow 0.2s ease,
         -webkit-transform 0.3s cubic-bezier(0.34, 2, 0.6, 1);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
     // -webkit-transform: translateY(-5px);
     // transform: translateY(-5px);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .post-content {

@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "axios": "^0.21.1",
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5.0.0-beta3",
     "highlight.js": "^10.5.0",
     "jquery": "^3.5.1",
     "laravel-echo": "^1.10.0",

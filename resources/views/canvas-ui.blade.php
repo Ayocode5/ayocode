@@ -9,15 +9,17 @@
 
     <title>ayocode</title>
 
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" />
+
+    {{-- Canvas CSS --}}
     <link rel="stylesheet" type="text/css" href="{{ mix('css/canvas-ui.css') }}">
 
     {{-- Google Fonts --}}
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Kirang+Haerang:wght@400;700&display=swap" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Karla&family=Merriweather:wght@400;700&display=swap"> --}}
 
     {{-- Sintax Highlighting --}}
     <link rel="stylesheet"
@@ -66,10 +68,6 @@
     </script>
 
     <script type="text/javascript" src="{{ mix('js/canvas-ui.js') }}"></script>
-    {{-- <script
-  src="https://code.jquery.com/jquery-3.6.0.js"
-  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-  crossorigin="anonymous"></script> --}}
 
 </body>
 
