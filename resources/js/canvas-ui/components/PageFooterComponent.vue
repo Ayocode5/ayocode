@@ -49,7 +49,7 @@
 								*Ayocode
 							</h6>
 							<p>
-								A Digital Agency with 4 members domicilied in Cengkareng, West Jakarta. Our team consist of Adrian and Jonathan as UI/UX Designer and Front-End Developer. Septian and Iqbal as Back End Developer.
+								A Digital Agency with 5 members domicilied in Cengkareng, West Jakarta. Our team consist of Adrian and Jonathan as UI/UX Designer and Front-End Developer. Septian, Iqbal, Joko as Back End Developer.
 							</p>
 						</div>
 						<!-- Grid column -->

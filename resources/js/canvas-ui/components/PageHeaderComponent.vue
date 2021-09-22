@@ -58,22 +58,17 @@
             <!-- Search Input -->
             <label class="sr-only" for="inlineFormInputGroup">Search</label>
             
-            <div class="input-group-prepend float-right mb-2 mt-2">
+            <div class="row float-right px-2">
               <input
                 v-on:keyup.enter="searchPost()"
                 v-model="keyword"
                 type="text"
-                class=""
+                class="col-12"
                 id="inlineFormInputGroup"
                 placeholder="Search"
               />
-              <!-- <div v-on:click="searchPost()" class="input-group-prepend">
-                <div class="input-group-text">
-                  <i class="fas fa-search"></i>
-                </div>
-              </div> -->
+            <!-- <i v-on:click="searchPost()" class="col-1 fas fa-search text-secondary" style=""></i> -->
             </div>
-
           </div>
 
         </div>
