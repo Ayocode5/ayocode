@@ -82,6 +82,15 @@ export default {
   );
 } */
 
+.card-link {
+  text-decoration: none;
+  color: rgb(22, 22, 22);
+}
+
+.card-link:hover {
+  color: rgb(85, 85, 85);
+}
+
 /* Loading Animation */
 .lds-facebook {
   display: inline-block;

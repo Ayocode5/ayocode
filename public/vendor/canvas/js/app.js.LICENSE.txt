@@ -2,14 +2,7 @@
  * @license MIT */
 
 /*!
-	 * The buffer module from node.js, for the browser.
-	 *
-	 * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
-	 * @license  MIT
-	 */
-
-/*!
-  * Bootstrap v5.0.0-beta3 (https://getbootstrap.com/)
+  * Bootstrap v4.6.0 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -29,7 +22,7 @@
  */
 
 /*!
- * FilePond 4.29.1
+ * FilePond 4.29.0
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -53,7 +46,7 @@
  */
 
 /*!
- * FilePondPluginImagePreview 4.6.10
+ * FilePondPluginImagePreview 4.6.8
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -71,14 +64,6 @@
  * All Rights Reserved. Apache Software License 2.0
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
- */
-
-/*!
- * Pusher JavaScript Library v4.4.0
- * https://pusher.com/
- *
- * Copyright 2017, Pusher
- * Released under the MIT licence.
  */
 
 /*!

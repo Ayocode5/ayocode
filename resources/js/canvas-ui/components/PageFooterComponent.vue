@@ -13,7 +13,7 @@
 				<!-- Left -->
 
 				<!-- Right -->
-				<div>
+				<div class="ml-2">
 					<!-- <a href="" class="me-4 text-reset">
 						<i class="fab fa-facebook-f"></i>
 					</a>

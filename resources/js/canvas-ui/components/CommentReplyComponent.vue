@@ -220,7 +220,7 @@
                     </div>
 
                     <!-- Reply Target Message -->
-                    <div class="row mt-2" style="padding-left: 15px">
+                    <div class="row mt-2" style="padding-left: 10px">
                       <p
                         class="px-2 py-1"
                         style="
@@ -238,7 +238,7 @@
                     <!-- End of Reply Target Message -->
 
                     <!-- Reply Message -->
-                    <div class="row mt-1 pl-8" style="padding-left: 12px">
+                    <div class="row mt-1 pl-8">
                       <p class="card-text">
                         <span v-html="reply.comment"></span>
                       </p>
@@ -726,6 +726,15 @@ button {
   border-radius: 0px;
   transition: none;
   box-shadow: none;
+}
+
+.card-link {
+  text-decoration: none;
+  color: rgb(22, 22, 22);
+}
+
+.card-link:hover {
+  color: rgb(85, 85, 85);
 }
 
 .card-comment {

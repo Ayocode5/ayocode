@@ -385,12 +385,3 @@ export default {
     },
 };
 </script>
-
-<style>
-.ql-bubble .ql-editor pre.ql-syntax {
-    background-color: #f1f1f1;
-    color: #5f5f5f;
-    overflow: visible;
-}
-
-</style>

@@ -2,13 +2,13 @@
 
 namespace Canvas\Models;
 
-use App\Models\Comment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -63,6 +63,15 @@ class Post extends Model
      */
     protected $dates = [
         'published_at',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'read_time',
     ];
 
     /**
@@ -136,9 +145,27 @@ class Post extends Model
         return $this->hasMany(Visit::class);
     }
 
-    public function comments(): HasMany
+    /**
+     * Get the human-friendly estimated reading time of a given text.
+     *
+     * @return string
+     */
+    public function getReadTimeAttribute(): string
     {
-        return $this->hasMany(Comment::class, 'post_id', 'id');
+        // Only count words in our estimation
+        $words = str_word_count(strip_tags($this->body));
+
+        // Divide by the average number of words per minute
+        $minutes = ceil($words / 250);
+
+        // The user is optional since we append this attribute
+        // to every model and we may be creating a new one
+        return vsprintf('%d %s %s', [
+            $minutes,
+            Str::plural(trans('canvas::app.min', [], optional(request()->user())->locale), $minutes),
+            trans('canvas::app.read', [], optional(request()->user())->locale),
+        ]
+        );
     }
 
     /**
@@ -162,6 +189,12 @@ class Post extends Model
         return $query->where('published_at', '<=', now()->toDateTimeString());
     }
 
+    /**
+     * Scope a query to only include published posts.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
     public function scopePopular(Builder $query): Builder
     {
         return $query->withCount([

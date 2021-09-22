@@ -22,7 +22,7 @@
  */
 
 /*!
- * FilePond 4.27.2
+ * FilePond 4.29.0
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -46,7 +46,7 @@
  */
 
 /*!
- * FilePondPluginImagePreview 4.6.6
+ * FilePondPluginImagePreview 4.6.8
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -92,8 +92,8 @@
  */
 
 /*!
- * Vue.js v2.6.12
- * (c) 2014-2020 Evan You
+ * Vue.js v2.6.14
+ * (c) 2014-2021 Evan You
  * Released under the MIT License.
  */
 

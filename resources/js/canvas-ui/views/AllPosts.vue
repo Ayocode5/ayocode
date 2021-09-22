@@ -26,7 +26,7 @@
                 >
                   <router-link
                     :to="{ name: 'show-post', params: { slug: post.slug } }"
-                    class="card card-link border-1"
+                    class="card card-link border-1 h-100"
                   >
                     <div v-if="post.featured_image">
                       <img
@@ -45,23 +45,38 @@
                       </p>
                       <strong>{{ post.read_time }} to read.</strong>
 
-                      <br />
-                      Tags:
-                      <!-- <span class="badge bg-info">Programming</span>
+                      <div class="row-cols-auto">
+                        <span class="col">Tags:</span>
+
+                        <!-- <span class="badge bg-info">Programming</span>
                       <span class="badge bg-warning">Javascript</span> -->
-                      <span v-if="post.tags.length">
-                        <span
-                          v-for="(tag, index) in post.tags"
-                          :key="'tag' + index"
-                          class="badge" :class="getRandomColour()"
-                          style="margin-left: 2px"
-                        >
-                          {{ tag.name }}
+                        <span v-if="post.tags.length" class="col">
+                          <!-- <span
+                            v-for="(tag, index) in post.tags"
+                            :key="'tag' + index"
+                            class="badge"
+                            :class="getRandomColour()"
+                            style="margin-left: 2px"
+                          >
+                            {{ tag.name }}
+                          </span> -->
+                          <router-link
+                            v-for="(tag, index) in post.tags"
+                            :key="'tag' + index"
+                            :to="{
+                              name: 'show-tag',
+                              params: { slug: tag.slug },
+                            }"
+                            class="badge text-decoration-none text-white"
+                            :class="getRandomColour()"
+                            style="margin-left: 2px"
+                          >
+                            {{ tag.name }}
+                          </router-link>
                         </span>
-                      </span>
-
-                      <br /><br />
-
+                      </div>                      
+                    </div>
+                    <div class="card-footer border-0 bg-light">
                       <div class="row row-cols-auto">
                         <div class="col">
                           <img
@@ -218,8 +233,10 @@ export default {
     },
 
     getRandomColour() {
-      return 'bg-' + this.colours[Math.floor(Math.random() * this.colours.length)];
-    }
+      return (
+        "bg-" + this.colours[Math.floor(Math.random() * this.colours.length)]
+      );
+    },
   },
 
   watch: {
@@ -235,7 +252,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* Posts Card Style */
 .card-link {
   text-decoration: none;
@@ -308,18 +325,10 @@ export default {
     height: 32px;
   }
 }
-
-*:focus {
-  outline: 0 !important;
-  box-shadow: none !important;
-}
-
-*:focus:not(:focus-visible) {
-  outline: 0 !important;
-  box-shadow: none !important;
-}
 /* End Loading Progress Animation */
+</style>
 
+<style>
 /* Pagination Button Style */
 .page-link {
   border: none;
@@ -352,6 +361,16 @@ export default {
   background-color: white;
   /* border-color: #be53d3; */
   border-bottom: 2px solid #be53d3;
+}
+
+*:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+*:focus:not(:focus-visible) {
+  outline: 0 !important;
+  box-shadow: none !important;
 }
 /* End Of Pagination Button Style */
 </style>

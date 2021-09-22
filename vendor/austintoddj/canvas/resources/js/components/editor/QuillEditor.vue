@@ -439,7 +439,7 @@ div.embedded_image[data-layout='wide'] {
 }
 
 .ql-editor pre.ql-syntax {
-    border-radius: 2px !important;
+    border-radius: $border-radius !important;
     padding: 1em !important;
     margin-top: 2em !important;
 }

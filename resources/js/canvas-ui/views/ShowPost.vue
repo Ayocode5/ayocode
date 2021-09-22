@@ -140,7 +140,7 @@
 
         <div v-if="post.tags.length" class="mt-5">
           Tags:
-          <div v-for="tag in post.tags" :key="tag.id" class="badge p-2 my-1 bg-info" style="margin-right: 2px">
+          <div v-for="tag in post.tags" :key="tag.id" class="badge p-2 my-1" :class="getRandomColour()" style="margin-right: 2px">
             <router-link
               :to="{ name: 'show-tag', params: { slug: tag.slug } }" class="text-decoration-none text-white"
             >
@@ -176,7 +176,7 @@
       <comment-reply-component :post_id="post.id" :post_slug="post.slug" />
 
       <!-- Related Posts Component -->
-      <div v-if="post.topic">
+      <div v-if="post.topic.length > 0">
         <related-posts-component
           :related_params="{
             topic: post.topic[0].id,
@@ -257,6 +257,7 @@ export default {
       post: null,
       isReady: false,
       routeChangesIdentifier: 0,
+      colours: ["danger", "info", "primary", "secondary", "success", "warning"],
     };
   },
 
@@ -322,6 +323,12 @@ export default {
       let colors = ["#ff0000", "#00ff00", "#0000ff"];
       let random_color = colors[Math.floor(Math.random() * colors.length)];
       document.getElementById("title").style.color = random_color;
+    },
+
+    getRandomColour() {
+      return (
+        "bg-" + this.colours[Math.floor(Math.random() * this.colours.length)]
+      );
     },
   },
 

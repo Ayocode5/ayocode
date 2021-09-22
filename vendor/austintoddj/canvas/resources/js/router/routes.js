@@ -9,7 +9,6 @@ import PostStats from '../views/PostStats';
 import TagList from '../views/TagList';
 import TopicList from '../views/TopicList';
 import UserList from '../views/UserList';
-import Discussions from '../views/AllDiscussions'
 import settings from '../store/modules/settings';
 
 let isAdmin = settings.state.user.role === 3;
@@ -125,11 +124,6 @@ export default [
                 next({ name: 'home' });
             }
         },
-    },
-    {
-        path: '/discussions',
-        name: 'discussions',
-        component: Discussions,
     },
     {
         path: '*',

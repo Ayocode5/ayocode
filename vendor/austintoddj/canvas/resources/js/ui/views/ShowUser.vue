@@ -131,7 +131,7 @@ export default {
                     NProgress.inc();
                 })
                 .catch(() => {
-                    NProgress.done();
+                    this.$router.push({ name: 'posts' });
                 });
         },
 

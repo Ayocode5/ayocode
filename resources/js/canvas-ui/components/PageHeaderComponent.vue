@@ -17,10 +17,10 @@
             class="navbar-brand"
             style="font-family: 'Acme', sans-serif"
             :to="{name: 'posts'}"
-            >Blog</router-link
+            >Blogs</router-link
           >
           <button
-            class="navbar-toggler"
+            class="navbar-toggler border-0"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"

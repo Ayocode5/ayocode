@@ -15,8 +15,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class CanvasUiController extends Controller
 {
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -30,8 +30,8 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return LengthAwarePaginator
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getPosts(Request $request): LengthAwarePaginator
     {
@@ -39,9 +39,9 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param $slug
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function showPost(Request $request, $slug): JsonResponse
     {
@@ -57,7 +57,7 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @return string
      */
     public function getTags(Request $request): string
@@ -66,9 +66,9 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param $slug
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function showTag(Request $request, $slug): JsonResponse
     {
@@ -78,9 +78,9 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param $slug
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getPostsForTag(Request $request, $slug): JsonResponse
     {
@@ -90,7 +90,7 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @return string
      */
     public function getTopics(Request $request): string
@@ -99,9 +99,9 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param $slug
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function showTopic(Request $request, $slug): JsonResponse
     {
@@ -111,9 +111,9 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param $slug
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getPostsForTopic(Request $request, $slug): JsonResponse
     {
@@ -123,9 +123,9 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param $id
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function showUser(Request $request, $id): JsonResponse
     {
@@ -135,14 +135,14 @@ class CanvasUiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param $id
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getPostsForUser(Request $request, $id): JsonResponse
     {
         $user = User::find($id);
 
-        return $user ? response()->json($user->posts()->published()->with('topic')->paginate(), 200) : response()->json(null, 200);
+        return $user ? response()->json($user->posts()->published()->with('user', 'topic')->paginate(), 200) : response()->json(null, 200);
     }
 }
