@@ -41,7 +41,7 @@
                         width="80px" />
                     <p class="paragraf1">The Website that we possibly develop, such as E-Commerce, Personal Website,
                         Company Profile, and many more.</p>
-                    <a class="btn btn-primary mt-3 my-btn" href="#">Contact Us</a>
+                    <a class="btn btn-success mt-3 my-btn" href="#contact">Contact Us</a>
                 </div>
             </div>
         </div>

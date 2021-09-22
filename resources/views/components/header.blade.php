@@ -5,7 +5,7 @@
             <img class="nav-brand-ayocode" src="./storage/images/content/1.png" alt="LogoAyocode.png">
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+        <button class="navbar-toggler" style="border: none;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
             aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,7 +29,7 @@
                 </li>
             </ul>
             <form class="d-flex">
-                <button class="btn btn-outline-success my-btn" type="submit">Contact Us</button>
+                <a href="#contact"  class="btn btn-outline-success my-btn">Contact Us</a>
             </form>
         </div>
     </div>

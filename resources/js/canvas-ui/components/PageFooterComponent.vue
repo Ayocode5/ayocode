@@ -4,7 +4,7 @@
 		<footer class="text-center text-lg-start bg-dark text-muted">
 			<!-- Section: Social media -->
 			<section
-				class="d-flex justify-content-center justify-content-lg-between p-4 "
+				class="d-flex justify-content-center border-bottom border-secondary justify-content-lg-between p-4 "
 			>
 				<!-- Left -->
 				<div class="me-5 d-none d-lg-block">
@@ -14,7 +14,7 @@
 
 				<!-- Right -->
 				<div>
-					<a href="" class="me-4 text-reset">
+					<!-- <a href="" class="me-4 text-reset">
 						<i class="fab fa-facebook-f"></i>
 					</a>
 					<a href="" class="me-4 text-reset">
@@ -22,14 +22,14 @@
 					</a>
 					<a href="" class="me-4 text-reset">
 						<i class="fab fa-google"></i>
-					</a>
-					<a href="" class="me-4 text-reset">
+					</a> -->
+					<a href="https://www.instagram.com/ayocode.id/" class="me-4 text-reset">
 						<i class="fab fa-instagram"></i>
 					</a>
 					<a href="" class="me-4 text-reset">
 						<i class="fab fa-linkedin"></i>
 					</a>
-					<a href="" class="me-4 text-reset">
+					<a href="https://github.com/Ayocode5" class="me-4 text-reset">
 						<i class="fab fa-github"></i>
 					</a>
 				</div>
@@ -46,12 +46,10 @@
 						<div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
 							<!-- Content -->
 							<h6 class="text-uppercase fw-bold mb-4">
-								<i class="fas fa-gem me-3"></i>Ayocode Agency
+								*Ayocode
 							</h6>
 							<p>
-								Here you can use rows and columns to organize
-								your footer content. Lorem ipsum dolor sit amet,
-								consectetur adipisicing elit.
+								A Digital Agency with 4 members domicilied in Cengkareng, West Jakarta. Our team consist of Adrian and Jonathan as UI/UX Designer and Front-End Developer. Septian and Iqbal as Back End Developer.
 							</p>
 						</div>
 						<!-- Grid column -->
@@ -63,23 +61,23 @@
 								Services
 							</h6>
 							<p>
-								<a href="#!" class="text-reset">Angular</a>
+								<span href="" class="text-reset">Web Development</span>
 							</p>
 							<p>
-								<a href="#!" class="text-reset">React</a>
+								<span href="" class="text-reset">UI/UX Design</span>
 							</p>
 							<p>
-								<a href="#!" class="text-reset">Vue</a>
+								<span href="" class="text-reset">Web Design</span>
 							</p>
-							<p>
+							<!-- <p>
 								<a href="#!" class="text-reset">Laravel</a>
-							</p>
+							</p> -->
 						</div>
 						<!-- Grid column -->
 
 						<!-- Grid column -->
-						<div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-							<!-- Links -->
+						<!-- <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+							Links
 							<h6 class="text-uppercase fw-bold mb-4">
 								Useful links
 							</h6>
@@ -95,7 +93,7 @@
 							<p>
 								<a href="#!" class="text-reset">Help</a>
 							</p>
-						</div>
+						</div> -->
 						<!-- Grid column -->
 
 						<!-- Grid column -->
@@ -105,21 +103,19 @@
 							<!-- Links -->
 							<h6 class="text-uppercase fw-bold mb-4">Contact</h6>
 							<p>
-								<i class="fas fa-home me-3"></i> New York, NY
-								10012, US
+								<i class="fas fa-home me-3"></i>West Jakarta, 11710, ID
 							</p>
 							<p>
 								<i class="fas fa-envelope me-3"></i>
-								info@example.com
+								contact@ayocode.my.id
 							</p>
 							<p>
-								<i class="fas fa-phone me-3"></i> + 01 234 567
-								88
+								<i class="fas fa-phone me-3"></i> + 62 57-3260-7049
 							</p>
-							<p>
+							<!-- <p>
 								<i class="fas fa-print me-3"></i> + 01 234 567
 								89
-							</p>
+							</p> -->
 						</div>
 						<!-- Grid column -->
 					</div>

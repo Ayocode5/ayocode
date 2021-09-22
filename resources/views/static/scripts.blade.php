@@ -2,8 +2,9 @@
     //  window.addEventListener("scroll", function (event) {
     //      let top = this.scrollY;
     //      const myNavbar = document.getElementsByClassName("my-navbar");
+    //      console.log(top)
 
-    //      if (top != 0) {
+    //      if (top > 20) {
     //          myNavbar[0].classList.add("bck-nav");
     //      } else {
     //          myNavbar[0].classList.remove("bck-nav");
