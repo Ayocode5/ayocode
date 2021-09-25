@@ -26,15 +26,13 @@
       >
         <div class="card-body">
           <!-- Guest Short Information -->
-          <div class="row row-cols-auto mt-0">
-            <div class="col">
-              <img
-                class="mr-3"
-                style="width: 50px; height: 50px; border-radius: 50%"
-                :src="comment.avatar"
-                alt="user"
-              />
-            </div>
+          <div class="row row-cols-auto mt-0 px-0">
+            <img
+              class=""
+              style="width: 50px; height: 50px; border-radius: 50%"
+              :src="comment.avatar"
+              alt="guests"
+            />
             <div class="col offset-0">
               <h5 class="card-title">{{ comment.name }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">
@@ -46,18 +44,27 @@
           <!-- End of Guest Short Information -->
 
           <!-- Guest Comments -->
-          <div class="row mt-2">
-            <p class="card-text">
+          <div class="row mt-1">
+            <p class="col card-text">
               <span v-html="comment.comment"></span>
             </p>
           </div>
 
           <!-- Reply Button -->
-          <div class="mt-3 ml-3">
+          <div class="row">
             <a
-              class="card-link input-box disable-select pointer mt-4 py-1 px-1"
+              class="
+                card-link
+                input-box
+                disable-select
+                pointer
+                mt-4
+                py-1
+                px-1
+                ml-2
+              "
               variant="primary"
-              data-bs-toggle="collapse"
+              data-toggle="collapse"
               :href="'#reply-input-' + comment.id"
               role="button"
               aria-expanded="false"
@@ -75,7 +82,7 @@
                 py-1
                 px-1
               "
-              data-bs-toggle="collapse"
+              data-toggle="collapse"
               variant="primary"
               :href="'#reply-section-' + comment.id"
               role="button"
@@ -184,11 +191,11 @@
                 <div class="card border-2 mt-2" style="padding-left: 10px">
                   <div class="card-body">
                     <!-- Guest -->
-                    <div class="row row-cols-auto">
+                    <div class="row">
                       <!-- Guest Alias -->
                       <img
-                        class="col mr-2"
-                        style="width: 75px; height: 50px; border-radius: 50%"
+                        class=""
+                        style="height: 50px; width: 50px; border-radius: 50%"
                         :src="reply.avatar"
                         alt="user"
                       />
@@ -220,7 +227,7 @@
                     </div>
 
                     <!-- Reply Target Message -->
-                    <div class="row mt-2" style="padding-left: 10px">
+                    <div class="row mt-2 ml-1">
                       <p
                         class="px-2 py-1"
                         style="
@@ -238,7 +245,7 @@
                     <!-- End of Reply Target Message -->
 
                     <!-- Reply Message -->
-                    <div class="row mt-1 pl-8">
+                    <div class="row mt-1 ml-1 pl-8">
                       <p class="card-text">
                         <span v-html="reply.comment"></span>
                       </p>
@@ -246,14 +253,11 @@
                     <!-- End of Reply Message -->
 
                     <!-- Reply Button Trigger -->
-                    <div
-                      v-if="reply.email != guest.email"
-                      class="mt-3"
-                    >
+                    <div v-if="reply.email != guest.email" class="mt-3">
                       <a
                         class="card-link disable-select pointer py-1 px-1"
                         variant="primary"
-                        data-bs-toggle="collapse"
+                        data-toggle="collapse"
                         :href="'#reply-input-' + reply.id"
                         role="button"
                         aria-expanded="false"

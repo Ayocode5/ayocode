@@ -22,7 +22,7 @@
                 <div
                   :key="`${index}-${post.id}`"
                   v-for="(post, index) in posts"
-                  class="col"
+                  class="col mb-2"
                 >
                   <router-link
                     :to="{ name: 'show-post', params: { slug: post.slug } }"
@@ -36,6 +36,14 @@
                         :alt="post.featured_image_caption"
                       />
                     </div>
+                    <div v-else>
+                      <img
+                        class="card-img-top"
+                        style="height: 200px"
+                        src="https://www.kediri-pringsewu.desa.id/desa/themes/cosmo/assets/images/placeholder.png"
+                        alt="no pic"
+                      />
+                    </div>
                     <div class="card-body">
                       <h4 class="card-title">
                         {{ post.title }}
@@ -46,7 +54,7 @@
                       <strong>{{ post.read_time }} to read.</strong>
 
                       <div class="row-cols-auto">
-                        <span class="col">Tags:</span>
+                        <span>Tags:</span>
 
                         <!-- <span class="badge bg-info">Programming</span>
                       <span class="badge bg-warning">Javascript</span> -->
@@ -69,7 +77,7 @@
                             }"
                             class="badge text-decoration-none text-white"
                             :class="getRandomColour()"
-                            style="margin-left: 2px"
+                            style="margin-right: 3px"
                           >
                             {{ tag.name }}
                           </router-link>
@@ -78,7 +86,7 @@
                     </div>
                     <div class="card-footer border-0 bg-light">
                       <div class="row row-cols-auto">
-                        <div class="col">
+                        <div class="mr-1 ml-1">
                           <img
                             :src="post.user.default_avatar"
                             class="author-avatar"

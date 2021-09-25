@@ -67,13 +67,13 @@
         <h1>{{ post.title }}</h1>
 
         <div class="row row-cols-auto media pt-1 pb-5">
-          <div class="col">
+          <div class="ml-3">
             <router-link
               :to="{ name: 'show-user', params: { id: post.user.id } }"
             >
               <img
                 :src="post.user.avatar || post.user.default_avatar"
-                class="mr-3 rounded-circle shadow-inner"
+                class="mr-1 rounded-circle shadow-inner"
                 style="width: 50px"
                 :alt="post.user.name"
               />

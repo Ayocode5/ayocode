@@ -22,8 +22,8 @@
           <button
             class="navbar-toggler border-0"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
@@ -63,7 +63,7 @@
                 v-on:keyup.enter="searchPost()"
                 v-model="keyword"
                 type="text"
-                class="col-12"
+                class="col"
                 id="inlineFormInputGroup"
                 placeholder="Search"
               />
