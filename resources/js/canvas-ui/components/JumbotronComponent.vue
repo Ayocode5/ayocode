@@ -9,11 +9,11 @@
 	    height: 300px;
       /* margin-top: 90px; */
     "
-  > 
+  >
     <div class="jumbotron">
       <h1 class="display-4">Welcome,</h1>
       <p class="lead">
-        Let's Code the world
+        Let's Code the world wkwkwkwk
       </p>
     </div>
   </div>
@@ -24,3 +24,9 @@ export default {
   name: "JumbotronComponent",
 };
 </script>
+
+<style scoped>
+.jumbotron {
+    background-color: transparent;
+}
+</style>

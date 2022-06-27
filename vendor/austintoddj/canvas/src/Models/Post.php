@@ -181,7 +181,7 @@ class Post extends Model
     /**
      * Scope a query to only include published posts.
      *
-     * @param Builder $query
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopePublished(Builder $query): Builder
@@ -190,37 +190,9 @@ class Post extends Model
     }
 
     /**
-     * Scope a query to only include published posts.
-     *
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopePopular(Builder $query): Builder
-    {
-        return $query->withCount([
-            // 'views as views_count' => function ($q) {
-            //     $q
-            //     // ->select('id')
-            //     ->whereBetween('created_at', [
-            //         today()->startOfMonth()->startOfDay()->toDateTimeString(),
-            //         today()->endOfMonth()->endOfDay()->toDateTimeString()
-            //     ]);
-            // },
-            'visits as visits_count' => function ($q) {
-                $q
-                // ->select('id')
-                ->whereBetween('created_at', [
-                    today()->startOfMonth()->startOfDay()->toDateTimeString(),
-                    today()->endOfMonth()->endOfDay()->toDateTimeString()
-                ]);
-            }
-        ])->orderBy('visits_count', 'desc');
-    }
-
-    /**
      * Scope a query to only include drafted posts.
      *
-     * @param Builder $query
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeDraft(Builder $query): Builder

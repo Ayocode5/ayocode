@@ -2,7 +2,7 @@
  * @license MIT */
 
 /*!
-  * Bootstrap v4.6.0 (https://getbootstrap.com/)
+  * Bootstrap v4.6.1 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -22,13 +22,13 @@
  */
 
 /*!
- * FilePond 4.29.0
+ * FilePond 4.30.3
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
 
 /*!
- * FilePondPluginFileValidateSize 2.2.4
+ * FilePondPluginFileValidateSize 2.2.5
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -46,13 +46,13 @@
  */
 
 /*!
- * FilePondPluginImagePreview 4.6.8
+ * FilePondPluginImagePreview 4.6.10
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
 
 /*!
- * FilePondPluginImageValidateSize 1.2.6
+ * FilePondPluginImageValidateSize 1.2.7
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */

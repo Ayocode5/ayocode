@@ -8,7 +8,7 @@
 
                 <slot name="status" />
 
-                <a href="#" class="ml-auto" @click="showSearchModal()">
+                <a href="#" class="ml-auto" @click="showSearchModal">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" class="icon-search pr-1">
                         <circle cx="10" cy="10" r="7" style="fill: none" />
                         <path

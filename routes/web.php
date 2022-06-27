@@ -9,7 +9,8 @@ use App\Http\Controllers\PostPopularController;
 use App\Http\Controllers\PostRelatedController;
 use App\Http\Controllers\PostTagController;
 use App\Http\Controllers\PostTopicController;
-use App\Models\{Comment, Guest};
+use App\Http\Controllers\PortfolioController;
+//use App\Models\{Comment, Guest, Portfolio};
 
 use Illuminate\Support\Facades\Route;
 
@@ -28,14 +29,10 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/test', function() {
-
-    $c = Comment::findOrFail(81);
-
-    return new \App\Mail\NewPostCommentNotification($c);
+Route::prefix('/portfolio')->group(function() {
+    // return redirect()->route('canvas.login');
+    Route::get('/', [PortfolioController::class, 'index']);
 });
-
-Route::get('/sitemap.xml', SitemapController::class);
 
 Route::prefix('blog')->group(function () {
     Route::prefix('api')->group(function () {
@@ -45,10 +42,10 @@ Route::prefix('blog')->group(function () {
 
         //Handle Popular Post
         Route::get('posts/popular', PostPopularController::class);
-        
+
         //Handle Related Post
         Route::get('posts/related', PostRelatedController::class);
-             
+
         //Handle Comment and Reply for Posts
         Route::get('posts/comment', [PostCommentController::class, 'comments']);
         Route::get('posts/reply', [PostCommentController::class, 'replies']);
@@ -58,7 +55,7 @@ Route::prefix('blog')->group(function () {
         //Handle Specific Post
         Route::get('posts/{slug}', [PostController::class, 'showPost'])
              ->middleware('Canvas\Http\Middleware\Session');
-        
+
         //Handle Post Tags
         Route::get('tags', [PostTagController::class, 'tags']);
         Route::get('tags/{slug}', [PostTagController::class, 'showTag']);
@@ -78,6 +75,8 @@ Route::prefix('blog')->group(function () {
          ->where('view', '(.*)')
          ->name('blog');
 });
+
+Route::get('/sitemap.xml', SitemapController::class);
 
 
 // Route::group(['domain' => 'blog.localhost'], function () {

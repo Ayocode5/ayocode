@@ -1,7 +1,13 @@
 {
     "name": "austintoddj/canvas",
     "description": "A Laravel publishing platform",
-    "keywords": ["blog", "canvas", "laravel", "publishing", "platform"],
+    "keywords": [
+        "blog",
+        "canvas",
+        "laravel",
+        "publishing",
+        "platform"
+    ],
     "license": "MIT",
     "homepage": "https://trycanvas.app",
     "support": {
@@ -17,12 +23,12 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
-        "laravel/framework": "^6.0|^7.0|^8.0"
+        "laravel/framework": "^6.0|^7.0|^8.0|^9.0"
     },
     "require-dev": {
         "laravel/legacy-factories": "^1.0",
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^4.0|^5.0|^6.0",
+        "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0",
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {
