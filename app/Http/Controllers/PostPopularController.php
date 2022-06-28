@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Canvas\Models\Post;
+use App\Models\Post;
 use Illuminate\Http\{Request, JsonResponse};
 
 class PostPopularController extends Controller
