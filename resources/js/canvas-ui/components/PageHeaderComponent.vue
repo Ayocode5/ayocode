@@ -58,7 +58,7 @@
             <!-- Search Input -->
             <label class="sr-only" for="inlineFormInputGroup">Search</label>
             
-            <div class="float-right px-2">
+            <div class="float-right px-2 ml-auto">
               <input
                 v-on:keyup.enter="searchPost()"
                 v-model="keyword"
