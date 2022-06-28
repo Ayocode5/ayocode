@@ -13,7 +13,7 @@
     <div class="jumbotron">
       <h1 class="display-4">Welcome,</h1>
       <p class="lead">
-        Let's Code the world wkwkwkwk
+        Let's Code the world
       </p>
     </div>
   </div>
