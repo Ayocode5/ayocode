@@ -28,7 +28,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
-
+Route::get('/react', function () {
+    return view('home-react');
+});
 Route::prefix('/portfolio')->group(function() {
     // return redirect()->route('canvas.login');
     Route::get('/', [PortfolioController::class, 'index']);

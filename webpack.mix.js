@@ -11,12 +11,36 @@ const mix = require('laravel-mix');
  |
  */
 
+// mix.options({
+//     postCss: [
+//         require('autoprefixer'),
+//     ]
+// });
+
+mix.setPublicPath('public');
+
+
+
 mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
-//
+        //
     ]);
 mix.js('resources/js/canvas-ui/app.js', 'public/js/canvas-ui.js').vue()
     .sass('resources/sass/canvas-ui.scss', 'public/css/canvas-ui.css');
 //
 mix.js('vendor/austintoddj/canvas/resources/js/app.js', 'public/vendor/canvas/js/app.js').vue()
     .sass('vendor/austintoddj/canvas/resources/sass/app.scss', 'public/vendor/canvas/css/app.css');
+
+mix.webpackConfig({
+    resolve: {
+        extensions: ['.js', '.vue'],
+        alias: {
+            '@': __dirname + 'resources'
+        }
+    },
+    output: {
+        chunkFilename: 'js/chunks/[name].js'
+    }
+}).react();
+mix.js('resources/js/react-app/src/index.js', 'public/js/app.js').version();
+mix.copy('resources/js/react-app/public', 'public');
