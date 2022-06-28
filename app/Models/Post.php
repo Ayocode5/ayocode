@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Canvas\Models\Post as ModelsPost;
+use Illuminate\Database\Eloquent\Builder;
 
 class Post extends ModelsPost
 {
